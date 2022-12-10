@@ -17,9 +17,11 @@ class CategoriesIndexResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $lang = LangHelper::getDefaultLang($request);
         return [
             'id' => $this['id'],
             'name' => $this['name'],
+            'label' => $this['label_title_' . $lang] ? $this['label_title_' . $lang] : trans('messages.general.size'),
             'category_id' => $this['category_id'],
             'has_sub' => (bool)count($this['categories']),
         ];

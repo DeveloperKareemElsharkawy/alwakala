@@ -10,6 +10,7 @@ return [
         'forbidden' => 'غير مسموح',
         'store_exists' => 'تحقق من المتجر',
         'success' => 'نجح',
+        'size' => 'الحجم',
 
     ],
     'auth' => [
