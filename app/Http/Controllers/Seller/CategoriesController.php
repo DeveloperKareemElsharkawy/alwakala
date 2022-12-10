@@ -176,7 +176,7 @@ class CategoriesController extends BaseController
                     ->pluck('id')
                     ->toArray();
                 $query = Category::query()
-                    ->select('id', 'name_' . $this->lang . ' as name', 'category_id')
+                    ->select('id', 'name_' . $this->lang . ' as name','label_title_' . $this->lang . ' as label_title', 'category_id')
                     ->where('activation', true);
                 if ($request->filled('id')) {
                     $query->where('category_id', $request->query('id'));
@@ -192,7 +192,7 @@ class CategoriesController extends BaseController
                     ->pluck('id')
                     ->toArray();
                 $query = Category::query()
-                    ->select('id', 'name_' . $this->lang . ' as name', 'category_id')
+                    ->select('id', 'name_' . $this->lang . ' as name','label_title_' . $this->lang . ' as label_title', 'category_id')
                     ->where('activation', true);
                 if ($request->filled('id')) {
                     $query->where('category_id', $request->query('id'));
@@ -202,7 +202,7 @@ class CategoriesController extends BaseController
                 $categories = $query->get();
             } elseif ($type == 'parent') {
                 $categories = Category::query()
-                    ->select('id', 'name_' . $this->lang . ' as name', 'category_id')
+                    ->select('id', 'name_' . $this->lang . ' as name','label_title_' . $this->lang . ' as label_title', 'category_id')
                     ->where('activation', true)
                     ->whereNull('category_id')
                     ->get();

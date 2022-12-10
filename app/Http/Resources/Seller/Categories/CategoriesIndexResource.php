@@ -21,7 +21,7 @@ class CategoriesIndexResource extends JsonResource
         return [
             'id' => $this['id'],
             'name' => $this['name'],
-            'label_title' => $this['label_title_' . $lang] ? $this['label_title_' . $lang] : trans('messages.general.size'),
+            'label_title' => $this->label_title,
             'category_id' => $this['category_id'],
             'has_sub' => (bool)count($this['categories']),
         ];
