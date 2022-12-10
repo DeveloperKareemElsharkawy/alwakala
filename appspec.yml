@@ -1,0 +1,15 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /var/www/html/main-system
+hooks:
+  BeforeInstall:
+    - location: scripts/cleanup
+      timeout: 300
+      runas: root
+
+  AfterInstall:
+    - location: scripts/docker
+      timeout: 300
+      runas: root

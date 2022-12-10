@@ -1,0 +1,4 @@
+#!/bin/bash
+docker restart elwekala
+sleep 5
+cd /var/www/html/main-system/ && git add . && git commit -m "Latest Changes on The Server"

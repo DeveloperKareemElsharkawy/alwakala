@@ -1,0 +1,62 @@
+<?php
+
+return [
+    'general' => [
+        'name_en' => 'Name (EN)',
+        'name_ar' => 'Name (AR)',
+        'name' => 'Name',
+        'email' => 'Email',
+        'mobile' => 'Mobile',
+        'type'    => 'Type',
+        'city'   => 'City',
+        'owner'   => 'Owner',
+        'categories' => 'Categories',
+        'created_at' => 'Created At',
+        'updated_at' => 'Updated At',
+        'status' => 'Status',
+        'category' => 'Category',
+        'store'    => 'Store',
+        'expiry_date' => 'Expiry Date',
+        'hex'    => 'hex',
+        'country' => 'Country',
+        'region' => 'Region',
+        'state' => 'State',
+        'description_en' => 'Description (EN)',
+        'description_ar' => 'Description (AR)',
+        'color' => 'Color',
+        'is_product' => 'Is Product',
+        'is_seller' => 'Is Seller',
+        'is_store' => 'Is Store',
+        'activation' => 'Activation',
+    ],
+
+    'categories' => [
+        'name' => 'Category',
+        'name_en' => 'Category Name (EN)',
+        'name_ar' => 'Category Name (AR)',
+        'parent' => 'Parent Category',
+    ],
+    'products' => [
+        'name' => 'Product Name',
+        'brand' => 'Brand',
+        'owner_name' => 'Owner Name',
+        'channel' => 'Channel',
+    ],
+    'sizes' => [
+        'size' => 'Size',
+        'size_type' => 'Size Type',
+        'size_categories' => 'Size Categories',
+    ],
+    'orders' =>[
+        'order_price' => 'Order Price',
+        'total_price' => 'Total Price',
+        'store_name' => 'Store Name',
+        'client_name' => 'Client Name',
+        'delivery_date' => 'Delivery Date',
+    ],
+    'app_tvs' =>[
+        'location' => 'Location',
+        'app' => 'App',
+        'type' => 'Type',
+    ],
+];
