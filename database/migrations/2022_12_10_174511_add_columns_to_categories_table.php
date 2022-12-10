@@ -27,7 +27,8 @@ class AddColumnsToCategoriesTable extends Migration
     public function down()
     {
         Schema::table('categories', function (Blueprint $table) {
-            //
+            $table->dropColumn('label_title_ar');
+            $table->dropColumn('label_title_en');
         });
     }
 }
