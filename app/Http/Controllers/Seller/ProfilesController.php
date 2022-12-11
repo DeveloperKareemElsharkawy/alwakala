@@ -557,6 +557,7 @@ class ProfilesController extends BaseController
                 'products' => $products->items()
             ];
 
+            return $this->respondWithPagination($products);
             return $this->respondPaginationWithAdditionalData($products, $data);
         } catch (\Exception $e) {
             Log::error('error in storeProducts of seller Profile ' . __LINE__ . $e);
