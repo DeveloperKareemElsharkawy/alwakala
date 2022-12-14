@@ -246,10 +246,14 @@ class FeedsController extends BaseController
     /**
      * @throws Exception
      */
-    public function deleteFeed($feedId, ToggleFavoriteFeedRequest $request)
+    public function deleteFeed($feedId, Request $request)
     {
         try {
             $feed = Feed::query()->find($feedId);
+
+            if (!$feed) {
+                return $this->error(['message' => trans('messages.general.not_found')]);
+            }
 
             $feed['products'] = ProductStore::query()->where('store_id', $feed['store_id'])
                 ->whereIn('product_id', $feed['products'])->with('product.image')->get();

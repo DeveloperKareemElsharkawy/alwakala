@@ -30,4 +30,6 @@ class ToggleFavoriteFeedRequest extends FormRequest
         ];
     }
 
+
+
 }
