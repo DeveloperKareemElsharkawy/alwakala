@@ -70,6 +70,7 @@ class ProductRepository extends Controller
             }
             $app = $arrayOfParameters['app'] ?? AApps::SELLER_APP;
             $isActive = self::checkIfUserActive($arrayOfParameters['userId']);
+            return $products;
             return $this->prepareProductsResponse($products, $arrayOfParameters['userId'], $isActive, isset($arrayOfParameters['mostPopular']) ? true : false, $app);
         } catch (Exception $e) {
             throw new Exception($e);
