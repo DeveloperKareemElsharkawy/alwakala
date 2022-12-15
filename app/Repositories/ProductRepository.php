@@ -524,17 +524,17 @@ class ProductRepository extends Controller
                 ->where('store_id', $product->store_id)
                 ->first();
 
-//            $colorsIds = ProductStoreStock::query()
-//                ->where('product_store_id', $productStore->id)
-//                ->pluck('color_id')->toArray();
-//
-//            $colors = Color::query()
-//                ->whereIn('id', $colorsIds)
-//                ->select('id', 'name_' . $this->locale . ' as name', 'hex')
-//                ->get();
-//
-////            $product['colors'] = $colors;
-////            $product['hex'] = $colors[0]['hex'];
+            $colorsIds = ProductStoreStock::query()
+                ->where('product_store_id', $productStore->id)
+                ->pluck('color_id')->toArray();
+
+            $colors = Color::query()
+                ->whereIn('id', $colorsIds)
+                ->select('id', 'name_' . $this->locale . ' as name', 'hex')
+                ->get();
+
+            $product['colors'] = $colors;
+            $product['hex'] = $colors[0]['hex'];
 //            $product['number_of_followers'] = FollowedStore::query()->select('id')
 //                ->where('store_id', $product->store_id)->get()->count();
 //            $product['number_of_views'] = View::query()->select('id')
