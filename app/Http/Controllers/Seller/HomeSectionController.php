@@ -202,7 +202,7 @@ class HomeSectionController extends BaseController
             $data = [
                 'brands' => $brands,
                 'categories' => CategoriesResource::collection($categories->get()),
-                'products' =>  $products->items()
+                'products' => $products->items()
             ];
 
             return $this->respondPaginationWithAdditionalData($products, $data);
@@ -268,6 +268,8 @@ class HomeSectionController extends BaseController
             $arrayOfParameters['userId'] = $userId;
             $arrayOfParameters['storeId'] = $storeId;
             $products = $this->productsRepo->getProducts($arrayOfParameters);
+
+            $this->respondWithPagination($products);
             return response()->json([
                 'status' => true,
                 'message' => trans('messages.sections.most_popular'),

@@ -542,7 +542,7 @@ class ProductRepository extends Controller
                 ->where('item_id', $product->store_id)->get()->count();
             if ($mostPopular && $product['number_of_views'] == 0) {
 //                $products->forget($key);
-                // To DO Remove Product With no views 
+                // To DO Remove Product With no views
             }
             $product->price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->price) : $product->price;
             $product->net_price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->net_price) : $product->net_price;
