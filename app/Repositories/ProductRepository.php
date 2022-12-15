@@ -534,7 +534,7 @@ class ProductRepository extends Controller
                 ->get();
 
 //            $product['colors'] = $colors;
-            $product['hex'] = $colors[0]['hex'];
+//            $product['hex'] = $colors[0]['hex'];
             $product['number_of_followers'] = FollowedStore::query()->select('id')
                 ->where('store_id', $product->store_id)->get()->count();
             $product['number_of_views'] = View::query()->select('id')
