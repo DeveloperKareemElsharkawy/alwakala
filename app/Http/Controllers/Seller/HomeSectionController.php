@@ -269,7 +269,7 @@ class HomeSectionController extends BaseController
             $arrayOfParameters['storeId'] = $storeId;
             $products = $this->productsRepo->getProducts($arrayOfParameters);
 
-            $this->respondWithPagination($products);
+            return $this->respondWithPagination($products);
             return response()->json([
                 'status' => true,
                 'message' => trans('messages.sections.most_popular'),
