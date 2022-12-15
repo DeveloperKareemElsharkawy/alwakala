@@ -70,7 +70,7 @@ class ProductRepository extends Controller
             }
             $app = $arrayOfParameters['app'] ?? AApps::SELLER_APP;
             $isActive = self::checkIfUserActive($arrayOfParameters['userId']);
-             return $this->prepareProductsResponse($products, $arrayOfParameters['userId'], $isActive, isset($arrayOfParameters['mostPopular']) ? true : false, $app);
+            return $this->prepareProductsResponse($products, $arrayOfParameters['userId'], $isActive, isset($arrayOfParameters['mostPopular']) ? true : false, $app);
         } catch (Exception $e) {
             throw new Exception($e);
 
@@ -540,36 +540,37 @@ class ProductRepository extends Controller
             $product['number_of_views'] = View::query()->select('id')
                 ->where('item_type', '=', 'STORE')
                 ->where('item_id', $product->store_id)->get()->count();
-//            if ($mostPopular && $product['number_of_views'] == 0) {
+            if ($mostPopular && $product['number_of_views'] == 0) {
 //                $products->forget($key);
-//            }
-//            $product->price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->price) : $product->price;
-//            $product->net_price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->net_price) : $product->net_price;
-//            $product->is_retailer_product = $productStore->store->store_type_id == 1;
-//
-//            $productStore->store_logo = null;
-//
-//            if ($productStore->store->logo) {
-//                $product->store_logo = config('filesystems.aws_base_url') . $productStore->store->logo;
-//            }
-//
-//            if ($product->discount != 0 && $product->price != '--') {
-//                $product->has_discount = true;
-////                if ($product->discount_type == DiscountTypes::AMOUNT) {
-////                    $product->discount_type = 'amount';
-////                } else {
-//                $product->discount_type = 'percentage';
-//                $product->discount = $product->discount . '%';
-//
-////                }
-//            } else {
-//                $product->has_discount = false;
-//            }
-//            if (count($product->SellerRate) > 0) {
-//                $product->rate = $product->SellerRate[0]->rate;
-//            } else {
-//                $product->rate = 0;
-//            }
+                // To DO Remove Product With no views 
+            }
+            $product->price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->price) : $product->price;
+            $product->net_price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->net_price) : $product->net_price;
+            $product->is_retailer_product = $productStore->store->store_type_id == 1;
+
+            $productStore->store_logo = null;
+
+            if ($productStore->store->logo) {
+                $product->store_logo = config('filesystems.aws_base_url') . $productStore->store->logo;
+            }
+
+            if ($product->discount != 0 && $product->price != '--') {
+                $product->has_discount = true;
+//                if ($product->discount_type == DiscountTypes::AMOUNT) {
+//                    $product->discount_type = 'amount';
+//                } else {
+                $product->discount_type = 'percentage';
+                $product->discount = $product->discount . '%';
+
+//                }
+            } else {
+                $product->has_discount = false;
+            }
+            if (count($product->SellerRate) > 0) {
+                $product->rate = $product->SellerRate[0]->rate;
+            } else {
+                $product->rate = 0;
+            }
             unset($product->SellerRate);
             $product->image = null;
             if ($product->productImage) {
@@ -849,9 +850,9 @@ class ProductRepository extends Controller
             'product_images.id as product_image_id',
             'product_images.is_primary as is_primary',
             'product_images.color_id as image_color_id',
-//            'colors.id as color_id',
-//            'colors.name_' . $this->locale . ' as color_name',
-//            'colors.hex as color_code',
+            'colors.id as color_id',
+            'colors.name_' . $this->locale . ' as color_name',
+            'colors.hex as color_code',
             'sizes.id as size_id',
             'sizes.size as size_name',
             'product_store_stock.available_stock as available_stock',
