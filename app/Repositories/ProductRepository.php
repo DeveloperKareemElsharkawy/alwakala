@@ -535,14 +535,14 @@ class ProductRepository extends Controller
 
             $product['colors'] = $colors;
             $product['hex'] = $colors[0]['hex'];
-//            $product['number_of_followers'] = FollowedStore::query()->select('id')
-//                ->where('store_id', $product->store_id)->get()->count();
-//            $product['number_of_views'] = View::query()->select('id')
-//                ->where('item_type', '=', 'STORE')
-//                ->where('item_id', $product->store_id)->get()->count();
-//            if ($mostPopular && $product['number_of_views'] == 0) {
-//                $products->forget($key);
-//            }
+            $product['number_of_followers'] = FollowedStore::query()->select('id')
+                ->where('store_id', $product->store_id)->get()->count();
+            $product['number_of_views'] = View::query()->select('id')
+                ->where('item_type', '=', 'STORE')
+                ->where('item_id', $product->store_id)->get()->count();
+            if ($mostPopular && $product['number_of_views'] == 0) {
+                $products->forget($key);
+            }
 //            $product->price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->price) : $product->price;
 //            $product->net_price = $app == AApps::SELLER_APP ? ProductHelper::canShowPrice($userId, $isActive, $product->net_price) : $product->net_price;
 //            $product->is_retailer_product = $productStore->store->store_type_id == 1;
