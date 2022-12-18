@@ -538,5 +538,5 @@ Route::get('/test', function () {
 });
 Route::post('pull', function () {
     $output = exec('git pull');
-    return  $output;
+    return  $output . ' Git Command Response' ;
 });
