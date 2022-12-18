@@ -75,11 +75,9 @@ class FavoritesController extends BaseController
     {
         try {
             $userId = UserId::UserId($request);
-            $favoriteProductsCount = SellerFavorite::query()
-                ->select('id')
-                ->where('favorited_type', Product::class)
-                ->where('favoriter_id', $userId)
-                ->count('*');
+
+            $query = ProductRepository::prepareProductQuery($request, $userId, null, null, null, true);
+            $favoriteProductsCount = $query->count();
 
             return response()->json([
                 'status' => true,
