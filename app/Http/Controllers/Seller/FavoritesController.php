@@ -75,14 +75,37 @@ class FavoritesController extends BaseController
     {
         try {
             $userId = UserId::UserId($request);
-
             $query = ProductRepository::prepareProductQuery($request, $userId, null, null, null, true);
-            $favoriteProductsCount = $query->count();
+            $products = $query->get();
+            foreach ($products as $product) {
+                if ($product->discount != 0) {
+                    $product->has_discount = true;
+                    if ($product->discount_type == DiscountTypes::AMOUNT) {
+                        $product->discount_type = 'amount';
+                    } else {
+                        $product->discount_type = 'percentage';
+                        $product->discount = $product->discount . '%';
+                    }
+                } else {
+                    $product->has_discount = false;
+                }
+                if (count($product->SellerRate) > 0) {
+                    $product->rate = $product->SellerRate[0]->rate;
+                } else {
+                    $product->rate = 0;
+                }
+                unset($product->SellerRate);
+                $product->image = null;
+                if ($product->productImage) {
+                    $product->image = config('filesystems.aws_base_url') . $product->productImage->image;
+                }
+                unset($product->productImage);
+            }
 
             return response()->json([
                 'status' => true,
                 'message' => trans('messages.product.fav_products_count'),
-                'data' => $favoriteProductsCount
+                'data' => count($products)
             ], AResponseStatusCode::SUCCESS);
         } catch (\Exception $e) {
             return ServerError::handle($e);
