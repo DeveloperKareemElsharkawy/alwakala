@@ -20,6 +20,7 @@ use App\Http\Requests\SellerApp\Auth\validateFirstScreenRequest;
 use App\Http\Requests\Shared\LoginRequest;
 use App\Jobs\Emails\SendResetPasswordCodeJob;
 use App\Lib\Helpers\Lang\LangHelper;
+use App\Lib\Helpers\UserId\UserId;
 use App\Lib\Log\ValidationError;
 use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\Contract;
@@ -39,6 +40,7 @@ use App\Models\User;
 use App\Models\UserDeviceToken;
 use App\Models\UserResetPassword;
 use App\Repositories\ActivitiesRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use App\Services\Mail\MailService;
 use App\Services\Sms\SmsService;
@@ -601,6 +603,11 @@ class AuthController extends BaseController
             // Settings
             $settings = app(SellerAppSettings::class);
 
+            // Favorite Products Count
+            $userId = UserId::UserId($request);
+            $favQuery = ProductRepository::prepareProductQuery($request, $userId, null, null, null, true);
+            $favProducts = $favQuery->get();
+
             return response()->json([
                 'status' => true,
                 'message' => trans('messages.auth.side_data'),
@@ -622,7 +629,7 @@ class AuthController extends BaseController
 
                     'basic_counters' => [
                         'total_inventory' => $productCount,
-                        'favorite_products_count' => $user->favorites_count,
+                        'favorite_products_count' => count($favProducts),
                         'following_stores_count' => $followingCount,
                         'my_store_followers_count' => $followersCount,
                         'consumers_count' => $consumersCount,
