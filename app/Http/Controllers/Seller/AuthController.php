@@ -164,13 +164,14 @@ class AuthController extends BaseController
     public function register(RegisterSellerRequest $request)
     {
         try {
-//            DB::beginTransaction();
+            DB::beginTransaction();
             $data = $request->all();
             $user = new User();
             $data['type_id'] = UserType::SELLER;
             $user->initializeUserFields($data);
             $user->save();
 
+            dd('d');
             $token = $user->createToken('myApp')->accessToken;
             $store = new Store();
             $store->user_id = $user->id;
