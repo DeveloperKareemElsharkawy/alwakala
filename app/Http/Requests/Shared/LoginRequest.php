@@ -24,7 +24,7 @@ class LoginRequest extends FormRequest
     public function rules()
     {
         return [
-            'email' => 'required|max:50',
+            'email' => 'required|max:50|exists:users,' . $this->username(),
             'password' => 'required|min:6|max:25'
         ];
     }
@@ -32,11 +32,22 @@ class LoginRequest extends FormRequest
     public function messages()
     {
         return [
+            'email.exists' => trans('messages.auth.seller_not_found'),
             'email.required' => trans('seller_validation.required'),
             'email.max' => trans('seller_validation.max'),
             'password.required' => trans('seller_validation.required'),
             'password.min' => trans('seller_validation.min'),
             'password.max' => trans('seller_validation.max'),
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     *
+     * @return string
+     */
+    public function username(): string
+    {
+        return (filter_var(request()['username'], FILTER_VALIDATE_EMAIL)) ? 'email' : 'mobile';
     }
 }

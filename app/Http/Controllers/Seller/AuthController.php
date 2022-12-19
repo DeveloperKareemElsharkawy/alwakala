@@ -75,17 +75,14 @@ class AuthController extends BaseController
     public function login(LoginRequest $request)
     {
         // dd($this->smsService->sendSms("01004504511",'اهلا بيك فى الوكالة أول ايكو سيستم للجملة والتجزئة'));
-        // dd($this->smsService->sendSms("01552305252",'Welcome Elwekala'));
-        // dd($this->smsService->sendSms("01270795090",'Welcome Elwekala'));
-        // dd($this->smsService->sendSms("01000848650",'Welcome Elwekala'));
-        // dd("monem");
+
         $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'mobile';
         if (Auth::attempt([$loginType => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
             if ($user->type_id != UserType::SELLER) {
                 return response()->json([
                     'status' => false,
-                    'message' => trans('messages.auth.invalid_login_data'),
+                    'message' => trans('messages.general.not_found'),
                     'data' => ''
                 ], AResponseStatusCode::UNAUTHORIZED);
             }

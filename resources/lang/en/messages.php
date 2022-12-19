@@ -17,7 +17,8 @@ return [
     'auth' => [
         'error' => 'Error Occurred',
         'no_store' => 'You do not have store',
-        'invalid_login_data' => 'Check your credentials',
+        'invalid_login_data' => 'Wrong Password',
+        'seller_not_found' => 'This account was not found',
         'login' => 'Logged In',
         'logout' => 'Logged Out',
         'store_created' => 'Store created successfully data will be reviewed',
