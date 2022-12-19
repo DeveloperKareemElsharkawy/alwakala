@@ -55,6 +55,10 @@ class SellersController extends BaseController
         }
     }
 
+    /**
+     * @param UpdateSellerInfoRequest $request
+     * @return JsonResponse
+     */
     public function update(UpdateSellerInfoRequest $request)
     {
         try {
@@ -118,4 +122,17 @@ class SellersController extends BaseController
             return $this->connectionError($e);
         }
     }
+
+    /**
+     * @return JsonResponse
+     */
+    public function generateBarcode(Request $request)
+    {
+        $generatedBarcode = mt_rand(0, 8) . mt_rand(1, 9) . mt_rand(90, 900). mt_rand(10, 90);
+
+        return $this->success(['message' => 'Code Sent', 'data' => [
+            'generated_barcode' => $generatedBarcode
+        ]]);
+    }
+
 }
