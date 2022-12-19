@@ -48,6 +48,6 @@ class LoginRequest extends FormRequest
      */
     public function username(): string
     {
-        return (filter_var(request()['username'], FILTER_VALIDATE_EMAIL)) ? 'email' : 'mobile';
+        return (filter_var(request()['email'], FILTER_VALIDATE_EMAIL)) ? 'email' : 'mobile';
     }
 }
