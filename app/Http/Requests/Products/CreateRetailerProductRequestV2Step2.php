@@ -28,6 +28,7 @@ class CreateRetailerProductRequestV2Step2 extends FormRequest
             'color_id' => 'required|numeric|exists:colors,id',
             'barcode' => 'required|max:255',
             'images' => 'required|array',
+            'youtube_link' => 'required|max:255',
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
             'sizes' => 'required|array',
             'sizes.*.size_id' => 'required|numeric|exists:sizes,id',

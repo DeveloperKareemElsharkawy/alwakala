@@ -133,6 +133,8 @@ class CreateProductsController extends BaseController
             }
             $barcodeProduct = BarCodeRepository::createBarcodeProduct($request, $store->id);
 
+            Product::where('id',$request->product_id)->update(['youtube_link']);
+
             if (!$barcodeProduct)
                 return $this->error(['message' => trans('messages.product.barcode_used')]);
 
@@ -204,6 +206,8 @@ class CreateProductsController extends BaseController
 
 
             $productStore = $this->productStoreRepository->getProductStore($request->product_id, $store->id);
+
+            Product::where('id',$request->product_id)->update(['youtube_link']);
 
 
             if (!$productStore)

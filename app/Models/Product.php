@@ -23,6 +23,7 @@ class Product extends Model
         'material_rate',
         'shipping_method_id',
         'policy_id',
+        'youtube_link',
     ];
 
     public function brand()

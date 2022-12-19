@@ -28,6 +28,7 @@ class CreateSupplierProductRequestV2Step2 extends FormRequest
             'color_id' => 'required|numeric|exists:colors,id',
             'quantity' => 'required|numeric',
             'barcode' => 'required|max:255',
+            'youtube_link' => 'required|max:255',
             'images' => 'required|array',
             'images.*' => 'required|image|mimes:jpeg,png,jpg,gif,svg',
         ];

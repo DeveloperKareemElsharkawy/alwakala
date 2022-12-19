@@ -709,6 +709,7 @@ class ProductRepository extends Controller
                 'stores.name as store_name',
                 'products.brand_id',
                 'products.policy_id',
+                'products.youtube_link',
                 DB::raw('CASE WHEN products.policy_id = '. APolicyTypes::WekalaPrime .' THEN true else false END as is_wekala_policy'),
                 'products.consumer_price',
                 "brands.name_$lang as brand_name",
