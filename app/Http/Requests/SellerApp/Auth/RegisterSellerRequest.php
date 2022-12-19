@@ -29,7 +29,7 @@ class RegisterSellerRequest extends FormRequest
             'name' => "required|string|max:25|min:2",
             'store_name' => "required|string|max:25|min:2",
             'legal_name' => "nullable|string|max:50|min:2",
-            'email' => 'email|nullable|unique:users,email|max:255',
+            'email' => 'email|required|unique:users,email|max:255',
             'mobile' => 'required|unique:users,mobile|max:11|min:11|mobile_number', // in other file
             'store_mobile' => 'required|max:11|min:11|mobile_number',
             'store_type_id' => 'required|numeric|exists:store_types,id',
