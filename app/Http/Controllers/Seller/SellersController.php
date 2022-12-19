@@ -130,7 +130,7 @@ class SellersController extends BaseController
     {
         $generatedBarcode = mt_rand(0, 8) . mt_rand(1000, 9999) . mt_rand(1, 9) . mt_rand(0, 100) . mt_rand(90, 900) . mt_rand(10, 90);
 
-        return $this->success(['message' => 'Code Sent', 'data' => [
+        return $this->success(['message' => 'Barcode Generated', 'data' => [
             'generated_barcode' => $generatedBarcode
         ]]);
     }
