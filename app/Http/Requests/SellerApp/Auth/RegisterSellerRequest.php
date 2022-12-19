@@ -43,7 +43,7 @@ class RegisterSellerRequest extends FormRequest
             'user_lang' => 'required',
             'store_categories' => 'required|array',
             'store_categories.*' => 'required|numeric|exists:categories,id',
-            'description' => 'nullable|string|max:450|min:2',
+            'description' => 'required|string|max:450|min:2',
             'address' => 'required|string|max:255|min:2',
             'main_branch_store_id' => [ Rule::exists('stores', 'id')->where(function ($query) {
                 return $query->where('is_main_branch', true);
