@@ -238,10 +238,13 @@ class AuthController extends BaseController
             ActivitiesRepository::log($data);
 
 
-            UserDeviceToken::updateOrCreate(
-                ['user_id' => $seller->user_id],
-                ['token' => $request->token]
-            );
+            if ($request->token) {
+                UserDeviceToken::updateOrCreate(
+                    ['user_id' => $seller->user_id],
+                    ['token' => $request->token]
+                );
+            }
+
             event(new PendingForReview([$seller->user_id]));
 
             return response()->json([
