@@ -164,8 +164,8 @@ class AuthController extends BaseController
     public function register(RegisterSellerRequest $request)
     {
         try {
-            DB::beginTransaction();
-            dd( $request->all());
+//            DB::beginTransaction();
+//            dd( $request->all());
 
             $data = $request->all();
             $user = new User();
