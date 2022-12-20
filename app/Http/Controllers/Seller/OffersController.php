@@ -209,15 +209,7 @@ class OffersController extends BaseController
     function enrolledStores(Request $request, $offerId)
     {
         try {
-            $enrolledStores = OfferStore::query()->with('store', 'offer')->where([['offer_id', $offerId], ['status', 'approved']])->get();
-
-            $enrolledStores->pluck('store_id')->toArray();
-            $request->merge(['where_stores_ids' => $enrolledStores]);
-            $userId = UserId::UserId($request);
-            $limit = 0;
-            $pagination = 5;
-
-            $stores = $this->storesRepo->getStores($request, $userId, $limit, $pagination, null, null, false, false);
+            $enrolledStores = OfferStore::query()->with('store', 'offer')->where([['offer_id', $offerId], ['status', 'approved']])->paginate(10);
 
             return $this->respondWithPagination(OfferStoresStatusesResource::collection($enrolledStores));
         } catch (Exception $e) {
@@ -237,7 +229,7 @@ class OffersController extends BaseController
     {
         try {
 
-            $rejectedStores = OfferStore::query()->with('store', 'offer')->where([['offer_id', $offerId], ['status', 'rejected']])->pluck('store_id')->get();
+            $rejectedStores = OfferStore::query()->with('store', 'offer')->where([['offer_id', $offerId], ['status', 'rejected']])->paginate(10);
 
             return $this->respondWithPagination(OfferStoresStatusesResource::collection($rejectedStores));
         } catch (Exception $e) {
