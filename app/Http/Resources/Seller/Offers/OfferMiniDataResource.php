@@ -27,6 +27,7 @@ class OfferMiniDataResource extends JsonResource
             "name" => $this->name,
             "description" => $this->description,
             'created_at' => $this->created_at,
+            "products" => $this->when($this->offers_products, OfferProductResource::collection($this->offers_products)),
 
         ];
     }
