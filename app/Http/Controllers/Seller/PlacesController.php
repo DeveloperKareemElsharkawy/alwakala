@@ -8,6 +8,7 @@ use App\Lib\Helpers\Lang\LangHelper;
 use App\Lib\Log\ServerError;
 use App\Models\City;
 use App\Models\Country;
+use App\Models\State;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\DB;
@@ -44,11 +45,12 @@ class PlacesController extends BaseController
     public function getStates($country_id): \Illuminate\Http\JsonResponse
     {
         try {
-            $states = DB::table('states')
+            $states = State::query()
                 ->join('regions', 'regions.id', '=', 'states.region_id')
                 ->join('countries', 'countries.id', '=', 'regions.country_id')
                 ->select('states.id', 'states.name_' . $this->lang . ' as name')
                 ->where('countries.id', $country_id)
+                ->wherehas('cities')
                 ->where('states.activation', true)
                 ->get();
             return response()->json([

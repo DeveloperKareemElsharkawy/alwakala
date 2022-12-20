@@ -44,7 +44,6 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
         Route::post('/update-mobile', 'SellersController@sendUpdateMobileCode')->middleware('seller_can_access:sEditProfile');
         Route::post('/update-mobile/resend-code', 'SellersController@sendUpdateMobileCode')->middleware('seller_can_access:sEditProfile');
         Route::post('/update-mobile/confirm', 'SellersController@updateMobileConfirmation')->middleware('seller_can_access:sEditProfile');
-
     });
 
     Route::group(['prefix' => 'visitors'], function () {
