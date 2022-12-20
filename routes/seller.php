@@ -259,6 +259,9 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
         Route::post('/create', 'OffersController@addOffer')->middleware('seller_can_access:sIndexAddresses');
         Route::post('/edit', 'OffersController@editOffer')->middleware('seller_can_access:sIndexAddresses');
         Route::delete('/delete/{id}', 'OffersController@deleteOffer')->middleware('seller_can_access:sIndexAddresses');
+        Route::get('/approved-stores-list', 'OffersController@allEnrolledStores')->middleware('seller_can_access:sIndexAddresses');
+        Route::get('/rejected-stores-list', 'OffersController@allRejectedStores')->middleware('seller_can_access:sIndexAddresses');
+        Route::get('/pending-stores-list', 'OffersController@allPendingStores')->middleware('seller_can_access:sIndexAddresses');
     });
 
     Route::group(['prefix' => 'shopping-cart', 'middleware' => ['seller_auth', 'user_activation']], function () {
