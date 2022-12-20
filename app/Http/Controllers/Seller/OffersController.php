@@ -209,17 +209,17 @@ class OffersController extends BaseController
     function enrolledStores(Request $request, $offerId)
     {
         try {
+            $enrolledStores = OfferStore::query()->with('stores')->where([['offer_id', $offerId], ['status', 'approved']])->get();
 
-            $storesIds = OfferStore::query()->where([['offer_id', $offerId], ['status', 'approved']])->pluck('store_id')->toArray();
-
-            $request->merge(['where_stores_ids' => $storesIds]);
+            $enrolledStores->pluck('store_id')->toArray();
+            $request->merge(['where_stores_ids' => $enrolledStores]);
             $userId = UserId::UserId($request);
             $limit = 0;
             $pagination = 5;
 
             $stores = $this->storesRepo->getStores($request, $userId, $limit, $pagination, null, null, false, false);
 
-            return $this->respondWithPagination(OfferStoresStatusesResource::collection($stores));
+            return $this->respondWithPagination(OfferStoresStatusesResource::collection($enrolledStores));
         } catch (Exception $e) {
             Log::error('error in getOffer of Seller ' . __LINE__ . $e);
             return $e;
@@ -237,16 +237,9 @@ class OffersController extends BaseController
     {
         try {
 
-            $storesIds = OfferStore::query()->where([['offer_id', $offerId], ['status', 'rejected']])->pluck('store_id')->toArray();
+            $rejectedStores = OfferStore::query()->with('stores')->where([['offer_id', $offerId], ['status', 'rejected']])->pluck('store_id')->get();
 
-            $request->merge(['where_stores_ids' => $storesIds]);
-            $userId = UserId::UserId($request);
-            $limit = 0;
-            $pagination = 5;
-
-            $stores = $this->storesRepo->getStores($request, $userId, $limit, $pagination, null, null, false, false);
-
-            return $this->respondWithPagination(OfferStoresStatusesResource::collection($stores));
+            return $this->respondWithPagination(OfferStoresStatusesResource::collection($rejectedStores));
         } catch (Exception $e) {
             Log::error('error in getOffer of Seller ' . __LINE__ . $e);
             return $e;
