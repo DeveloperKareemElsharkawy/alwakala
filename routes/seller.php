@@ -180,7 +180,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
     });
     Route::get('/sizes', 'SizesController@getSizes');
     Route::get('/packing-units', 'PackingUnitsController@getPackingUnits');
-    Route::get('/generate-barcode', 'SellersController@generateBarcode');
+    Route::get('/generate-barcode', 'SellersController@generateBarcode')->middleware('seller_auth');
 
 
     Route::get('/logout', 'AuthController@logout')->middleware('seller_auth');
