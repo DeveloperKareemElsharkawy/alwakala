@@ -209,7 +209,7 @@ class OffersController extends BaseController
     function enrolledStores(Request $request, $offerId)
     {
         try {
-            $enrolledStores = OfferStore::query()->with('stores')->where([['offer_id', $offerId], ['status', 'approved']])->get();
+            $enrolledStores = OfferStore::query()->with(['store', 'offer'])->where([['offer_id', $offerId], ['status', 'approved']])->get();
 
             $enrolledStores->pluck('store_id')->toArray();
             $request->merge(['where_stores_ids' => $enrolledStores]);
@@ -237,7 +237,7 @@ class OffersController extends BaseController
     {
         try {
 
-            $rejectedStores = OfferStore::query()->with('stores')->where([['offer_id', $offerId], ['status', 'rejected']])->pluck('store_id')->get();
+            $rejectedStores = OfferStore::query()->with(['store', 'offer'])->where([['offer_id', $offerId], ['status', 'rejected']])->pluck('store_id')->get();
 
             return $this->respondWithPagination(OfferStoresStatusesResource::collection($rejectedStores));
         } catch (Exception $e) {
