@@ -469,7 +469,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
         Route::get('/', 'FeedsController@myFeeds');
         Route::get('/{feedId}', 'FeedsController@getFeed');
         Route::post('/{feedId}/pin', 'FeedsController@pinFeed');
-        Route::post('{feedId}/pin-feed', 'FeedsController@createFeed');
+        Route::post('create', 'FeedsController@createFeed');
         Route::post('/{feedId}/update', 'FeedsController@updateFeed');
         Route::post('/{feedId}/delete', 'FeedsController@deleteFeed');
 
