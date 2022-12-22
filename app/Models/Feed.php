@@ -14,6 +14,7 @@ class Feed extends Model
         'images',
         'youtube_url',
         'products',
+        'is_pinned',
     ];
 
     /**

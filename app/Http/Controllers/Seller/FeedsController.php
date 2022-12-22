@@ -107,6 +107,20 @@ class FeedsController extends BaseController
     }
 
     /**
+     * @return void
+     */
+    public function pinFeed($feedId, ToggleFavoriteFeedRequest $request)
+    {
+        Feed::query()->with('store')->where('user_id', $request->user_id)
+            ->update(['is_pinned' => false]);
+
+        $feed = Feed::query()->with('store')->where('id', $feedId)
+            ->update(['is_pinned' => true]);
+
+        return $this->success(['message' => 'Pinned Feed Successfully']);
+    }
+
+    /**
      * @param Request $request
      * @return FeedsCollection|JsonResponse
      */
@@ -115,11 +129,14 @@ class FeedsController extends BaseController
         try {
             $storeId = StoreId::getStoreID($request);
 
-            $feeds = Feed::query()->with('store')->where('store_id', $storeId)->paginate(10);
+            $feeds = Feed::query()->with('store')->where('store_id', $storeId)
+                ->orderByRaw('ifnull(is_pinned, updated_at) desc')
+                ->paginate(10);
 
             foreach ($feeds as $feed) {
                 $feed['products'] = ProductStore::query()->where('store_id', $feed->store_id)
-                    ->whereIn('product_id', $feed->products)->with('product.image')->get();
+                    ->whereIn('product_id', $feed->products)->with('product.image')
+                    ->get();
             }
 
             return new FeedsCollection($feeds);
