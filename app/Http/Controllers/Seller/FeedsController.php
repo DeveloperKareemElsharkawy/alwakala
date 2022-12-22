@@ -132,8 +132,9 @@ class FeedsController extends BaseController
             $storeId = StoreId::getStoreID($request);
 
             $feeds = Feed::query()->with('store')->where('store_id', $storeId)
-                ->orderByRaw('ifnull(is_pinned, updated_at) desc')
-                ->paginate(10);
+               orderBy('is_pinned', 'DESC')
+                   ->orderBy('created_at', 'DESC')
+                   ->paginate(10);
 
             foreach ($feeds as $feed) {
                 $feed['products'] = ProductStore::query()->where('store_id', $feed->store_id)
