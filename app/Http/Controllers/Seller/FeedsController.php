@@ -111,7 +111,9 @@ class FeedsController extends BaseController
      */
     public function pinFeed($feedId, ToggleFavoriteFeedRequest $request)
     {
-        Feed::query()->with('store')->where('user_id', $request->user_id)
+        $storeId = StoreId::getStoreID($request);
+
+        Feed::query()->with('store')->where('store_id', $storeId)
             ->update(['is_pinned' => false]);
 
         $feed = Feed::query()->with('store')->where('id', $feedId)
