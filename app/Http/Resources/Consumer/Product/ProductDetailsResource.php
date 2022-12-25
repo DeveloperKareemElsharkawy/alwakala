@@ -6,6 +6,7 @@ use App\Http\Resources\Consumer\Product\Relations\ProductBrandResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductCategoryResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductMaterialResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductPolicyResource;
+use App\Http\Resources\Consumer\Product\Relations\ProductShippingResource;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
