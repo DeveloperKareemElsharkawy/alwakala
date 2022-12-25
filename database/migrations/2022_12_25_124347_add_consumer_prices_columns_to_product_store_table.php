@@ -16,7 +16,7 @@ class AddConsumerPricesColumnsToProductStoreTable extends Migration
         Schema::table('product_store', function (Blueprint $table) {
             $table->float('consumer_old_price')->nullable();
             $table->float('consumer_price_discount')->nullable();
-            $table->enum('consumer_price_discount_type', ['1', '2']);
+            $table->enum('consumer_price_discount_type', ['1', '2'])->nullable();
         });
     }
 
