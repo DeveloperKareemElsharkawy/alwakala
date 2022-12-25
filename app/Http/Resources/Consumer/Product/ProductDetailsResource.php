@@ -4,6 +4,7 @@ namespace App\Http\Resources\Consumer\Product;
 
 use App\Http\Resources\Consumer\Product\Relations\ProductBrandResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductCategoryResource;
+use App\Http\Resources\Consumer\Product\Relations\ProductImagesResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductMaterialResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductPolicyResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductShippingResource;
@@ -26,9 +27,7 @@ class ProductDetailsResource extends JsonResource
             "description" => $this->description,
             "youtube_link" => $this->youtube_link,
 
-            'images' => $this->images->pluck('image')->toArray()->map(function ($image) {
-                return config('filesystems.aws_base_url') . $image;
-            }),
+            'images' => ProductImagesResource::collection($this->images),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
             'brand' => new ProductBrandResource($this->brand),
