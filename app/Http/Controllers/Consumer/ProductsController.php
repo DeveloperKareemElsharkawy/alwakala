@@ -108,7 +108,7 @@ class ProductsController extends BaseController
                     "data" => []
                 ],AResponseStatusCode::FORBIDDEN);
             }
-            $productDetails = $this->productService->getProductDetails($productId, $storeId);
+            $productDetails = $this->productService->getProductDetailsv2($productId, $storeId);
             return response()->json([
                 'success' => true,
                 'message' => "",
