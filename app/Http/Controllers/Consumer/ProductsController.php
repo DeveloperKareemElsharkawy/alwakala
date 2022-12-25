@@ -110,7 +110,7 @@ class ProductsController extends BaseController
             ProductStore::where('id','!=',90909)->update([
                 'consumer_price' => 70,
                 'consumer_old_price' => 100,
-                'price_discount_type' => DiscountTypes::PERCENTAGE,
+                'consumer_price_discount_type' => DiscountTypes::PERCENTAGE,
                 'consumer_price_discount' => 30,
             ]);
             if (!$productStore) {
