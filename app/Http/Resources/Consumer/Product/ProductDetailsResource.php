@@ -46,7 +46,7 @@ class ProductDetailsResource extends JsonResource
             ],
 
             'images' => ProductImagesResource::collection($this->images),
-            'colors' => $this->productStore->product_store_stock,
+            'colors' => $this->productStore?->productStoreStock,
             'store' => new ProductStoreResource($this->productStore->store),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
