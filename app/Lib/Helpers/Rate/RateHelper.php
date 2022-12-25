@@ -36,9 +36,13 @@ class RateHelper
                         ", [$itemId, $ratedType, 5])[0]->round;
     }
 
-    public static function getProductAvgRating($storeId, $productId)
+    public static function getProductAvgRating($storeId, $productId): float
     {
         return round(SellerRate::query()->where(['rated_id' => $productId, 'rated_store_id' => $storeId, 'rated_type' => Product::class])->avg('rate'), 1);
     }
 
+    public static function getStoreAvgRating($storeId): float
+    {
+        return round(SellerRate::query()->where(['rated_id' => $storeId, 'rated_type' => Store::class])->avg('rate'), 1);
+    }
 }
