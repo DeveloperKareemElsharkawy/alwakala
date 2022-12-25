@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Seller\Sizes;
 
 
+use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class SizesResource extends JsonResource
@@ -10,14 +11,17 @@ class SizesResource extends JsonResource
     /**
      * Transform the resource into an array.
      *
-     * @param \Illuminate\Http\Request $request
-     * @return array|\Illuminate\Contracts\Support\Arrayable|\JsonSerializable
+     * @param Request $request
+     * @return array
      */
-    public function toArray($request)
+    public function toArray($request): array
     {
+        $lang = LangHelper::getDefaultLang($request);
+
         return [
-            'id' => $this->id,
-            'size' => $this->size,
+            "id" => $this->id,
+            "size" => $this->size,
+            "size_type" => $this->sizeType['type_' . $lang],
         ];
     }
 }

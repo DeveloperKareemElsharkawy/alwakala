@@ -7,6 +7,8 @@ namespace App\Lib\Helpers\Product;
 use App\Enums\DiscountTypes\DiscountTypes;
 use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Enums\UserTypes\UserType;
+use App\Http\Resources\Dashboard\Stock\ColorResource;
+use App\Http\Resources\Seller\Sizes\SizesResource;
 use App\Models\Color;
 use App\Models\PackingUnitProduct;
 use App\Models\Product;
@@ -24,8 +26,8 @@ class ProductVariationHelper
         $colors = Color::query()->whereIn('id', $variations->pluck('color_id')->toArray())->get();
         $sizes = Size::query()->whereIn('id', $variations->pluck('size_id')->toArray())->get();
         return array([
-            'colors' => $colors,
-            'sizes' => $sizes,
+            'colors' =>  ColorResource::collection($colors),
+            'sizes' => SizesResource::collection($sizes),
         ]);
         $groupedVariations = $variationsList->groupBy('size_id');
         $sortedVariations = $groupedVariations->sortBy('available_stock');
