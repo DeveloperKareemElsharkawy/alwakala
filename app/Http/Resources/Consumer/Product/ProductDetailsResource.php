@@ -28,6 +28,7 @@ class ProductDetailsResource extends JsonResource
     {
         $storeId = StoreId::getStoreID($request);
         $userID = $request->user('api') ? $request->user('api')->id : 0;
+
         return [
             'id' => $this->id,
             'name' => $this->name,
@@ -46,7 +47,7 @@ class ProductDetailsResource extends JsonResource
             ],
 
             'images' => ProductImagesResource::collection($this->images),
-            'colors' => $this->productStore?->productStoreStock,
+            'options' => $this->productStore?->productStoreStock->orderBy('id'),
             'store' => new ProductStoreResource($this->productStore->store),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
@@ -56,4 +57,6 @@ class ProductDetailsResource extends JsonResource
 
         ];
     }
+
+
 }
