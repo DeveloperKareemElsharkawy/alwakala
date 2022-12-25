@@ -10,6 +10,7 @@ use App\Http\Resources\Consumer\Product\Relations\ProductPolicyResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductShippingResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductStoreResource;
 use App\Lib\Helpers\Favorite\FeedFavoriteHelper;
+use App\Lib\Helpers\Product\ProductVariationHelper;
 use App\Lib\Helpers\Rate\RateHelper;
 use App\Lib\Helpers\StoreId\StoreId;
 use App\Services\Product\ProductService;
@@ -47,7 +48,7 @@ class ProductDetailsResource extends JsonResource
             ],
 
             'images' => ProductImagesResource::collection($this->images),
-            'options' => $this->productStore?->productStoreStock->orderBy('id'),
+            'options' => ProductVariationHelper::getProductVariationsForSelection($this->productStore?->productStoreStock),
             'store' => new ProductStoreResource($this->productStore->store),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),

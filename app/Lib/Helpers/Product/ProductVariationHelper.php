@@ -16,69 +16,14 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class ProductVariationHelper
 {
-
-
-    public static function productStatus($availableStock, $publishDate, $reviewed)
+    public static function getProductVariationsForSelection($variations): \Illuminate\Support\Collection
     {
-        $productStatuses = '';
-        if (!$reviewed) {
-            $productStatuses = trans('messages.status.in_review');
-        } elseif ($availableStock > 0 && Carbon::now()->greaterThan($publishDate)) {
-            $productStatuses = trans('messages.status.available');
-        } elseif ($availableStock == 0) {
-            $productStatuses = trans('messages.status.not_available');
-        } elseif ($publishDate >= Carbon::now()->lessThan($publishDate)) {
-            $productStatuses = trans('messages.status.soon');
-        }
-        return $productStatuses;
+        $variationsList = collect($variations);
+        $groupedVariations = $variationsList->groupBy('size_id');
+        $sortedVariations = $groupedVariations->sortBy('available_stock');
+
+        return $sortedVariations;
     }
 
-    public static function calculateProductDiscount($discountType, $discountValue, $price)
-    {
-        if ($discountType == DiscountTypes::AMOUNT) {
-            return $price - $discountValue;
-        } else {
-            return $price - (($price / 100) * $discountValue);
-        }
-    }
 
-    public static function isActiveProduct($productId): bool
-    {
-        $product = Product::query()
-            ->select('activation')
-            ->find($productId);
-
-        if ($product->activation == false) {
-            return false;
-        }
-        return true;
-
-    }
-
-    public static function canShowPrice($userId, $activation, $price)
-    {
-        $user = User::query()->where('id', $userId)->first();
-        if ($user) {
-            if ($user->type_id == UserType::CONSUMER) {
-                return $price;
-            }
-        }
-        if (!$userId || !$activation) {
-            return '--';
-        } else {
-            return $price;
-        }
-    }
-
-    public static function getProductBasicUnitCount($productId)
-    {
-        $packingUnit = PackingUnitProduct::query()
-            ->where('product_id', '=', $productId)
-            ->first();
-
-        if ($packingUnit)
-            return $packingUnit->basic_unit_count;
-
-        return false;
-    }
 }
