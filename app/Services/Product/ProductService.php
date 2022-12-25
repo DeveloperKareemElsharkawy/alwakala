@@ -32,7 +32,7 @@ class ProductService
         return Product::query()->whereHas('productStore', function ($q) use ($productId, $storeId) {
             $q->where('product_id', $productId);
             $q->where('store_id', $storeId);
-        })->with(['category', 'brand', 'material', 'shipping'])->first();
+        })->with(['category', 'brand', 'material', 'shipping', 'images'])->first();
     }
 
 

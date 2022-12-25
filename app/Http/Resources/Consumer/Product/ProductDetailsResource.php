@@ -26,6 +26,7 @@ class ProductDetailsResource extends JsonResource
             "description" => $this->description,
             "youtube_link" => $this->youtube_link,
 
+            'images' => $this->images,
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
             'brand' => new ProductBrandResource($this->brand),
