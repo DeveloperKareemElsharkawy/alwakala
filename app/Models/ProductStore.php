@@ -23,6 +23,10 @@ class ProductStore extends Model
         'is_purchased',
         'consumer_price',
         'barcode',
+        'consumer_price_discount_type',
+        'consumer_price_discount',
+        'consumer_old_price',
+        'barcode',
         'barcode_text'
     ];
     protected $table = 'product_store';

@@ -29,21 +29,28 @@ class ProductDetailsResource extends JsonResource
         $storeId = StoreId::getStoreID($request);
         $userID = $request->user('api') ? $request->user('api')->id : 0;
         return [
-            "id" => $this->id,
-            "name" => $this->name,
-            "description" => $this->description,
-            "youtube_link" => $this->youtube_link,
+            'id' => $this->id,
+            'name' => $this->name,
+            'description' => $this->description,
+            'youtube_link' => $this->youtube_link,
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
             'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
 
-            'store' => new ProductStoreResource($this->productStore->store),
+            'pricing' => [
+                'price' => $this->consumer_price,
+                'has_discount' => (bool)$this->consumer_price_discount,
+                'old_price' => $this->consumer_old_price,
+                'price_discount' => $this->consumer_price_discount,
+                'price_discount_type' => $this->consumer_price_discount_type,
+            ],
+
             'images' => ProductImagesResource::collection($this->images),
+            'store' => new ProductStoreResource($this->productStore->store),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
             'brand' => new ProductBrandResource($this->brand),
             'material' => new ProductMaterialResource($this->material),
             'shipping' => new ProductShippingResource($this->shipping),
-
 
         ];
     }

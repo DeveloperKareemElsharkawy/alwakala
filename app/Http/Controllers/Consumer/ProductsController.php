@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Consumer;
 
+use App\Enums\DiscountTypes\DiscountTypes;
 use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Events\Product\FavoriteProduct;
 use App\Http\Controllers\BaseController;
@@ -11,6 +12,7 @@ use App\Http\Resources\Consumer\Product\ProductDetailsResource;
 use App\Lib\Log\ValidationError;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductStore;
 use App\Models\SellerFavorite;
 use App\Models\Store;
 use App\Models\User;
@@ -104,6 +106,13 @@ class ProductsController extends BaseController
             $productId = $request->product_id;
             $storeId = $request->store_id;
             $productStore = $this->productRepository->getProductStore($productId, $storeId);
+
+            ProductStore::update([
+                'consumer_price' => 70,
+                'consumer_old_price' => 100,
+                'price_discount_type' => DiscountTypes::PERCENTAGE,
+                'consumer_price_discount' => 30,
+            ]);
             if (!$productStore) {
                 return response()->json([
                     "status" => AResponseStatusCode::FORBIDDEN,
