@@ -16,7 +16,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class ProductVariationHelper
 {
-    public static function getProductVariationsForSelection($variations): array
+    public static function getProductVariationsForSelection($variations)
     {
         $variationsList = collect($variations);
         $variationsList->pluck('color_id');
