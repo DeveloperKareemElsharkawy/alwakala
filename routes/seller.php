@@ -403,7 +403,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
     Route::group(['prefix' => 'users', 'middleware' => ['seller_auth', 'user_activation']], function () {
         Route::get('', 'RoleController@index')->middleware('seller_can_access:sIndexStoreUsers');
         Route::post('', 'RoleController@createUser')->middleware('seller_can_access:sAddStoreUser');
-        Route::put('', 'RoleController@editUser')->middleware('seller_can_access:sEditStoreUser');
+        Route::put('update', 'RoleController@editUser')->middleware('seller_can_access:sEditStoreUser');
         Route::get('/get-roles/{user_type}', 'RoleController@getRolesForUserType')->middleware('seller_can_access:sShowRolesForUserType');
         Route::get('/get-roles-for-select', 'RoleController@getRolesForSelection')->middleware('seller_can_access:sShowRolesForSelection');
     });

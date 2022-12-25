@@ -33,7 +33,7 @@ class RoleController extends BrandsController
                 ->where('user_id', $request->user_id)->first();
 
             $users = User::query()
-                ->select('users.id', 'users.name', 'users.email', 'users.mobile', 'roles.id as role_id', 'roles.role', 'users.activation')
+                ->select('users.id', 'users.name','users.image', 'users.email', 'users.mobile', 'roles.id as role_id', 'roles.role', 'users.activation')
                 ->join('sellers', 'sellers.user_id', '=', 'users.id')
                 ->join('roles', 'roles.id', '=', 'sellers.role_id')
                 ->where('sellers.store_id', $store->id)
