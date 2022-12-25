@@ -13,7 +13,7 @@ class AddSizeTableImageColumnsToProductTable extends Migration
      */
     public function up()
     {
-        Schema::table('product', function (Blueprint $table) {
+        Schema::table('products', function (Blueprint $table) {
             $table->string('size_table_image')->nullable();
         });
     }
