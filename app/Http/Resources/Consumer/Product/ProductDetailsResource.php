@@ -37,11 +37,11 @@ class ProductDetailsResource extends JsonResource
             'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
 
             'pricing' => [
-                'price' => $this->consumer_price,
-                'has_discount' => (bool)$this->consumer_price_discount,
-                'old_price' => $this->consumer_old_price,
-                'price_discount' => $this->consumer_price_discount,
-                'price_discount_type' => $this->consumer_price_discount_type,
+                'price' => (double)$this->productStore->consumer_price,
+                'has_discount' => (bool)$this->productStore->consumer_price_discount,
+                'old_price' => (double)$this->productStore->consumer_old_price,
+                'price_discount' => (double)$this->productStore->consumer_price_discount,
+                'price_discount_type' => (double)$this->productStore->consumer_price_discount_type,
             ],
 
             'images' => ProductImagesResource::collection($this->images),
