@@ -34,7 +34,7 @@ class ProductDetailsResource extends JsonResource
             "description" => $this->description,
             "youtube_link" => $this->youtube_link,
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
-            'rating' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
+            'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
 
             'store' => new ProductStoreResource($this->productStore->store),
             'images' => ProductImagesResource::collection($this->images),

@@ -22,9 +22,13 @@ class ProductStoreResource extends JsonResource
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'address' => $this->address,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
             'followers_count' => $followersCount,
-            'rating' => RateHelper::getStoreAvgRating($this->id),
+            'rating_avg' => RateHelper::getStoreAvgRating($this->id),
             'logo' => $this->logo ? config('filesystems.aws_base_url') . $this->logo : null,
+            'is_followed' => (bool)FollowedStore::where([['user_id', auth('api')?->user()->id ], ['store_id', $this->id]])->first(),
         ];
     }
 }
