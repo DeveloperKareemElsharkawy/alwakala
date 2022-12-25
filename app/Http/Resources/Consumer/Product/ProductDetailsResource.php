@@ -10,7 +10,9 @@ use App\Http\Resources\Consumer\Product\Relations\ProductPolicyResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductShippingResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductStoreResource;
 use App\Lib\Helpers\Favorite\FeedFavoriteHelper;
+use App\Lib\Helpers\Rate\RateHelper;
 use App\Lib\Helpers\StoreId\StoreId;
+use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -32,6 +34,7 @@ class ProductDetailsResource extends JsonResource
             "description" => $this->description,
             "youtube_link" => $this->youtube_link,
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
+            'rating' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
 
             'store' => new ProductStoreResource($this->productStore->store),
             'images' => ProductImagesResource::collection($this->images),
