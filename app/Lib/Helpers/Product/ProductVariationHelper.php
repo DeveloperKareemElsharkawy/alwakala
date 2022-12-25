@@ -19,10 +19,25 @@ class ProductVariationHelper
     public static function getProductVariationsForSelection($variations): array
     {
         $variationsList = collect($variations);
+        $variationsList->pluck('color_id');
+        $variationsList->pluck('size_id');
+
+        return response()->json([
+            $variationsList->pluck('color_id'),
+            $variationsList->pluck('size_id'),
+        ]);
         $groupedVariations = $variationsList->groupBy('size_id');
         $sortedVariations = $groupedVariations->sortBy('available_stock');
 
-        return $sortedVariations->values()->all();
+        $variationLoop = 0;
+
+        foreach ($sortedVariations->values()->all() as $variation) {
+            if ($variationLoop == 0) {
+                $variation->is_default = true;
+            } else {
+                $variation->is_default = false;
+            }
+        }
     }
 
 
