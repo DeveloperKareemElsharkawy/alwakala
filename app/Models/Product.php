@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\DB;
 class Product extends Model
 {
     use HasFactory;
+
     protected $fillable = [
         'name_en',
         'name_ar',
@@ -71,18 +72,18 @@ class Product extends Model
 
     public function image()
     {
-        return $this->hasOne(ProductImage::class)->select('product_id', 'image','color_id');
+        return $this->hasOne(ProductImage::class)->select('product_id', 'image', 'color_id');
     }
 
     public function productImage()
     {
-        return $this->hasOne(ProductImage::class)->select(DB::raw("image,CONCAT('".config('filesystems.aws_base_url')."',image) AS image_full,product_id"));
+        return $this->hasOne(ProductImage::class)->select(DB::raw("image,CONCAT('" . config('filesystems.aws_base_url') . "',image) AS image_full,product_id"));
         return $this->hasOne(ProductImage::class)->select('product_id', 'image');
     }
 
     public function images()
     {
-        return $this->hasMany(ProductImage::class,'product_id');
+        return $this->hasMany(ProductImage::class, 'product_id');
     }
 
     public function favActor()
@@ -158,7 +159,7 @@ class Product extends Model
 
     public function packingUnitAttributes()
     {
-        return $this->hasMany(PackingUnitProductAttribute::class,'packing_unit_product_id');
+        return $this->hasMany(PackingUnitProductAttribute::class, 'packing_unit_product_id');
     }
 
     public function bundles()
@@ -186,7 +187,7 @@ class Product extends Model
 
     public function shipping(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(ShippingMethod::class)->select('id', 'name_en', 'name_ar');
+        return $this->belongsTo(ShippingMethod::class, 'shipping_method_id')->select('id', 'name_en', 'name_ar');
     }
 
     public function shippingMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
