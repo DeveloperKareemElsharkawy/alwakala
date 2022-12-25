@@ -42,7 +42,7 @@ class User extends Authenticatable
         $this->mobile = $data['mobile'];
         $this->type_id = $data['type_id'];
 
-        if ($data['type_id'] == UserType::SELLER && $this->image) {
+        if ($data['type_id'] == UserType::SELLER && $data['image']) {
             $this->image = UploadImage::uploadImageToStorage($data['image'], 'sellers');
 
         }
