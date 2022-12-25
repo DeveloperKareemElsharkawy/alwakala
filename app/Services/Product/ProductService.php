@@ -26,19 +26,20 @@ class ProductService
         return $formattedData;
     }
 
-    private function mapProductDetailsResponse($productDetails) {
+    private function mapProductDetailsResponse($productDetails)
+    {
         $formattedData = [];
         foreach ($productDetails as $productDetail) {
-            $formattedData['product_id'] = $productDetail->product_id;
-            $formattedData['product_name'] = $productDetail->product_name;
-            $formattedData['product_description'] = $productDetail->description;
-            $formattedData['category'] = $productDetail->category_name;
-            $formattedData['category_id'] = $productDetail->category_id;
-            $formattedData['price'] = $productDetail->price;
-            $formattedData['net_price'] = $productDetail->net_price;
-            $formattedData['store_name'] = $productDetail->store_name;
-            $formattedData['has_discount'] = $productDetail->has_discount;
-            $formattedData['images'][$productDetail->product_image_id] = config('filesystems.aws_base_url') . $productDetail->product_image;
+            $formattedData['product_data']['product_id'] = $productDetail->product_id;
+            $formattedData['product_data']['product_name'] = $productDetail->product_name;
+            $formattedData['product_data']['product_description'] = $productDetail->description;
+            $formattedData['product_data']['category'] = $productDetail->category_name;
+            $formattedData['product_data']['category_id'] = $productDetail->category_id;
+            $formattedData['product_data']['price'] = $productDetail->price;
+            $formattedData['product_data']['net_price'] = $productDetail->net_price;
+            $formattedData['product_data']['store_name'] = $productDetail->store_name;
+            $formattedData['product_data']['has_discount'] = $productDetail->has_discount;
+            $formattedData['product_data']['images'][$productDetail->product_image_id] = config('filesystems.aws_base_url') . $productDetail->product_image;
             if (isset($formattedData['colors'][$productDetail->color_id]) && $formattedData['colors'][$productDetail->color_id]['available'] == false) {
                 $formattedData['colors'][$productDetail->color_id]['available'] = $productDetail->available_stock > 0 ? true : false;
             } else {
@@ -52,7 +53,7 @@ class ProductService
             $formattedData['colors'][$productDetail->color_id]['sizes'][$productDetail->product_store_stock_id]['stock'] = $productDetail->available_stock;
             if ($productDetail->color_id == $productDetail->image_color_id) {
                 $formattedData['colors'][$productDetail->color_id]['images'][$productDetail->product_image_id]['image'] = config('filesystems.aws_base_url') . $productDetail->product_image;
-                $formattedData['colors'][$productDetail->color_id]['images'][$productDetail->product_image_id]['is_primary'] =  $productDetail->is_primary;
+                $formattedData['colors'][$productDetail->color_id]['images'][$productDetail->product_image_id]['is_primary'] = $productDetail->is_primary;
             }
         }
         return $formattedData;
@@ -71,6 +72,7 @@ class ProductService
         $formattedData['has_discount'] = $mappedData['has_discount'];
         $formattedData['rating'] = $this->getProductRating($productId);
         $formattedData['store']['name'] = $mappedData['store_name'];
+        $formattedData['store']['logo'] = $mappedData['store_logo'] ? config('filesystems.aws_base_url') . $mappedData['store_logo'] : null;
         $formattedData['store']['followers_count'] = $this->storeRepository->getStoreFollowersCount($storeId);
         $formattedData['store']['rating'] = $this->storesService->getStoreRating($storeId);
         foreach ($mappedData['images'] as $image) {
@@ -97,8 +99,8 @@ class ProductService
         $reviews = $this->productRepository->getProductReviews($productId, $limit);
         if (count($reviews)) {
             foreach ($reviews as $formattedReview) {
-                $formattedReview->image = $formattedReview->image ? config('filesystems.aws_base_url') . $formattedReview->image: null;
-                $formattedReview->user_image = $formattedReview->user_image ? config('filesystems.aws_base_url') . $formattedReview->user_image: null;
+                $formattedReview->image = $formattedReview->image ? config('filesystems.aws_base_url') . $formattedReview->image : null;
+                $formattedReview->user_image = $formattedReview->user_image ? config('filesystems.aws_base_url') . $formattedReview->user_image : null;
             }
         }
         return $reviews;
@@ -109,14 +111,15 @@ class ProductService
         $reviews = $this->productRepository->getProductReviews($productId);
         if (count($reviews)) {
             foreach ($reviews->items() as $formattedReview) {
-                $formattedReview->image = $formattedReview->image ? config('filesystems.aws_base_url') . $formattedReview->image: null;
-                $formattedReview->user_image = $formattedReview->user_image ? config('filesystems.aws_base_url') . $formattedReview->user_image: null;
+                $formattedReview->image = $formattedReview->image ? config('filesystems.aws_base_url') . $formattedReview->image : null;
+                $formattedReview->user_image = $formattedReview->user_image ? config('filesystems.aws_base_url') . $formattedReview->user_image : null;
             }
         }
         return $reviews;
     }
 
-    public function getProductRating($productId) {
+    public function getProductRating($productId)
+    {
         $ratingData = $this->productRepository->getProductRatings($productId)[0];
         if ($ratingData['rating'] == null) {
             return 5;

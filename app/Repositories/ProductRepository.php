@@ -239,7 +239,7 @@ class ProductRepository extends Controller
         $productStore->price = $productData->price;
         $productStore->net_price = $productData->net_price;
         $productStore->is_purchased = true;
-         $productStore->discount = $productStore->discount ? $productStore->discount : 0;
+        $productStore->discount = $productStore->discount ? $productStore->discount : 0;
         $productStore->discount_type = $productStore->discount_type ? $productStore->discount_type : DiscountTypes::AMOUNT;
         $productStore->publish_app_at = $productStore->publish_app_at ? $productStore->publish_app_at : Carbon::now()->toDateString();
         $productStore->save();
@@ -710,7 +710,7 @@ class ProductRepository extends Controller
                 'products.brand_id',
                 'products.policy_id',
                 'products.youtube_link',
-                DB::raw('CASE WHEN products.policy_id = '. APolicyTypes::WekalaPrime .' THEN true else false END as is_wekala_policy'),
+                DB::raw('CASE WHEN products.policy_id = ' . APolicyTypes::WekalaPrime . ' THEN true else false END as is_wekala_policy'),
                 'products.consumer_price',
                 "brands.name_$lang as brand_name",
                 'product_store.discount',
@@ -858,7 +858,10 @@ class ProductRepository extends Controller
             'sizes.size as size_name',
             'product_store_stock.available_stock as available_stock',
             'product_store_stock.id as product_store_stock_id',
-            'stores.name as store_name'
+            'stores.id as store_id',
+            'stores.name as store_name',
+            'stores.logo as store_logo',
+
         )
             ->orderBy('product_images.color_id')->get();
     }
