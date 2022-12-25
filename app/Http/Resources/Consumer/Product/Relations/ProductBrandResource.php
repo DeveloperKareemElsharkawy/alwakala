@@ -2,7 +2,7 @@
 
 namespace App\Http\Resources\Consumer\Product\Relations;
 
-use App\Http\Resources\Consumer\Product\LangHelper;
+use App\Lib\Helpers\Lang\LangHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
