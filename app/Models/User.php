@@ -41,6 +41,11 @@ class User extends Authenticatable
             $this->email = $data['email'];
         $this->mobile = $data['mobile'];
         $this->type_id = $data['type_id'];
+
+        if ($data['type_id'] == UserType::SELLER && $this->image) {
+            $this->image = UploadImage::uploadImageToStorage($data['image'], 'sellers');
+
+        }
         if ($data['type_id'] == UserType::ADMIN) {
             $this->image = UploadImage::uploadImageToStorage($data['image'], 'admins');
             $this->activation = $data['activation'];
@@ -86,7 +91,7 @@ class User extends Authenticatable
 
     public function roles()
     {
-        return $this->belongsToMany(Role::class,'sellers');
+        return $this->belongsToMany(Role::class, 'sellers');
     }
 
     public function warehourses()

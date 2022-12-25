@@ -375,7 +375,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
     });
     Route::group(['prefix' => 'users', 'middleware' => ['seller_auth', 'user_activation']], function () {
         Route::post('/create', 'RoleController@createUser')->middleware('seller_can_access:sAddStoreUser');
-        Route::put('/update', 'RoleController@editUser')->middleware('seller_can_access:sEditStoreUser');
+        Route::post('/update', 'RoleController@editUser')->middleware('seller_can_access:sEditStoreUser');
 
 
         Route::delete('/delete', 'RoleController@deleteUser')->middleware('seller_can_access:sDeleteStoreUser');
@@ -472,13 +472,12 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
         Route::post('create', 'FeedsController@createFeed');
         Route::post('/{feedId}/update', 'FeedsController@updateFeed');
         Route::post('/{feedId}/delete', 'FeedsController@deleteFeed');
-
     });
+
     Route::group(['prefix' => 'feeds'], function () {
         Route::get('/', 'FeedsController@allFeedsList');
         Route::post('/toggle-favorite-feed', 'FeedsController@toggleFavoriteFeed')->middleware('seller_auth');
         Route::get('/my-favorites', 'FeedsController@myFavorites')->middleware('seller_auth');
-
     });
 
     Route::group(['prefix' => 'feeds', 'middleware' => ['seller_auth']], function () {
