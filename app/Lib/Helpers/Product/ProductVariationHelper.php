@@ -23,8 +23,8 @@ class ProductVariationHelper
         $variationsList->pluck('size_id');
 
         return response()->json([
-            $variationsList->pluck('color_id')->unique(),
-            $variationsList->pluck('size_id')->unique(),
+            $variations->pluck('color_id')->toArray()->unique(),
+            $variations->pluck('size_id')->toArray()->unique(),
         ]);
         $groupedVariations = $variationsList->groupBy('size_id');
         $sortedVariations = $groupedVariations->sortBy('available_stock');
