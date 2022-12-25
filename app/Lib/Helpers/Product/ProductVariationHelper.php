@@ -22,7 +22,7 @@ class ProductVariationHelper
         $groupedVariations = $variationsList->groupBy('size_id');
         $sortedVariations = $groupedVariations->sortBy('available_stock');
 
-        return $sortedVariations;
+        return $sortedVariations->values()->all();
     }
 
 
