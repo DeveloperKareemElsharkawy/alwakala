@@ -16,7 +16,7 @@ use phpDocumentor\Reflection\Types\Boolean;
 
 class ProductVariationHelper
 {
-    public static function getProductVariationsForSelection($variations): \Illuminate\Support\Collection
+    public static function getProductVariationsForSelection($variations): array
     {
         $variationsList = collect($variations);
         $groupedVariations = $variationsList->groupBy('size_id');
