@@ -32,24 +32,12 @@ class ProductVariationHelper
         return array([
             'colors' => ColorResource::collection($colors),
             'sizes' => SizesResource::collection($sizes),
-            '$sortedVariations' => $sortedVariations,
-            'default_variations' => [
-                'selected_color_id' => '',
-                'selected_size_id' => '',
-                'available_quantity' => ''
+             'default_variations' => [
+                'selected_color_id' => $sortedVariations?->color_id,
+                'selected_size_id' => $sortedVariations?->size_id,
+                'available_quantity' => $sortedVariations?->available_stock
             ],
         ]);
-        $groupedVariations = $variationsList->groupBy('size_id');
-
-        $variationLoop = 0;
-
-        foreach ($sortedVariations->values()->all() as $variation) {
-            if ($variationLoop == 0) {
-                $variation->is_default = true;
-            } else {
-                $variation->is_default = false;
-            }
-        }
     }
 
 
