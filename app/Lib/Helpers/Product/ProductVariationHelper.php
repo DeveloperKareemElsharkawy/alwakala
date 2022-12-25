@@ -23,10 +23,9 @@ class ProductVariationHelper
 
         $colors = Color::query()->whereIn('id', $variations->pluck('color_id')->toArray())->get();
         $sizes = Size::query()->whereIn('id', $variations->pluck('size_id')->toArray())->get();
-        return response()->json([
+        return array([
             'colors' => $colors,
             'sizes' => $sizes,
-
         ]);
         $groupedVariations = $variationsList->groupBy('size_id');
         $sortedVariations = $groupedVariations->sortBy('available_stock');
