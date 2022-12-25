@@ -20,8 +20,7 @@ class ProductVariationHelper
 {
     public static function getProductVariationsForSelection($variations)
     {
-        $variationsList = collect($variations);
-
+ 
         $colors = Color::query()->where('id', $variations->pluck('color_id')->toArray())->get();
         $sizes = Size::query()->where('id', $variations->pluck('size_id')->toArray())->get();
         return response()->json([
