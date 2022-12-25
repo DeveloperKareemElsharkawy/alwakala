@@ -32,6 +32,7 @@ class ProductDetailsResource extends JsonResource
             "youtube_link" => $this->youtube_link,
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
 
+            'store' => ProductImagesResource::collection($this->productStore->store),
             'images' => ProductImagesResource::collection($this->images),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
@@ -39,7 +40,7 @@ class ProductDetailsResource extends JsonResource
             'material' => new ProductMaterialResource($this->material),
             'shipping' => new ProductShippingResource($this->shipping),
 
-            
+
         ];
     }
 }
