@@ -8,6 +8,7 @@ use App\Http\Resources\Consumer\Product\Relations\ProductImagesResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductMaterialResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductPolicyResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductShippingResource;
+use App\Http\Resources\Consumer\Product\Relations\ProductStoreResource;
 use App\Lib\Helpers\Favorite\FeedFavoriteHelper;
 use App\Lib\Helpers\StoreId\StoreId;
 use Illuminate\Http\Request;
@@ -32,7 +33,7 @@ class ProductDetailsResource extends JsonResource
             "youtube_link" => $this->youtube_link,
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
 
-            'store' => ProductImagesResource::collection($this->productStore->store),
+            'store' => new ProductStoreResource($this->productStore->store),
             'images' => ProductImagesResource::collection($this->images),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
