@@ -2,6 +2,7 @@
 
 namespace App\Services\Product;
 
+use App\Models\Product;
 use App\Repositories\ProductRepository;
 use App\Repositories\StoreRepository;
 use App\Services\Stores\StoresService;
@@ -26,20 +27,29 @@ class ProductService
         return $formattedData;
     }
 
+    public function getProductDetailsv2($productId, $storeId)
+    {
+        return Product::query()->whereHas('productStore', function ($q) use ($productId, $storeId) {
+            $q->where('product_id', $productId);
+            $q->where('store_id', $storeId);
+        })->first();
+    }
+
+
     private function mapProductDetailsResponse($productDetails)
     {
         $formattedData = [];
         foreach ($productDetails as $productDetail) {
-            $formattedData['product_data']['product_id'] = $productDetail->product_id;
-            $formattedData['product_data']['product_name'] = $productDetail->product_name;
-            $formattedData['product_data']['product_description'] = $productDetail->description;
-            $formattedData['product_data']['category'] = $productDetail->category_name;
-            $formattedData['product_data']['category_id'] = $productDetail->category_id;
-            $formattedData['product_data']['price'] = $productDetail->price;
-            $formattedData['product_data']['net_price'] = $productDetail->net_price;
-            $formattedData['product_data']['store_name'] = $productDetail->store_name;
-            $formattedData['product_data']['has_discount'] = $productDetail->has_discount;
-            $formattedData['product_data']['images'][$productDetail->product_image_id] = config('filesystems.aws_base_url') . $productDetail->product_image;
+            $formattedData['product_id'] = $productDetail->product_id;
+            $formattedData['product_name'] = $productDetail->product_name;
+            $formattedData['product_description'] = $productDetail->description;
+            $formattedData['category'] = $productDetail->category_name;
+            $formattedData['category_id'] = $productDetail->category_id;
+            $formattedData['price'] = $productDetail->price;
+            $formattedData['net_price'] = $productDetail->net_price;
+            $formattedData['store_name'] = $productDetail->store_name;
+            $formattedData['has_discount'] = $productDetail->has_discount;
+            $formattedData['images'][$productDetail->product_image_id] = config('filesystems.aws_base_url') . $productDetail->product_image;
             if (isset($formattedData['colors'][$productDetail->color_id]) && $formattedData['colors'][$productDetail->color_id]['available'] == false) {
                 $formattedData['colors'][$productDetail->color_id]['available'] = $productDetail->available_stock > 0 ? true : false;
             } else {
@@ -72,7 +82,6 @@ class ProductService
         $formattedData['has_discount'] = $mappedData['has_discount'];
         $formattedData['rating'] = $this->getProductRating($productId);
         $formattedData['store']['name'] = $mappedData['store_name'];
-        $formattedData['store']['logo'] = $mappedData['store_logo'] ? config('filesystems.aws_base_url') . $mappedData['store_logo'] : null;
         $formattedData['store']['followers_count'] = $this->storeRepository->getStoreFollowersCount($storeId);
         $formattedData['store']['rating'] = $this->storesService->getStoreRating($storeId);
         foreach ($mappedData['images'] as $image) {
