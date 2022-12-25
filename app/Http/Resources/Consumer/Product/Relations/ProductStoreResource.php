@@ -28,7 +28,7 @@ class ProductStoreResource extends JsonResource
             'followers_count' => $followersCount,
             'rating_avg' => RateHelper::getStoreAvgRating($this->id),
             'logo' => $this->logo ? config('filesystems.aws_base_url') . $this->logo : null,
-            'is_followed' => (bool)FollowedStore::where([['user_id', auth('api')?->user()->id ], ['store_id', $this->id]])->first(),
+            'is_followed' => (bool)FollowedStore::where([['user_id', auth('api')?->user()?->id ], ['store_id', $this->id]])->first(),
         ];
     }
 }
