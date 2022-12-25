@@ -26,7 +26,9 @@ class ProductDetailsResource extends JsonResource
             "description" => $this->description,
             "youtube_link" => $this->youtube_link,
 
-            'images' => $this->images,
+            'images' => $this->images->pluck('image')->toArray()->map(function ($image) {
+                return config('filesystems.aws_base_url') . $image;
+            }),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),
             'brand' => new ProductBrandResource($this->brand),
