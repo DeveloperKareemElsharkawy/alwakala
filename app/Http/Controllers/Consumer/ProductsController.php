@@ -107,7 +107,7 @@ class ProductsController extends BaseController
             $storeId = $request->store_id;
             $productStore = $this->productRepository->getProductStore($productId, $storeId);
 
-            ProductStore::update([
+            ProductStore::query()->update([
                 'consumer_price' => 70,
                 'consumer_old_price' => 100,
                 'price_discount_type' => DiscountTypes::PERCENTAGE,
