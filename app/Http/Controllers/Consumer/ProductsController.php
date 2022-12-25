@@ -7,7 +7,6 @@ use App\Events\Product\FavoriteProduct;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\ConsumerApp\Product\ListProductReviews;
 use App\Http\Requests\ConsumerApp\Product\ShowProductRequest;
-use App\Http\Resources\Consumer\Product\ProductDetailsResource;
 use App\Lib\Log\ValidationError;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -25,14 +24,12 @@ use Illuminate\Http\Request;
 class ProductsController extends BaseController
 {
     public $storeRepository, $productService, $productRepository;
-
     public function __construct(StoreRepository $storeRepository, ProductService $productService, ProductRepository $productRepository)
     {
         $this->storeRepository = $storeRepository;
         $this->productService = $productService;
         $this->productRepository = $productRepository;
     }
-
     public function toggleFavoriteProduct(Request $request)
     {
         try {
@@ -73,7 +70,7 @@ class ProductsController extends BaseController
                 $favorite->save();
                 $store = Store::query()->where('id', $request->store_id)->first();
                 $product_image = ProductImage::query()->where('product_id', $request->product_id)->first();
-                event(new FavoriteProduct([$store->user_id], $request->product_id, $product_image->image));
+                event(new FavoriteProduct([$store->user_id], $request->product_id,$product_image->image));
 
                 return response()->json([
                     'status' => true,
@@ -109,13 +106,13 @@ class ProductsController extends BaseController
                     "status" => AResponseStatusCode::FORBIDDEN,
                     "message" => "Store doesn't have this product",
                     "data" => []
-                ], AResponseStatusCode::FORBIDDEN);
+                ],AResponseStatusCode::FORBIDDEN);
             }
-            $productDetails = $this->productService->getProductDetailsv2($productId, $storeId);
+            $productDetails = $this->productService->getProductDetails($productId, $storeId);
             return response()->json([
                 'success' => true,
                 'message' => "",
-                'data' => new ProductDetailsResource($productDetails),
+                'data' => $productDetails,
             ], AResponseStatusCode::SUCCESS);
         } catch (\Exception $e) {
             Log::error('error in showProductFromConsumerSide of seller products' . __LINE__ . $e);
@@ -124,8 +121,7 @@ class ProductsController extends BaseController
     }
 
 
-    public function getProductReviews(ListProductReviews $request)
-    {
+    public function getProductReviews(ListProductReviews $request) {
         try {
             $productDetails = $this->productService->getPaginatedProductReviews($request->product_id);
             return response()->json([
