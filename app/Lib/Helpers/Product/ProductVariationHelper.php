@@ -27,7 +27,7 @@ class ProductVariationHelper
         $colors = Color::query()->whereIn('id', $variations->pluck('color_id')->toArray())->get();
         $sizes = Size::query()->whereIn('id', $variations->pluck('size_id')->toArray())->get();
 
-        $sortedVariations = $variationsCollection->sortBy('available_stock')->first();
+        $sortedVariations = $variationsCollection->sortByDesc('available_stock')->first();
 
         return array([
             'colors' => ColorResource::collection($colors),
