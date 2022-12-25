@@ -184,6 +184,11 @@ class Product extends Model
         return $this->belongsTo(Policy::class)->select('id', 'name_en', 'name_ar');
     }
 
+    public function shipping(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(ShippingMethod::class)->select('id', 'name_en', 'name_ar');
+    }
+
     public function shippingMethod(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(ShippingMethod::class)->select('id', 'name_en', 'name_ar');
