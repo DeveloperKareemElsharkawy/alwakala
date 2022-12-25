@@ -3,6 +3,7 @@
 namespace App\Http\Resources\Seller\Sizes;
 
 
+use App\Lib\Helpers\Lang\LangHelper;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
