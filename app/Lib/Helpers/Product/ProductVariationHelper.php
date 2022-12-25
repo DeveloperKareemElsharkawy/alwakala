@@ -22,15 +22,24 @@ class ProductVariationHelper
 {
     public static function getProductVariationsForSelection($variations)
     {
+        $variationsCollection = collect($variations);
 
         $colors = Color::query()->whereIn('id', $variations->pluck('color_id')->toArray())->get();
         $sizes = Size::query()->whereIn('id', $variations->pluck('size_id')->toArray())->get();
+
+        $sortedVariations = $variationsCollection->sortBy('available_stock')->first();
+
         return array([
-            'colors' =>  ColorResource::collection($colors),
+            'colors' => ColorResource::collection($colors),
             'sizes' => SizesResource::collection($sizes),
+            '$sortedVariations' => $sortedVariations,
+            'default_variations' => [
+                'selected_color_id' => '',
+                'selected_size_id' => '',
+                'available_quantity' => ''
+            ],
         ]);
         $groupedVariations = $variationsList->groupBy('size_id');
-        $sortedVariations = $groupedVariations->sortBy('available_stock');
 
         $variationLoop = 0;
 
