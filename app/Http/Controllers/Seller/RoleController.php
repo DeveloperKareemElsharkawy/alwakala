@@ -12,6 +12,7 @@ use App\Http\Requests\Users\UpdateUserRequest;
 use App\Http\Resources\RolesResource;
 use App\Http\Resources\Seller\ModeratorResource;
 use App\Lib\Log\ServerError;
+use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\Permission;
 use App\Models\Role;
 use App\Models\Seller;
@@ -33,7 +34,7 @@ class RoleController extends BrandsController
                 ->where('user_id', $request->user_id)->first();
 
             $users = User::query()
-                ->select('users.id', 'users.name','users.image', 'users.email', 'users.mobile', 'roles.id as role_id', 'roles.role', 'users.activation')
+                ->select('users.id', 'users.name', 'users.image', 'users.email', 'users.mobile', 'roles.id as role_id', 'roles.role', 'users.activation')
                 ->join('sellers', 'sellers.user_id', '=', 'users.id')
                 ->join('roles', 'roles.id', '=', 'sellers.role_id')
                 ->where('sellers.store_id', $store->id)
@@ -101,6 +102,9 @@ class RoleController extends BrandsController
             $user->mobile = $request->mobile;
             $user->email = $request->email;
             $user->password = bcrypt($request->password);
+            if ($request->image) {
+                $user->image = UploadImage::uploadImageToStorage($request->image, 'sellers/');
+            }
             $user->save();
 
             $seller = Seller::query()->where('user_id', $request->id)->first();
