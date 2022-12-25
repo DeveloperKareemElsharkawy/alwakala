@@ -38,6 +38,7 @@ class ProductDetailsResource extends JsonResource
 
             'pricing' => [
                 'price' => (double)$this->productStore->consumer_price,
+                'is_free_shipping' => (bool)$this->productStore->free_shipping,
                 'has_discount' => (bool)$this->productStore->consumer_price_discount,
                 'old_price' => (double)$this->productStore->consumer_old_price,
                 'discount' => (double)$this->productStore->consumer_price_discount,
@@ -45,6 +46,7 @@ class ProductDetailsResource extends JsonResource
             ],
 
             'images' => ProductImagesResource::collection($this->images),
+            'colors' => $this->colors,
             'store' => new ProductStoreResource($this->productStore->store),
             'policy' => new ProductPolicyResource($this->policy),
             'category' => new ProductCategoryResource($this->category),

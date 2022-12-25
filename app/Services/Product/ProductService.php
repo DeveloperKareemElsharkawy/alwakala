@@ -32,7 +32,7 @@ class ProductService
         return Product::query()->whereHas('productStore', function ($q) use ($productId, $storeId) {
             $q->where('product_id', $productId);
             $q->where('store_id', $storeId);
-        })->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store'])->first();
+        })->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store', 'productStore.product_store_stock'])->first();
     }
 
 
@@ -50,6 +50,8 @@ class ProductService
             $formattedData['store_name'] = $productDetail->store_name;
             $formattedData['has_discount'] = $productDetail->has_discount;
             $formattedData['images'][$productDetail->product_image_id] = config('filesystems.aws_base_url') . $productDetail->product_image;
+
+
             if (isset($formattedData['colors'][$productDetail->color_id]) && $formattedData['colors'][$productDetail->color_id]['available'] == false) {
                 $formattedData['colors'][$productDetail->color_id]['available'] = $productDetail->available_stock > 0 ? true : false;
             } else {
@@ -66,6 +68,7 @@ class ProductService
                 $formattedData['colors'][$productDetail->color_id]['images'][$productDetail->product_image_id]['is_primary'] = $productDetail->is_primary;
             }
         }
+
         return $formattedData;
     }
 
