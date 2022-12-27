@@ -41,7 +41,7 @@ class ProductService
 
     public function suggestedProducts($category_id): _IH_Product_C|Collection|array
     {
-        return Product::query()->whereHas('category_id', $category_id)
+        return Product::query()->where('category_id', $category_id)
             ->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store', 'productStore.productStoreStock'])->limit(3)->get();
     }
 
