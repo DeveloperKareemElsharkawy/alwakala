@@ -111,6 +111,16 @@ Route::group(['prefix' => 'consumer-app', 'middleware' => 'consumer_auth'], func
     Route::get('/notification/un-read-count', 'NotificationController@unReadCount');
 });
 
+Route::group(['prefix' => 'cart', 'middleware' => ['consumer_auth']], function () {
+    Route::get('list', 'CartController@index');
+    Route::get('get-count', 'CartController@getCount');
+    Route::get('summary ', 'CartController@summary');
+    Route::post('add', 'CartController@addCart');
+    Route::post('apply-coupon', 'CartController@applyCoupon');
+    Route::post('change-quantity', 'CartController@changeCartQuantity');
+    Route::post('remove-cart', 'CartController@removeCart');
+});
+
 Route::group(['prefix' => 'coupons', 'middleware' => 'consumer_auth'], function () {
     Route::get('/', 'CouponController@getCoupons');
     Route::get('{id}', 'CouponController@getCoupon');

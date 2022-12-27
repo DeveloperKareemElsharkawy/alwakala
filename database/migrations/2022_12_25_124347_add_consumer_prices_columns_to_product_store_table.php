@@ -28,7 +28,9 @@ class AddConsumerPricesColumnsToProductStoreTable extends Migration
     public function down()
     {
         Schema::table('product_store', function (Blueprint $table) {
-            //
+            $table->dropColumn('consumer_old_price');
+            $table->dropColumn('consumer_price_discount');
+            $table->dropColumn('consumer_price_discount_type');
         });
     }
 }

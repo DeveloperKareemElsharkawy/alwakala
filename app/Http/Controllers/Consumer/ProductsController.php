@@ -133,7 +133,6 @@ class ProductsController extends BaseController
         }
     }
 
-
     public function getProductReviews(ListProductReviews $request)
     {
         try {
