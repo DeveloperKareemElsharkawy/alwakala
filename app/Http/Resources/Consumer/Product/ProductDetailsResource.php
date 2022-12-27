@@ -9,6 +9,7 @@ use App\Http\Resources\Consumer\Product\Relations\ProductMaterialResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductPolicyResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductShippingResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductStoreResource;
+use App\Http\Resources\Seller\Store\SellerRateResource;
 use App\Lib\Helpers\Favorite\FeedFavoriteHelper;
 use App\Lib\Helpers\Product\ProductVariationHelper;
 use App\Lib\Helpers\Rate\RateHelper;
@@ -19,6 +20,7 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProductDetailsResource extends JsonResource
 {
+
     /**
      * Transform the resource into an array.
      *
@@ -37,6 +39,9 @@ class ProductDetailsResource extends JsonResource
             'youtube_link' => $this->youtube_link,
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
             'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
+
+            'reviews' => SellerRateResource::collection(RateHelper::getProductReviews($this?->productStore?->store_id, $this->id)),
+
             "size_table_image" => $this->size_table_image ? config('filesystems.aws_base_url') . $this->size_table_image : null,
 
             'pricing' => [
