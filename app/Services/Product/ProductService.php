@@ -7,6 +7,11 @@ use App\Repositories\ProductRepository;
 use App\Repositories\StoreRepository;
 use App\Services\Stores\StoresService;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Model;
+use LaravelIdea\Helper\App\Models\_IH_Product_C;
+use LaravelIdea\Helper\App\Models\_IH_Product_QB;
 
 class ProductService
 {
@@ -19,20 +24,25 @@ class ProductService
         $this->storesService = $storesService;
     }
 
-    public function getProductDetails($productId, $storeId)
-    {
-        $productDetails = $this->productRepository->getProductDetails($productId, $storeId);
-        $mappedData = $this->mapProductDetailsResponse($productDetails);
-        $formattedData = $this->formatMappedProductData($mappedData, $storeId, $productId);
-        return $formattedData;
-    }
+//    public function getProductDetailsOld($productId, $storeId): array
+//    {
+//        $productDetails = $this->productRepository->getProductDetails($productId, $storeId);
+//        $mappedData = $this->mapProductDetailsResponse($productDetails);
+//        $formattedData = $this->formatMappedProductData($mappedData, $storeId, $productId);
+//        return $formattedData;
+//    }
 
-    public function getProductDetailsv2($productId, $storeId)
+    public function getProductDetails($productId, $storeId): Model|_IH_Product_QB|Builder|Product|null
     {
         return Product::query()->whereHas('productStore', function ($q) use ($productId, $storeId) {
-            $q->where('product_id', $productId);
-            $q->where('store_id', $storeId);
+            $q->where([['product_id', $productId], ['store_id', $storeId]]);
         })->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store', 'productStore.productStoreStock'])->first();
+    }
+
+    public function suggestedProducts($category_id): _IH_Product_C|Collection|array
+    {
+        return Product::query()->whereHas('category_id', $category_id)
+            ->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store', 'productStore.productStoreStock'])->limit(3)->get();
     }
 
 

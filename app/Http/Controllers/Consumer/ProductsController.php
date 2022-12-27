@@ -9,6 +9,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Requests\ConsumerApp\Product\ListProductReviews;
 use App\Http\Requests\ConsumerApp\Product\ShowProductRequest;
 use App\Http\Resources\Consumer\Product\ProductDetailsResource;
+use App\Http\Resources\Consumer\Product\ProductResource;
 use App\Lib\Log\ValidationError;
 use App\Models\Product;
 use App\Models\ProductImage;
@@ -114,11 +115,17 @@ class ProductsController extends BaseController
                     "data" => []
                 ], AResponseStatusCode::FORBIDDEN);
             }
-            $productDetails = $this->productService->getProductDetailsv2($productId, $storeId);
+
+            $productDetails = $this->productService->getProductDetails($productId, $storeId);
+            $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id);
+
             return response()->json([
                 'success' => true,
                 'message' => "",
-                'data' => new ProductDetailsResource($productDetails),
+                'data' => [
+                    'product' => new ProductDetailsResource($productDetails),
+                    'suggested_products' => ProductResource::collection($suggestedProducts),
+                ]
             ], AResponseStatusCode::SUCCESS);
         } catch (\Exception $e) {
             Log::error('error in showProductFromConsumerSide of seller products' . __LINE__ . $e);
