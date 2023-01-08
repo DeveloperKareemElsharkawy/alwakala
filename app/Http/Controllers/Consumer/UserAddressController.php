@@ -6,11 +6,7 @@ use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\Consumer\Address\CreateAddressRequest;
 use App\Lib\Helpers\Lang\LangHelper;
-use App\Lib\Helpers\UserId\UserId;
 use App\Lib\Log\ValidationError;
-
-;
-
 use App\Repositories\UserAddressesRepository;
 use App\Services\UserAddressesService;
 use Illuminate\Http\JsonResponse;
@@ -28,10 +24,7 @@ class UserAddressController extends BaseController
      * @var UserAddressesRepository
      */
     private $userAddressesRepository;
-    /**
-     * @var null
-     */
-    private $userId;
+
     /**
      * @var UserAddressesService
      */
@@ -43,12 +36,11 @@ class UserAddressController extends BaseController
      * @param UserAddressesService $userAddressesService
      * @param Request $request
      */
-    public function __construct(UserAddressesRepository $userAddressesRepository,UserAddressesService $userAddressesService, Request $request)
+    public function __construct(UserAddressesRepository $userAddressesRepository, UserAddressesService $userAddressesService, Request $request)
     {
         $this->userAddressesRepository = $userAddressesRepository;
         $this->userAddressesService = $userAddressesService;
         $this->lang = LangHelper::getDefaultLang($request);
-        $this->userId = UserId::UserId($request);
     }
 
     /**
@@ -56,11 +48,10 @@ class UserAddressController extends BaseController
      * @param Request $request
      * @return JsonResponse
      */
-    public function index(Request $request): JsonResponse
+    public function index(Request $request)
     {
         try {
-            $userId = UserId::UserId($request);
-            $data = $this->userAddressesRepository->getUserAddresses($userId, $this->lang);
+            $data = $this->userAddressesRepository->getUserAddresses($request->user_id, $this->lang);
 
             return response()->json([
                 "status" => true,
@@ -84,7 +75,7 @@ class UserAddressController extends BaseController
 
     {
         try {
-            $request['user_id'] = $this->userId;
+            $request['user_id'] = $request->user_id;
             $this->userAddressesRepository->createUserAddress($request);
             return response()->json([
                 "status" => true,

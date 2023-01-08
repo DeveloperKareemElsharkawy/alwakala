@@ -3,16 +3,22 @@
 namespace App\Http\Controllers\Consumer;
 
 use App\Http\Controllers\BaseController;
-use App\Http\Requests\SellerApp\Cart\AddCartRequest;
+use App\Http\Requests\Consumer\Cart\AddCartRequest;
 use App\Http\Requests\SellerApp\Cart\ApplyCouponRequest;
 use App\Http\Requests\SellerApp\Cart\ChangeCartQuantityRequest;
 use App\Http\Requests\SellerApp\Cart\GetCartSummaryRequest;
+use App\Http\Requests\SellerApp\Cart\RemoveCartItemsByStore;
 use App\Http\Requests\SellerApp\Cart\RemoveCartRequest;
-use App\Http\Resources\Seller\Cart\CartResource;
+use App\Http\Resources\Consumer\Cart\CartResource;
+use App\Http\Resources\Consumer\Cart\ConsumerCartSummaryResource;
+use App\Http\Resources\Consumer\Product\ProductResource;
 use App\Http\Resources\Seller\Cart\CartSummaryResource;
+use App\Lib\Helpers\Coupon\CouponService;
 use App\Lib\Helpers\Lang\LangHelper;
 use App\Models\Coupon;
 use App\Repositories\CartRepository;
+use App\Repositories\Consumer\ConsumerCartRepository;
+use App\Services\Product\ProductService;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -31,9 +37,12 @@ class CartController extends BaseController
     /**
      * @param CartRepository $cartRepository
      */
-    public function __construct(CartRepository $cartRepository)
+    public $productService;
+
+    public function __construct(ConsumerCartRepository $cartRepository, ProductService $productService,)
     {
         $this->cartRepository = $cartRepository;
+        $this->productService = $productService;
     }
 
     /**
@@ -44,10 +53,13 @@ class CartController extends BaseController
     {
         try {
             $carts = $this->cartRepository->getCartsByUserId($request);
-            return $this->success(['message' => trans('messages.general.listed'),
+            $suggestedProducts = $this->productService->suggestedProducts(null, null, 0, $request);
+
+            return $this->success([
+                'message' => trans('messages.general.listed'),
                 'data' => [
                     'cart' => new CartResource($carts),
-                    'recommended_products' => $this->cartRepository->recommendedProducts($request)
+                    'suggested_products' => ProductResource::collection($suggestedProducts),
                 ]
             ]);
         } catch (Exception $e) {
@@ -79,9 +91,8 @@ class CartController extends BaseController
     {
         try {
             $summary = $this->cartRepository->getCartsSummaryByUserId($request);
-            return $this->success(['message' => trans('messages.general.listed'), 'data' => new CartSummaryResource($summary)]);
+            return $this->success(['message' => trans('messages.general.listed'), 'data' => new ConsumerCartSummaryResource($summary)]);
         } catch (Exception $e) {
-            return $e;
             Log::error('error in index of Seller Cart ' . __LINE__ . $e);
             return $this->connectionError($e);
         }
@@ -97,16 +108,16 @@ class CartController extends BaseController
             DB::beginTransaction();
 
             $carts = $this->cartRepository->addCartItem($request);
+            $suggestedProducts = $this->productService->suggestedProducts(null, null, 0, $request);
 
             DB::commit();
 
             return $this->success(['message' => trans('messages.general.listed'), 'data' => [
                 'cart' => new CartResource($carts),
-                'recommended_products' => $this->cartRepository->recommendedProducts(request())
+                'suggested_products' => ProductResource::collection($suggestedProducts),
             ]]);
         } catch (Exception $e) {
             Log::error('error in store of Seller Cart' . __LINE__ . $e);
-            return $e;
             return $this->connectionError($e);
         }
     }
@@ -117,32 +128,45 @@ class CartController extends BaseController
      */
     public function applyCoupon(ApplyCouponRequest $request)
     {
-        $user_Cart = $this->cartRepository->getCartsByUserId(['user_id' => $request['user_id']]);
-        $coupon = Coupon::where('code', $request->coupon_code)->first();
-
         try {
-            if ($coupon->active == 0)
-                return $this->error(['message' => trans('messages.cart.active')]);
+            $userCart = $this->cartRepository->getCartsByUserId($request);
 
-            if (!Carbon::now()->between($coupon->start_date, $coupon->end_date))
-                return $this->error(['message' => trans('messages.cart.apply')]);
+            $applyCoupon = CouponService::ApplyCoupon($request->coupon_code, $request, $userCart['stores']);
 
-            if ($coupon->quantity == 0)
-                return $this->error(['message' => trans('messages.cart.quantity')]);
+            if (!$applyCoupon['status']) {
+                return $this->error(['message' => $applyCoupon['message']]);
+            }
 
-            if (!$user_Cart['cart_total'] >= $coupon->purchased_amount)
-                return $this->error(['message' => trans('messages.cart.purchase_amount')]);
+            $carts = $this->cartRepository->getCartsByUserId($request);
 
-            $cart = $this->cartRepository->applyCoupon($request, $coupon, $user_Cart);
+            $suggestedProducts = $this->productService->suggestedProducts(null, null, 0, $request);
 
 
             return $this->success(['message' => trans('messages.general.listed'), 'data' => [
-                'cart' => new CartResource($cart),
+                'cart' => new CartResource($carts),
+                'suggested_products' => ProductResource::collection($suggestedProducts),
+            ]]);
+        } catch (Exception $e) {
+            Log::error('error in applying coupon in cart' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    /**
+     * @param RemoveCartRequest $request
+     * @return JsonResponse
+     */
+    public function removeCartCoupon(Request $request)
+    {
+        try {
+            $carts = $this->cartRepository->removeCartCoupon($request);
+
+            return $this->success(['message' => trans('messages.general.listed'), 'data' => [
+                'cart' => new CartResource($carts),
                 'recommended_products' => $this->cartRepository->recommendedProducts(request())
             ]]);
         } catch (Exception $e) {
             Log::error('error in applying coupon in cart' . __LINE__ . $e);
-            dd($e->getMessage());
             return $this->connectionError($e);
         }
     }
@@ -160,7 +184,6 @@ class CartController extends BaseController
                 'recommended_products' => $this->cartRepository->recommendedProducts(request())
             ]]);
         } catch (Exception $e) {
-            return $e;
             Log::error('error in store of Seller Cart' . __LINE__ . $e);
             return $this->connectionError($e);
         }
@@ -174,6 +197,25 @@ class CartController extends BaseController
     {
         try {
             $carts = $this->cartRepository->removeCartItem($request);
+
+            return $this->success(['message' => trans('messages.cart.cart_deleted'), 'data' => [
+                'cart' => new CartResource($carts),
+                'recommended_products' => $this->cartRepository->recommendedProducts(request())
+            ]]);
+        } catch (Exception $e) {
+            Log::error('error in store of Seller Cart' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    /**
+     * @param RemoveCartItemsByStore $request
+     * @return JsonResponse
+     */
+    public function removeCartByStore(RemoveCartItemsByStore $request)
+    {
+        try {
+            $carts = $this->cartRepository->removeCartsItemsByStore($request);
 
             return $this->success(['message' => trans('messages.cart.cart_deleted'), 'data' => [
                 'cart' => new CartResource($carts),

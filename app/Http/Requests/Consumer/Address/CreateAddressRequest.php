@@ -30,7 +30,6 @@ class CreateAddressRequest extends FormRequest
             'building_no' => 'nullable|numeric',
             'city_id' => 'nullable|numeric||exists:cities,id',
             'landmark' => 'nullable|string|max:255',
-
         ];
     }
 }

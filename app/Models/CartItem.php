@@ -16,6 +16,7 @@ class CartItem extends Model
         'cart_id',
         'user_id',
         'store_id',
+        'size_id',
         'product_id',
         'color_id',
         'basic_unit_count',
@@ -35,5 +36,15 @@ class CartItem extends Model
     public function product(): BelongsTo
     {
         return $this->belongsTo(Product::class);
+    }
+
+    public function color(): BelongsTo
+    {
+        return $this->belongsTo(Color::class);
+    }
+
+    public function size(): BelongsTo
+    {
+        return $this->belongsTo(Size::class);
     }
 }

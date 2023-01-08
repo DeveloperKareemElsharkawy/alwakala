@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Enums\Apps\AApps;
 use App\Enums\StoreTypes\StoreType;
+use App\Lib\Helpers\Coupon\CouponService;
 use App\Lib\Helpers\Lang\LangHelper;
 use App\Lib\Helpers\Product\ProductHelper;
 use App\Lib\Helpers\UserId\UserId;
@@ -140,7 +141,6 @@ class CartRepository
             $storeLoop++;
         }
 
-        $cartsList['cart_total'] = $cartTotal;
         $cartsList['cart_count'] = $cartCount;
         $cartsList['item_count'] = $itemCount;
 
@@ -291,7 +291,7 @@ class CartRepository
     /**
      * get Cart Summary.
      * @param $request
-     * @return Builder[]|Collection|false
+     * @return array
      */
     public function getCartsSummaryByUserId($request): array
     {

@@ -35,6 +35,8 @@ class ProductStoreStock extends Model
             ->get();
 
         $total_reserved = count($result) > 0 ? $result[0]['total_reserved'] : 0;
+        dd($this->stock);
+
         $this->available_stock = $this->stock - $total_reserved;
         $this->reserved_stock = $total_reserved;
 

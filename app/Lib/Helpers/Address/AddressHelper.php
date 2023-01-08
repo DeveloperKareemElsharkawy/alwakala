@@ -23,6 +23,14 @@ class AddressHelper
         return $address->id;
     }
 
+    public static function getAddressById($userId,$addressId)
+    {
+        return Address::query()
+             ->where('user_id', $userId)
+            ->where('id', $addressId)
+            ->first();
+    }
+
     public static function getFullAddress($userId, $lang)
     {
         $address = Address::query()

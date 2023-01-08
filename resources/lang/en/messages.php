@@ -86,9 +86,20 @@ return [
         'apply' => 'Coupon isn\'t valid anymore',
         'quantity' => 'Coupon quantity is 0',
         'purchase_amount' => 'Cart total is less than allowed purchase amount',
-        'active' => 'This coupon is inactive'
+        'coupon_inactive' => 'This coupon is inactive'
 
     ],
+
+    'coupon' => [
+        'quantity' => 'The available amount of coupon is 0',
+        'purchase_amount' => 'Your cart total is less than the total available for using this coupon',
+        'not_found' => 'Coupon not found',
+        'inactive' => 'The coupon is not available for the current period',
+        'ended' => 'Coupon isn\'t valid anymore',
+        'qty_is_over' => 'The maximum limit for this coupon has been used',
+        'no_products_for_this_coupon' => 'There are no products for this coupon',
+    ],
+
 
     'status' => [
         'available' => 'Available',
@@ -102,6 +113,7 @@ return [
         'no_quantities_available' => 'quantities not available',
         'cannot_cancel' => 'cannot cancel not issued orders',
         'canceled' => 'order canceled successfully',
+        'already_canceled' => 'Order Already Canceled',
         'add_order_id' => 'please add order id',
         'cannot_receive_in_progress_order' => 'cannot receive not in progress orders',
         'consumer_unit_publish_date' => 'please enter consumer price and publish date for these products',

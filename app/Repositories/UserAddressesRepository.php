@@ -40,7 +40,7 @@ class UserAddressesRepository
      * @param $data
      * @return bool
      */
-    public function createUserAddress($data): bool
+    public function createUserAddress($data)
     {
         try {
             $city_id = $data['city_id'];
@@ -55,7 +55,7 @@ class UserAddressesRepository
             $this->userAddress->save();
             return true;
         } catch (\Exception $e) {
-            return false;
+            return $e;
         }
 
     }

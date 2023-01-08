@@ -76,8 +76,22 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
     Route::group(['prefix' => 'orders', 'middleware' => 'consumer_auth'], function () {
         Route::post('/', 'OrdersController@addOrder');
         Route::get('/', 'OrdersController@index');
+        Route::get('/{order_id}', 'OrdersController@showOrder');
         Route::get('{id}', 'OrdersController@show');
+        Route::post('/receive-order', 'OrdersController@receiveOrder');
+        Route::post('/cancel-order', 'OrdersController@cancelOrder');
+        Route::post('/cancel-order-product', 'OrdersController@cancelOrderProduct');
+        Route::post('/review-purchased-product', 'OrdersController@reviewPurchasedProduct');
+
     });
+
+
+    Route::group(['prefix' => 'feeds', 'middleware' => 'consumer_auth'], function () {
+        Route::get('/', 'FeedController@allFeedsList');
+        Route::post('/toggle-favorite-feed', 'FeedController@toggleFavoriteFeed');
+        Route::get('/my-favorites', 'FeedController@myFavorites');
+    });
+
     Route::group(['prefix' => 'search'], function () {
         Route::get('/products', 'SearchController@searchProducts');
         Route::get('/stores', 'SearchController@searchStores');
@@ -101,8 +115,28 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
     });
     Route::group(['prefix' => 'products'], function () {
         Route::get('/show', 'ProductsController@show');
+        Route::get('/smiler-products', 'ProductsController@smilerProducts');
+        Route::get('/suggested-products', 'ProductsController@suggestedProducts');
         Route::get('/reviews', 'ProductsController@getProductReviews');
     });
+
+    Route::group(['prefix' => 'cart', 'middleware' => ['consumer_auth']], function () {
+        Route::get('get-count', 'CartController@getCount');
+
+        Route::get('list', 'CartController@index');
+        Route::post('add', 'CartController@addCart');
+        Route::post('change-quantity', 'CartController@changeCartQuantity');
+        Route::post('remove-cart', 'CartController@removeCart');
+        Route::post('remove-cart-from-store', 'CartController@removeCartByStore');
+
+        Route::post('apply-coupon', 'CartController@applyCoupon');
+        Route::post('remove-coupon', 'CartController@removeCartCoupon');
+
+        Route::get('summary ', 'CartController@summary');
+
+    });
+
+
 });
 Route::group(['prefix' => 'consumer-app', 'middleware' => 'consumer_auth'], function () {
     Route::get('/notification/list-notifications', 'NotificationController@listNotifications');
@@ -111,15 +145,6 @@ Route::group(['prefix' => 'consumer-app', 'middleware' => 'consumer_auth'], func
     Route::get('/notification/un-read-count', 'NotificationController@unReadCount');
 });
 
-Route::group(['prefix' => 'cart', 'middleware' => ['consumer_auth']], function () {
-    Route::get('list', 'CartController@index');
-    Route::get('get-count', 'CartController@getCount');
-    Route::get('summary ', 'CartController@summary');
-    Route::post('add', 'CartController@addCart');
-    Route::post('apply-coupon', 'CartController@applyCoupon');
-    Route::post('change-quantity', 'CartController@changeCartQuantity');
-    Route::post('remove-cart', 'CartController@removeCart');
-});
 
 Route::group(['prefix' => 'coupons', 'middleware' => 'consumer_auth'], function () {
     Route::get('/', 'CouponController@getCoupons');

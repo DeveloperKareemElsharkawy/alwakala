@@ -31,12 +31,12 @@ class OrderProduct extends Model
 
     public function color(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Color::class)->select('id', 'name_en', 'hex');
+        return $this->belongsTo(Color::class)->select('id', 'name_en','name_ar', 'hex');
     }
 
     public function size(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
-        return $this->belongsTo(Size::class)->select('id', 'size');
+        return $this->belongsTo(Size::class);
     }
 
     public function store(): \Illuminate\Database\Eloquent\Relations\BelongsTo
@@ -50,6 +50,11 @@ class OrderProduct extends Model
     }
 
     public function last_status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(OrderStatus::class, 'status_id');
+    }
+
+    public function status(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {
         return $this->belongsTo(OrderStatus::class, 'status_id');
     }

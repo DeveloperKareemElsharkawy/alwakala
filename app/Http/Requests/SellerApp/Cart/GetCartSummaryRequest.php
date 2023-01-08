@@ -33,7 +33,7 @@ class GetCartSummaryRequest extends FormRequest
                     $query->where('user_id', request()->user('api')->id);
                 }),
             ],
-            'payment_method_id' => 'required|exists:payment_methods,id',
+            'payment_method_id' => 'required|integer|exists:payment_methods,id',
          ];
     }
 }

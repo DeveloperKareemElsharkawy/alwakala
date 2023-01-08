@@ -118,6 +118,7 @@ class ProductsController extends BaseController
 
             $productDetails = $this->productService->getProductDetails($productId, $storeId);
             $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id);
+            $justForYou = $this->productService->suggestedProducts($productDetails->category_id, $request->product_id);
 
             return response()->json([
                 'success' => true,
@@ -125,8 +126,55 @@ class ProductsController extends BaseController
                 'data' => [
                     'product' => new ProductDetailsResource($productDetails),
                     'suggested_products' => ProductResource::collection($suggestedProducts),
+                    'jus_for_you' => ProductResource::collection($justForYou),
+
                 ]
             ], AResponseStatusCode::SUCCESS);
+        } catch (\Exception $e) {
+            Log::error('error in showProductFromConsumerSide of seller products' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function smilerProducts(ShowProductRequest $request)
+    {
+        try {
+            $productId = $request->product_id;
+            $storeId = $request->store_id;
+            $productStore = $this->productRepository->getProductStore($productId, $storeId);
+
+            if (!$productStore) {
+                return response()->json([
+                    "status" => AResponseStatusCode::FORBIDDEN,
+                    "message" => "Store doesn't have this product",
+                    "data" => []
+                ], AResponseStatusCode::FORBIDDEN);
+            }
+
+            $productDetails = $this->productService->getProductDetails($productId, $storeId);
+            $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id);
+            $justForYou = $this->productService->suggestedProducts(null, $request->product_id, 10);
+
+            return $this->respondWithPagination(ProductResource::collection($justForYou));
+
+        } catch (\Exception $e) {
+            Log::error('error in showProductFromConsumerSide of seller products' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function suggestedProducts(Request $request)
+    {
+        try {
+            $productId = $request->product_id;
+            $storeId = $request->store_id;
+            $productStore = $this->productRepository->getProductStore($productId, $storeId);
+
+            $productDetails = $this->productService->getProductDetails($productId, $storeId);
+            $justForYou = $this->productService->suggestedProducts(null, $request->product_id, 10,$request);
+
+            return $this->respondWithPagination(ProductResource::collection($justForYou));
+
         } catch (\Exception $e) {
             Log::error('error in showProductFromConsumerSide of seller products' . __LINE__ . $e);
             return $this->connectionError($e);

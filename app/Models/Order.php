@@ -9,7 +9,22 @@ class Order extends Model
 {
     protected $fillable = [
         'status_id',
-        'store_id'
+        'total_price',
+        'discount',
+        'number',
+        'user_id',
+        'payment_method_id',
+        'order_address_id',
+        'coupon_id',
+        'barcode'
+    ];
+    /**
+     * The attributes that should be casted to native types.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'coupon' => 'array',
     ];
 
     public function products()
@@ -54,9 +69,16 @@ class Order extends Model
         return $this->belongsTo(OrderStatus::class, 'status_id');
     }
 
+
+
     public function order_address()
     {
         return $this->belongsTo(OrderAddress::class);
+    }
+
+    public function coupon(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    {
+        return $this->belongsTo(Coupon::class);
     }
 
     public function payment_method()

@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Enums\AChannels\AChannels;
 use App\Enums\Apps\AApps;
 use App\Enums\DiscountTypes\DiscountTypes;
+use App\Enums\Orders\AOrders;
 use App\Enums\Product\APolicyTypes;
 use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Enums\Stock\ATransactionTypes;
@@ -93,6 +94,31 @@ class ProductRepository extends Controller
         }
         return $storeProducts;
     }
+
+    public function CancelOrderStock($orderItems)
+    {
+
+        foreach ($orderItems as $orderItem) {
+
+            $productStore = ProductStore::query()
+                ->where('store_id', $orderItem['store_id'])
+                ->where('product_id', $orderItem['product_id'])
+                ->first();
+
+            $productStoreStock = ProductStoreStock::query()
+                ->where('product_store_id', $productStore->id)
+                ->where('color_id', $orderItem['color_id'])
+                ->where('size_id', $orderItem['size_id'])
+                ->first();
+
+            $productStoreStock->stock = $productStoreStock->available_stock + $orderItem->quantity;
+            $productStoreStock->available_stock = $productStoreStock->available_stock + $orderItem->quantity;
+            $productStoreStock->save();
+
+        }
+
+    }
+
 
     public function adoptQuantities($data)
     {

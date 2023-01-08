@@ -21,8 +21,8 @@ class StoreId
 
         if ($user) {
             $seller = Seller::query()->where('user_id', $user->id)->first();
-            $store = Store::query()->where('id', $seller->store_id)->first();
-            $storeId = $store->id;
+            $store = Store::query()->where('id', $seller?->store_id)->first();
+            $storeId = $store?->id;
         }
 
         return $storeId;

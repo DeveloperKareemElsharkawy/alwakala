@@ -27,14 +27,13 @@ class ProductResource extends JsonResource
      */
     public function toArray($request): array
     {
-        $storeId = StoreId::getStoreID($request);
         $userID = $request->user('api') ? $request->user('api')->id : 0;
 
         return [
             'id' => $this->id,
             'name' => $this->name,
             'description' => $this->description,
-            'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
+            'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id']),
             'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
 
             'pricing' => [

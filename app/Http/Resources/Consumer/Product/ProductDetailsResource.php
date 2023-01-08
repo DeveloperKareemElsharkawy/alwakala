@@ -40,7 +40,6 @@ class ProductDetailsResource extends JsonResource
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
             'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
             'reviews' => SellerRateResource::collection(RateHelper::getProductReviews($this?->productStore?->store_id, $this->id)),
-
             "size_table_image" => $this->size_table_image ? config('filesystems.aws_base_url') . $this->size_table_image : null,
 
             'pricing' => [

@@ -39,10 +39,32 @@ class ProductService
         })->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store', 'productStore.productStoreStock'])->first();
     }
 
-    public function suggestedProducts($category_id): _IH_Product_C|Collection|array
+    public function suggestedProducts($category_id = null, $productsSmilerTo = null, $paginated = 0, $request): _IH_Product_C|Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Pagination\LengthAwarePaginator|array
     {
-        return Product::query()->where('category_id', $category_id)
-            ->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store', 'productStore.productStoreStock'])->limit(3)->get();
+        $productsSmiler = Product::where('id', $productsSmilerTo)->first();
+
+        $products = Product::query()
+            ->when($category_id != null, function ($q) use ($category_id) {
+                return $q->where('category_id', $category_id);
+            })
+            ->when($productsSmilerTo != null, function ($q) use ($productsSmiler) {
+                $q->where('category_id', $productsSmiler->category_id)->orWhere('brand_id', $productsSmiler->brand_id);
+            })->with([
+                'category',
+                'brand',
+                'material',
+                'shipping',
+                'images',
+                'productStore.store',
+                'productStore.productStoreStock'
+            ]);
+
+
+
+        if (!$paginated > 0) {
+            return $products->limit(3)->get();
+        }
+        return $products->paginate($paginated);
     }
 
 

@@ -28,11 +28,8 @@ class ReviewController extends BaseController
 
         try {
             if (!$this->reviewsRepository->checkIfUserCanReviewProduct($request)) {
-                return response()->json([
-                    'status' => true,
-                    'message' => trans('messages.reviews.forbidden'),
-                    'data' => []
-                ], AResponseStatusCode::FORBIDDEN);
+                return $this->error(['message' => trans('messages.reviews.forbidden')]);
+
             }
 
             $this->reviewsRepository->saveRate($request);

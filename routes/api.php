@@ -200,13 +200,13 @@ Route::group(['prefix' => 'dashboard', 'namespace' => 'Dashboard'], function () 
             Route::get('/get-for-selection', 'RolesController@getForSelection')->middleware('admin_can_access:aIndexForSelection');
         });
 
-        Route::group(['prefix' => 'shopping-cart'], function () {
-            Route::get('/{id}', 'ShoppingCartController@show')->middleware('admin_can_access:aShowShoppingCart');
-            Route::get('/', 'ShoppingCartController@index')->middleware('admin_can_access:aIndexShoppingCart');
-            Route::post('/', 'ShoppingCartController@store')->middleware('admin_can_access:aAddShoppingCart');
-            Route::put('/', 'ShoppingCartController@update')->middleware('admin_can_access:aEditShoppingCart');
-            Route::delete('/', 'ShoppingCartController@delete')->middleware('admin_can_access:aDeleteShoppingCart');
-        });
+//        Route::group(['prefix' => 'shopping-cart'], function () {
+//            Route::get('/{id}', 'ShoppingCartController@show')->middleware('admin_can_access:aShowShoppingCart');
+//            Route::get('/', 'ShoppingCartController@index')->middleware('admin_can_access:aIndexShoppingCart');
+//            Route::post('/', 'ShoppingCartController@store')->middleware('admin_can_access:aAddShoppingCart');
+//            Route::put('/', 'ShoppingCartController@update')->middleware('admin_can_access:aEditShoppingCart');
+//            Route::delete('/', 'ShoppingCartController@delete')->middleware('admin_can_access:aDeleteShoppingCart');
+//        });
 
         Route::group(['namespace' => 'Places'], function () {
             Route::group(['prefix' => 'countries'], function () {
