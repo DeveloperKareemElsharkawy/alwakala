@@ -50,7 +50,7 @@ class QuantityCheck implements Rule
         $productId = $this->productId ?? request()['product_id'];
         $storeId = $this->storeId ?? request()['store_id'];
         $productStore = ProductStore::query()->where([['store_id', $storeId], ['product_id', $productId]])->first();
-        $quantity = request()['quantity'];
+        $quantity = (int)request()['quantity'];
         $store = Store::query()->find($storeId);
         $basicUnitCount = ProductHelper::getProductBasicUnitCount($productId);
 
