@@ -209,6 +209,24 @@ class CartController extends BaseController
     }
 
     /**
+      * @return JsonResponse
+     */
+    public function emptyCart(Request $request)
+    {
+        try {
+            $carts = $this->cartRepository->emptyCart($request);
+
+            return $this->success(['message' => trans('messages.cart.cart_deleted'), 'data' => [
+                'cart' => new CartResource($carts),
+                'recommended_products' => $this->cartRepository->recommendedProducts(request())
+            ]]);
+        } catch (Exception $e) {
+            Log::error('error in store of Seller Cart' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    /**
      * @param RemoveCartItemsByStore $request
      * @return JsonResponse
      */

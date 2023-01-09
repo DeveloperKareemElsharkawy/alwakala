@@ -74,7 +74,7 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
     });
 
     Route::group(['prefix' => 'orders', 'middleware' => 'consumer_auth'], function () {
-        Route::post('/', 'OrdersController@addOrder');
+        Route::post('/submit-order', 'OrdersController@addOrder');
         Route::get('/', 'OrdersController@index');
         Route::get('/{order_id}', 'OrdersController@showOrder');
         Route::get('{id}', 'OrdersController@show');
@@ -127,6 +127,7 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
         Route::post('add', 'CartController@addCart');
         Route::post('change-quantity', 'CartController@changeCartQuantity');
         Route::post('remove-cart', 'CartController@removeCart');
+        Route::post('empty-cart', 'CartController@emptyCart');
         Route::post('remove-cart-from-store', 'CartController@removeCartByStore');
 
         Route::post('apply-coupon', 'CartController@applyCoupon');

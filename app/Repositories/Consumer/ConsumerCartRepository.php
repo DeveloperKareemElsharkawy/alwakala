@@ -254,6 +254,17 @@ class ConsumerCartRepository
         return $this->getCartsByUserId(['user_id' => $request['user_id']]);
     }
 
+    public function emptyCart($request): array
+    {
+        $cart = Cart::where('user_id', $request['user_id'])->first();
+            if ($cart) {
+                $this->model->query()->where('cart_id', $cart->id)
+                    ->delete();
+            }
+
+        return $this->getCartsByUserId(['user_id' => $request['user_id']]);
+    }
+
     public function removeCartsItemsByStore($request): array
     {
         $cart = $this->model->query()->where('store_id', $request['store_id'])
