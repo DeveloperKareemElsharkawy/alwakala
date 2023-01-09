@@ -117,8 +117,8 @@ class ProductsController extends BaseController
             }
 
             $productDetails = $this->productService->getProductDetails($productId, $storeId);
-            $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id);
-            $justForYou = $this->productService->suggestedProducts($productDetails->category_id, $request->product_id,0,$request);
+            $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id, null, 0, $request);
+            $justForYou = $this->productService->suggestedProducts($productDetails->category_id, $request->product_id, 0, $request);
 
             return response()->json([
                 'success' => true,
@@ -171,7 +171,7 @@ class ProductsController extends BaseController
             $productStore = $this->productRepository->getProductStore($productId, $storeId);
 
             $productDetails = $this->productService->getProductDetails($productId, $storeId);
-            $justForYou = $this->productService->suggestedProducts(null, $request->product_id, 10,$request);
+            $justForYou = $this->productService->suggestedProducts(null, $request->product_id, 10, $request);
 
             return $this->respondWithPagination(ProductResource::collection($justForYou));
 
