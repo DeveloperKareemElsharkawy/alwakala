@@ -34,11 +34,12 @@ class ChangeCartQuantityRequest extends FormRequest
         $colorId = $cartItem->color_id ?? 0;
 
         return [
-            'cart_id' => ['required', Rule::exists('cart_items', 'id')->where(function ($query) {
+            'cart_id' => ['required','numeric', Rule::exists('cart_items', 'id')->where(function ($query) {
                 return $query->where('user_id', request()['user_id']);
             })],
             'quantity' => [
                 'required',
+                'numeric',
                 new QuantityCheck($productId, $storeId, $colorId),
                 // new UnitCountCheck($productId)
             ],
