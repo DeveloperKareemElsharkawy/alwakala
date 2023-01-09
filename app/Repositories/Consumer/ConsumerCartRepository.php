@@ -248,7 +248,7 @@ class ConsumerCartRepository
 
     public function removeCartItem($request): array
     {
-        $cart = $this->model->query()->find($request['cart_id'])
+        $cart = $this->model->query()->find($request['cart_item_id'])
             ->delete();
 
         return $this->getCartsByUserId(['user_id' => $request['user_id']]);
