@@ -25,7 +25,7 @@ class RemoveCartRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'cart_id' => ['required', Rule::exists('cart_items', 'id')->where(function ($query) {
+            'cart_item_id' => ['required', Rule::exists('cart_items', 'id')->where(function ($query) {
                 return $query->where('user_id', request()['user_id']);
             })],
         ];

@@ -118,7 +118,7 @@ class ProductsController extends BaseController
 
             $productDetails = $this->productService->getProductDetails($productId, $storeId);
             $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id);
-            $justForYou = $this->productService->suggestedProducts($productDetails->category_id, $request->product_id);
+            $justForYou = $this->productService->suggestedProducts($productDetails->category_id, $request->product_id,0,$request);
 
             return response()->json([
                 'success' => true,
