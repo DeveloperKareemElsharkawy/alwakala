@@ -6,6 +6,7 @@ use App\Enums\DiscountTypes\DiscountTypes;
 use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Events\Product\FavoriteProduct;
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\ConsumerApp\Product\GetProductByBarcodeRequest;
 use App\Http\Requests\ConsumerApp\Product\ListProductReviews;
 use App\Http\Requests\ConsumerApp\Product\ShowProductRequest;
 use App\Http\Resources\Consumer\Product\ProductDetailsResource;
@@ -117,6 +118,51 @@ class ProductsController extends BaseController
             }
 
             $productDetails = $this->productService->getProductDetails($productId, $storeId);
+
+            if (!$productDetails){
+                return $this->error(['message' => "Product is not active"]);
+            }
+
+            $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id, null, 0, $request);
+            $justForYou = $this->productService->suggestedProducts($productDetails->category_id, $request->product_id, 0, $request);
+
+            return response()->json([
+                'success' => true,
+                'message' => "",
+                'data' => [
+                    'product' => new ProductDetailsResource($productDetails),
+                    'suggested_products' => ProductResource::collection($suggestedProducts),
+                    'jus_for_you' => ProductResource::collection($justForYou),
+
+                ]
+            ], AResponseStatusCode::SUCCESS);
+        } catch (\Exception $e) {
+            Log::error('error in showProductFromConsumerSide of seller products' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function getProductByBarcode(GetProductByBarcodeRequest $request)
+    {
+        try {
+
+            $productStore = ProductStore::where('barcode_text', $request->barcode)->first();
+
+            $productId = $productStore->product_id;
+            $storeId = $productStore->store_id;
+
+            $productStore = $this->productRepository->getProductStore($productId, $storeId);
+
+            if (!$productStore) {
+                return $this->error(['message' => "Store doesn't have this product"]);
+            }
+
+            $productDetails = $this->productService->getProductDetails($productId, $storeId);
+
+            if (!$productDetails){
+                return $this->error(['message' => "Product is not active"]);
+            }
+
             $suggestedProducts = $this->productService->suggestedProducts($productDetails->category_id, null, 0, $request);
             $justForYou = $this->productService->suggestedProducts($productDetails->category_id, $request->product_id, 0, $request);
 

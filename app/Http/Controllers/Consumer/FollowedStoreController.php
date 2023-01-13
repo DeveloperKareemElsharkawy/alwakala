@@ -5,9 +5,11 @@ namespace App\Http\Controllers\Consumer;
 use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Events\Store\FollowStore;
 use App\Http\Controllers\BaseController;
+use App\Http\Resources\Consumer\Store\StoreIndexResource;
 use App\Lib\Helpers\UserId\UserId;
 use App\Lib\Log\ServerError;
 use App\Lib\Log\ValidationError;
+use App\Models\FollowedStore;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use App\Repositories\StoreRepository;
@@ -19,10 +21,12 @@ use Illuminate\Support\Facades\Validator;
 class FollowedStoreController extends BaseController
 {
     public $storeRepository;
+
     public function __construct(StoreRepository $storeRepository)
     {
         $this->storeRepository = $storeRepository;
     }
+
     /**
      * @param Request $request
      * @param $store_id
@@ -36,21 +40,16 @@ class FollowedStoreController extends BaseController
                     'required',
                     'numeric',
                     'exists:stores,id',
-                    'own_rule:App\Models\Store,' . $request['user_id'],
                 ],
             ]);
             if ($validator->fails()) {
                 return ValidationError::handle($validator);
             }
+
             $store_id = $request->store_id;
-            if (!$this->storeRepository->ifAllowTofollow($request)) {
-                return response()->json([
-                    'status' => true,
-                    'message' => trans('messages.stores.follow_denied'),
-                    'data' => []
-                ], AResponseStatusCode::BAD_REQUEST);
-            }
+
             $followed_store = StoreRepository::findFollowedStoreByUser($request['user_id'], $store_id);
+
             if ($followed_store) {
                 StoreRepository::deleteFollowedStoreByUser($request['user_id'], $store_id);
                 return response()->json([
@@ -60,7 +59,7 @@ class FollowedStoreController extends BaseController
                 ], AResponseStatusCode::SUCCESS);
             } else {
                 StoreRepository::addFollowedStoreByUser($request['user_id'], $store_id);
-                $store=Store::query()->where('id',$store_id)->first();
+                $store = Store::query()->where('id', $store_id)->first();
                 event(new FollowStore([$store->user_id], $store_id));
                 return response()->json([
                     'status' => true,
@@ -76,10 +75,10 @@ class FollowedStoreController extends BaseController
 
     }
 
-    public function getFollowedStores(Request $request)
+    public function getFollowedStoresV2(Request $request)
     {
         try {
-            $userId = UserId::UserId($request);
+            $userId = $request->user_id;
 
             $q = Store::query()
                 ->select('stores.id', 'stores.name', 'stores.logo',
@@ -125,12 +124,28 @@ class FollowedStoreController extends BaseController
                 if ($store->logo)
                     $store->logo = config('filesystems.aws_base_url') . $store->logo;
             }
-            return response()->json([
-                'success' => true,
-                'message' => '',
-                'data' => $stores
+           return $this->respondWithPagination($stores);
+        } catch (\Exception $e) {
+            Log::error('error in getFollowedStores of seller  FollowedStore' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
 
-            ], AResponseStatusCode::SUCCESS);
+
+    public function getFollowedStores(Request $request)
+    {
+        try {
+            $followedStoresIds = FollowedStore::where('user_id',$request->user_id)->get()->pluck('store_id')->toArray();
+
+            $stores = Store::query()->with(['city.state.region.country', 'storeSettings', 'storeOpeningHours', 'owner'])
+                ->with(array('SellerRate' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                    $query->take(3);
+                }))
+                ->whereIn('id', $followedStoresIds)
+                ->withCount('products')->paginate(10);
+
+            return $this->respondWithPagination(StoreIndexResource::collection($stores));
         } catch (\Exception $e) {
             Log::error('error in getFollowedStores of seller  FollowedStore' . __LINE__ . $e);
             return $this->connectionError($e);

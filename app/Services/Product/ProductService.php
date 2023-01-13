@@ -10,6 +10,7 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 use LaravelIdea\Helper\App\Models\_IH_Product_C;
 use LaravelIdea\Helper\App\Models\_IH_Product_QB;
 
@@ -59,12 +60,136 @@ class ProductService
                 'productStore.productStoreStock'
             ]);
 
-
-
         if (!$paginated > 0) {
             return $products->limit(3)->get();
         }
         return $products->paginate($paginated);
+    }
+
+
+    public function productsByStore($storeId, $request, $limit = 0, $filterData = []): _IH_Product_C|Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Pagination\LengthAwarePaginator|array
+    {
+
+        $products = Product::query()
+            ->whereHas('productStore', function ($q) use ($storeId) {
+                $q->where('store_id', $storeId);
+            })
+            ->with([
+                'category',
+                'brand',
+                'material',
+                'shipping',
+                'images',
+                'productStore.store',
+                'productStore.productStoreStock',
+                'orderProducts',
+            ]);
+
+        $products = $this->filterProducts($request, $products, $filterData);
+
+        if ($limit > 0) {
+            return $products->limit($limit)->get();
+        }
+
+        return $products->paginate(10);
+    }
+
+    public function filterProducts($request, $PQuery, $filterData = [])
+    {
+        if ($request->filled('filter_by_category_ids')) {
+            $PQuery->whereIn('category_id', $request->filter_by_category_ids);
+        }
+
+        if ($request->filled('filter_by_materials_ids')) {
+            $PQuery->whereIn('material_id', $request->query('filter_by_materials_ids'));
+        }
+
+        if ($request->filled('filter_by_category_ids')) {
+            $PQuery->whereIn('category_id', $request->filter_by_category_ids);
+        }
+
+        if ($request->filled('filter_by_brands_ids')) {
+            $PQuery->whereIn('brand_id', $request->query('filter_by_brands_ids'));
+        }
+
+        if ($request->filled('filter_by_price_from')) {
+            $PQuery->whereHas('productStore', function ($q) use ($request) {
+                $q->where('consumer_price', '>=', $request->query('filter_by_price_from'));
+            });
+        }
+
+        if ($request->filled('filter_by_price_to')) {
+            $PQuery->whereHas('productStore', function ($q) use ($request) {
+                $q->where('consumer_price', '<=', $request->query('filter_by_price_to'));
+            });
+        }
+
+        if ($request->filled('sort_by_price')) {
+            $PQuery->whereHas('productStore', function ($q) use ($request) {
+                $q->orderBy('consumer_price', $request->query('sort_by_price'));
+            });
+        }
+
+        if ($request->filled('is_new_arrivals') || array_key_exists('is_new_arrivals', $filterData)) {
+            $PQuery->orderBy('products.created_at', 'desc');
+        }
+
+        if ($request->filled('search_word')) {
+            $PQuery->where('name', 'ILIKE', '%' . $request->search_word . '%');
+        }
+
+        if ($request->filled('filter_by_shipping_method_id')) {
+            $PQuery->where('shipping_method_id', $request->filter_by_shipping_method_id);
+        }
+
+        if ($request->filled('filter_by_policy_id')) {
+            $PQuery->where('policy_id', $request->filter_by_policy_id);
+        }
+
+
+        if ($request->filled('filter_by_colors_ids')) {
+            $PQuery->whereHas('productStore.productStoreStock', function ($q) use ($request) {
+                $q->whereIn('color_id', $request->query('filter_by_colors_ids'));
+            });
+        }
+
+        if ($request->filled('filter_by_sizes_ids')) {
+            $PQuery->whereHas('productStore.productStoreStock', function ($q) use ($request) {
+                $q->whereIn('size_id', $request->query('filter_by_sizes_ids'));
+            });
+        }
+
+
+        if ($request->filled('has_discount') || array_key_exists('has_discount', $filterData)) {
+            $PQuery->whereHas('productStore', function ($q) use ($request) {
+                $q->where('discount', '!=', 0);
+            });
+        }
+
+        if ($request->filled('sort_by_most_selling') || array_key_exists('sort_by_most_selling', $filterData)) {
+            $PQuery->withCount('orderProducts')
+                ->orderBy('order_products_count', 'desc');
+        }
+
+        if ($request->filled('sort_by_rate')) {
+            $PQuery->withCount(['SellerRate as average_rating' => function($query) {
+                $query->select(DB::raw('coalesce(avg(rate),0)'));
+            }])->orderByDesc('average_rating');
+        }
+
+//        Filter By Location
+        $latitude = $request->header('Latitude');
+        $longitude = $request->header('Longitude');
+
+        if ($request->header('latitude') && $request->header('longitude')) {
+            // This will calculate the distance in km
+            // if you want in miles use 3959 instead of 6371
+
+            $PQuery->selectRaw(DB::raw('6371 * acos(cos(radians(' . $latitude . ')) * cos(radians(stores.latitude)) * cos(radians(stores.longitude) - radians(' . $longitude . ')) + sin(radians(' . $latitude . ')) * sin(radians(stores.latitude))) as distance'))
+                ->orderByRaw('distance asc');
+        }
+
+        return $PQuery;
     }
 
 

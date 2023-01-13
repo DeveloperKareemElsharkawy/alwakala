@@ -226,6 +226,16 @@ class Store extends Model
         return $this->hasMany(ShoppingCart::class, 'store_id');
     }
 
+    public function storeOpeningHours(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(StoreOpeningHour::class);
+    }
+
+    public function storeSettings()
+    {
+        return $this->hasOne(StoreSetting::class);
+    }
+
     /**
      * The roles that belong to Many the Products.
      */

@@ -39,7 +39,6 @@ class ReviewController extends BaseController
                 'data' => []
             ], AResponseStatusCode::SUCCESS);
         } catch (\Exception $e) {
-            dd($e);
             Log::error('error in change status of order of dashboard orders' . __LINE__ . $e);
             return $this->connectionError($e);
         }

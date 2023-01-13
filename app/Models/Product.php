@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Scopes\Consumer\Products\ActiveProductScope;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
@@ -26,6 +27,17 @@ class Product extends Model
         'policy_id',
         'youtube_link',
     ];
+
+
+    /**
+     * The "booted" method of the model.
+     *
+     * @return void
+     */
+    protected static function booted()
+    {
+        static::addGlobalScope(new ActiveProductScope());
+    }
 
     public function brand()
     {
@@ -99,6 +111,11 @@ class Product extends Model
     public function warehouses()
     {
         return $this->belongsToMany(Warehouse::class, 'warehouse_products');
+    }
+
+    public function orderProducts()
+    {
+        return $this->hasMany(OrderProduct::class);
     }
 
     public function warehouse_products()

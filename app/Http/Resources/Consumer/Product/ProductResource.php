@@ -50,6 +50,8 @@ class ProductResource extends JsonResource
             'store' => new ProductStoreResource($this->productStore->store),
             'category' => new ProductCategoryResource($this->category),
             'brand' => new ProductBrandResource($this->brand),
+            'material' => new ProductMaterialResource($this->material),
+
         ];
     }
 

@@ -39,16 +39,22 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
     Route::group(['prefix' => 'profile'], function () {
         Route::get('/store-home/{storeId}', 'ProfilesController@storeHome');
     });
-    Route::group(['prefix' => 'stores'], function () {
-        Route::get('/profile/{storeId}', 'ProfilesController@showProfile');
+
+    Route::group(['prefix' => 'reports', 'middleware' => ['consumer_auth']], function () {
+        Route::post('/', 'ReportsController@report');
     });
 
+    Route::group(['prefix' => 'store'], function () {
+        Route::get('/profile/{store_id}', 'ProfilesController@showProfile');
+        Route::get('/{store_id}/reviews', 'ProfilesController@storeReviews');
+        Route::get('/{store_id}/feeds', 'ProfilesController@storeFeeds');
+        Route::get('/{store_id}/products', 'ProfilesController@storeProducts');
+        Route::post('/review-store', 'ProfilesController@rateStore')->middleware('consumer_auth');
+    });
     Route::group(['prefix' => 'home'], function () {
         Route::get('/', 'HomeController@home');
     });
-    Route::group(['prefix' => 'store'], function () {
-        Route::get('/profile/{store_id}', 'ProfilesController@showProfile');
-    });
+
     Route::group(['prefix' => 'places'], function () {
         Route::get('/get-states', 'PlacesController@getStates');
         Route::get('get-cities', 'PlacesController@getCities');
@@ -61,6 +67,9 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
         Route::delete('/delete', 'UserAddressController@delete');
         Route::post('/set-default-address', 'UserAddressController@setDefaultAddress');
     });
+
+
+
 
     Route::group(['prefix' => 'categories'], function () {
         Route::get('/', 'CategoriesController@getParentCategories');
@@ -77,14 +86,11 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
         Route::post('/submit-order', 'OrdersController@addOrder');
         Route::get('/', 'OrdersController@index');
         Route::get('/{order_id}', 'OrdersController@showOrder');
-        Route::get('{id}', 'OrdersController@show');
-        Route::post('/receive-order', 'OrdersController@receiveOrder');
+         Route::post('/receive-order', 'OrdersController@receiveOrder');
         Route::post('/cancel-order', 'OrdersController@cancelOrder');
         Route::post('/cancel-order-product', 'OrdersController@cancelOrderProduct');
         Route::post('/review-purchased-product', 'OrdersController@reviewPurchasedProduct');
-
     });
-
 
     Route::group(['prefix' => 'feeds', 'middleware' => 'consumer_auth'], function () {
         Route::get('/', 'FeedController@allFeedsList');
@@ -115,6 +121,7 @@ Route::group(['prefix' => 'consumer-app', 'namespace' => 'Consumer'], function (
     });
     Route::group(['prefix' => 'products'], function () {
         Route::get('/show', 'ProductsController@show');
+        Route::get('/find-product-by-barcode', 'ProductsController@getProductByBarcode');
         Route::get('/smiler-products', 'ProductsController@smilerProducts');
         Route::get('/suggested-products', 'ProductsController@suggestedProducts');
         Route::get('/reviews', 'ProductsController@getProductReviews');

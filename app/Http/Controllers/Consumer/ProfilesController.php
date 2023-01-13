@@ -7,21 +7,31 @@ use App\Enums\Apps\AApps;
 use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Events\Store\VisitStore;
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\Consumer\Store\ReviewStoreRequest;
 use App\Http\Requests\Products\GetProductsRequest;
+use App\Http\Resources\Consumer\Product\ProductResource;
+use App\Http\Resources\Consumer\Store\ProfileResource;
 use App\Http\Resources\Seller\AppTv\AppTvResource;
+use App\Http\Resources\Seller\Feeds\FeedsCollection;
+use App\Http\Resources\Seller\Feeds\FeedsResource;
+use App\Http\Resources\Seller\Store\SellerRateResource;
 use App\Lib\Helpers\Lang\LangHelper;
 use App\Lib\Helpers\Rate\RateHelper;
 use App\Lib\Helpers\UserId\UserId;
 use App\Models\AppTv;
 use App\Models\Category;
 use App\Models\CategoryStore;
+use App\Models\Feed;
 use App\Models\FollowedStore;
+use App\Models\ProductStore;
 use App\Models\SellerFavorite;
 use App\Models\SellerRate;
 use App\Models\Store;
+use App\Models\User;
 use App\Repositories\ProductRepository;
 use App\Repositories\ProfileRepository;
 use App\Repositories\StoreRepository;
+use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -31,24 +41,22 @@ class ProfilesController extends BaseController
     public $productsRepo;
     public $profileRepo;
     private $lang;
+    public $productService;
 
-    public function __construct(ProductRepository $productRepository, ProfileRepository $profileRepository, Request $request)
+    public function __construct(ProductRepository $productRepository, ProductService $productService, ProfileRepository $profileRepository, Request $request)
     {
         $this->productsRepo = $productRepository;
         $this->profileRepo = $profileRepository;
         $this->lang = LangHelper::getDefaultLang($request);
+        $this->productService = $productService;
+
     }
 
-    public function storeHome(GetProductsRequest $request, $storeId)
+    public function storeHomeOld(GetProductsRequest $request, $storeId)
     {
         try {
             if (!Store::query()->where('id', $storeId)->first()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => 'store not found',
-                    'data' => ''
-
-                ], AResponseStatusCode::BAD_REQUEST);
+                return $this->error(['message' => 'store not found']);
             }
             $userId = UserId::UserId($request);
 
@@ -103,24 +111,160 @@ class ProfilesController extends BaseController
         }
     }
 
+
+    public function storeHome(Request $request, $storeId)
+    {
+        try {
+
+            // Store Information
+            $store = Store::query()->with(['city.state.region.country', 'storeSettings', 'storeOpeningHours', 'owner'])
+                ->with(array('SellerRate' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                    $query->take(3);
+                }))
+                ->withCount('products')->find($storeId);
+
+            if (!$store) {
+                return $this->error(['message' => 'Store not found']);
+            }
+
+            // Store Pinned Feed
+
+            $feed = Feed::query()->with('store')->where('store_id', $storeId)->where('is_pinned', true)
+                ->first();
+
+            $feed['products'] = ProductStore::query()->where('store_id', $feed->store_id)
+                ->whereIn('product_id', $feed->products)->with('product.image')
+                ->get();
+
+
+            // Store Products
+
+            $hotOffers = $this->productService->productsByStore($storeId, $request, 3,['has_discount']);
+            $newArrivals = $this->productService->productsByStore($storeId, $request, 3,['is_new_arrivals']);
+            $bestSelling = $this->productService->productsByStore($storeId, $request, 3,['sort_by_most_selling']);
+
+
+            return $this->success(['message' => '', 'data' => [
+                'store_info' => new ProfileResource($store),
+                'pinned_feed' => new FeedsResource($feed),
+                'hot_offers' => ProductResource::collection($hotOffers),
+                'new_arrivals' => ProductResource::collection($newArrivals),
+                'best_selling' => ProductResource::collection($bestSelling),
+            ]]);
+
+        } catch (\Exception $e) {
+            Log::error('error in showProfile of seller Profile ' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
     public function showProfile(Request $request, $storeId)
     {
         try {
-            $userId = UserId::UserId($request);
-            $store = Store::query()->find($storeId);
+            $store = Store::query()->with(['city.state.region.country', 'storeSettings', 'storeOpeningHours', 'owner'])
+                ->with(array('SellerRate' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                    $query->take(3);
+                }))
+                ->withCount('products')->find($storeId);
+
             if (!$store) {
-                return response()->json([
-                    "status" => false,
-                    "message" => "store not found",
-                    "data" => ''
-                ], AResponseStatusCode::BAD_REQUEST);
+                return $this->error(['message' => 'Store not found']);
             }
-            $storeProfile = $this->profileRepo->getStoreProfileForVisitors($userId, $this->lang, $storeId);
-            return response()->json([
-                "status" => true,
-                "message" => "store profile",
-                "data" => $storeProfile
-            ], AResponseStatusCode::SUCCESS);
+
+            return $this->success(['message' => '', 'data' => new ProfileResource($store)]);
+
+        } catch (\Exception $e) {
+            Log::error('error in showProfile of seller Profile ' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function storeReviews(Request $request, $storeId)
+    {
+        try {
+            $store = Store::query()->with(['city.state.region.country', 'storeSettings', 'storeOpeningHours', 'owner'])
+                ->with(array('SellerRate' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                    $query->take(3);
+                }))
+                ->withCount('products')->find($storeId);
+
+            if (!$store) {
+                return $this->error(['message' => 'Store not found']);
+            }
+
+            $reviews = SellerRate::where([['rated_type', Store::class], ['rated_id', $storeId]])->paginate(10);
+
+            return $this->respondWithPagination(SellerRateResource::collection($reviews));
+
+        } catch (\Exception $e) {
+            Log::error('error in showProfile of seller Profile ' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function storeFeeds(Request $request, $storeId)
+    {
+        try {
+            $feeds = Feed::query()->with('store')->where('store_id', $storeId)
+                ->orderBy('is_pinned', 'DESC')
+                ->orderBy('created_at', 'DESC')
+                ->paginate(10);
+
+            foreach ($feeds as $feed) {
+                $feed['products'] = ProductStore::query()->where('store_id', $feed->store_id)
+                    ->whereIn('product_id', $feed->products)->with('product.image')
+                    ->get();
+            }
+
+            return $this->respondWithPagination(FeedsResource::collection($feeds));
+
+        } catch (\Exception $e) {
+            Log::error('error in showProfile of seller Profile ' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function storeProducts(Request $request, $storeId)
+    {
+        try {
+            $products = $this->productService->productsByStore($storeId, $request);
+
+            return $this->respondWithPagination(ProductResource::collection($products));
+
+        } catch (\Exception $e) {
+            Log::error('error in showProfile of seller Profile ' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function rateStore(ReviewStoreRequest $request)
+    {
+        try {
+
+            SellerRate::updateOrCreate(
+                ['rater_type' => User::class, 'rater_id' => $request->user_id,
+                    'rated_type' => Store::class, 'rated_id' => $request->store_id,],
+                ['rate' => $request->rate, 'review' => $request->review]
+            );
+
+            $store = Store::query()->with(['city.state.region.country', 'storeSettings', 'storeOpeningHours', 'owner'])
+                ->with(array('SellerRate' => function ($query) {
+                    $query->orderBy('created_at', 'desc');
+                    $query->take(3);
+                }))
+                ->withCount('products')->find($request->store_id);
+
+            if (!$store) {
+                return $this->error(['message' => 'Store not found']);
+            }
+
+            $reviews = SellerRate::where([['rated_type', Store::class], ['rated_id', $request->store_id]])->paginate(10);
+
+            return $this->respondWithPagination(SellerRateResource::collection($reviews));
+
         } catch (\Exception $e) {
             Log::error('error in showProfile of seller Profile ' . __LINE__ . $e);
             return $this->connectionError($e);

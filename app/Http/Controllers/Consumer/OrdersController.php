@@ -170,7 +170,7 @@ class OrdersController extends BaseController
             }
 
             return $this->success([
-                'data' => $order
+                'data' => new OrderResource($order)
             ]);
         } catch (\Exception $e) {
             Log::error('error in salesOrders of seller Order' . __LINE__ . $e);
