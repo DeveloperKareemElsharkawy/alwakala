@@ -143,6 +143,7 @@ class CartRepository
 
         $cartsList['cart_count'] = $cartCount;
         $cartsList['item_count'] = $itemCount;
+        $cartsList['cart_total'] = $cartTotal;
 
         return $cartsList;
     }
