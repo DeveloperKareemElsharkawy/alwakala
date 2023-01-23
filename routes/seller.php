@@ -127,6 +127,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
         Route::group(['middleware' => ['seller_auth', 'user_activation']], function () {
             Route::get('/profile', 'ProfilesController@getProfile');
             Route::post('/update-profile', 'ProfilesController@updateProfile')->middleware('seller_can_access:sEditProfile');
+            Route::post('/update-profile-info', 'ProfilesController@updateProfileInfo')->middleware('seller_can_access:sEditProfile');
             Route::post('/update-categories', 'ProfilesController@updateStoreCategories')->middleware('seller_can_access:sEditStoreCategories');
             Route::post('/update-feed', 'ProfilesController@updateFeedLink')->middleware('seller_can_access:sEditFeedLink');
             Route::get('/get-seller-stores', 'StoresController@getSellerStores');

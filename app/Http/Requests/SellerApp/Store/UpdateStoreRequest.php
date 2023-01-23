@@ -26,7 +26,6 @@ class UpdateStoreRequest extends FormRequest
     public function rules(Request $request): array
     {
         return [
-            'id' => 'required|numeric|exists:stores,id',
             'name' => 'required|string|max:255',
             'address' => 'required|string|max:255',
             'mobile' => ['required', new EGPhoneNumber, 'size:11'],

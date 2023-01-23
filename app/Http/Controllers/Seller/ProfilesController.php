@@ -17,6 +17,7 @@ use App\Http\Requests\SellerApp\Auth\UpdateSellerInfoRequest;
 use App\Http\Requests\SellerApp\Auth\UploadDocumentsRequest;
 use App\Http\Requests\SellerApp\Store\ChangeMobileNumberRequest;
 use App\Http\Requests\SellerApp\Store\ContactsRequest;
+use App\Http\Requests\SellerApp\Store\UpdateStoreInfoRequest;
 use App\Http\Requests\SellerApp\Store\UpdateStoreRequest;
 use App\Http\Resources\Seller\AppTv\AppTvResource;
 use App\Http\Resources\Seller\Categories\CategoriesResource;
@@ -205,6 +206,35 @@ class ProfilesController extends BaseController
                 $store->logo = UploadImage::uploadImageToStorage($logo, 'stores');
             }
             $store->save();
+
+            $data['ref_id'] = $store->id;
+            $data['user_id'] = $request->seller_id;
+            $data['action'] = Activities::UPDATE_STORE;
+            $data['type'] = ActivityType::STORE;
+            ActivitiesRepository::log($data);
+            return response()->json([
+                "status" => true,
+                "message" => trans('messages.stores.profile_updated'),
+                "data" => ''
+            ], AResponseStatusCode::CREATED);
+        } catch (\Exception $e) {
+            Log::error('error in updateProfile of seller Profile ' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+
+    public function updateProfileInfo(UpdateStoreInfoRequest $request)
+    {
+        try {
+            $store = Store::query()
+                ->where('user_id', $request->user_id)->first();
+
+            $store->update($request->validated());
+
+            if ($request->categories)
+                $store->storeCategories()->sync($request->categories);
+
 
             $data['ref_id'] = $store->id;
             $data['user_id'] = $request->seller_id;
