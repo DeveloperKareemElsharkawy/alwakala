@@ -27,6 +27,8 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
     Route::post('/change-credentials-validate', 'CredentialsController@validateConfirmCode')->middleware('seller_auth');//
     Route::post('/change-credentials-submit', 'CredentialsController@changeCredentialsSubmit')->middleware('seller_auth');//
     Route::get('store-main-data', 'AuthController@sideData')->middleware('seller_auth');
+    Route::get('store-mini-data', 'AuthController@storeMiniData')->middleware('seller_auth');
+    Route::post('update-store-mini-data', 'AuthController@updateStoreMiniData')->middleware('seller_auth');
     Route::get('agreement/{type}/{app}', 'AuthController@getAgreement');
     Route::post('update-password', 'AuthController@updatePassword')->middleware(['seller_auth']);
     Route::post('sync-contacts', 'AuthController@syncContacts')->middleware(['seller_auth', 'user_activation']);

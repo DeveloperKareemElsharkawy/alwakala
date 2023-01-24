@@ -17,6 +17,8 @@ use App\Http\Requests\SellerApp\Auth\SyncContactsRequest;
 use App\Http\Requests\SellerApp\Auth\UpdateDeviceTokenRequest;
 use App\Http\Requests\SellerApp\Auth\UpdatePasswordRequest;
 use App\Http\Requests\SellerApp\Auth\validateFirstScreenRequest;
+use App\Http\Requests\SellerApp\Store\UpdateStoreInfoRequest;
+use App\Http\Requests\SellerApp\Store\UpdateStoreRequest;
 use App\Http\Requests\Shared\LoginRequest;
 use App\Jobs\Emails\SendResetPasswordCodeJob;
 use App\Lib\Helpers\Lang\LangHelper;
@@ -50,6 +52,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use LaravelFCM\Facades\FCM;
 use LaravelFCM\Message\PayloadDataBuilder;
@@ -681,6 +684,88 @@ class AuthController extends BaseController
             ], AResponseStatusCode::SUCCESS);
         } catch (\Exception $e) {
             Log::error('error in sideData of seller auth' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function storeMiniData(Request $request)
+    {
+        try {
+            $user = User::query()
+                ->select('id', 'email', 'name', 'image','mobile')
+                ->withCount('favorites')
+                ->where('id', $request->user_id)
+                ->first();
+
+            $store = Store::query()
+                ->select(
+                    'stores.id',
+                    'stores.name',
+                    'stores.mobile',
+                    'stores.logo',
+                    'stores.cover',
+                    'stores.qr_code_image',
+                )
+                ->where('stores.user_id', $request->user_id)
+                ->first();
+
+            $store->logo = config('filesystems.aws_base_url') . $store->logo;
+            $store->cover = config('filesystems.aws_base_url') . $store->cover;
+
+            $userId = UserId::UserId($request);
+
+            return response()->json([
+                'status' => true,
+                'message' => trans('messages.auth.side_data'),
+                'data' => [
+                    'store_id' => $store->id,
+                    'store_name' => $store->name,
+                    'store_mobile' => $store->mobile,
+                    'store_logo' => $store->logo,
+                    'store_cover' => $store->cover,
+
+                    'user_email' => $user->email,
+                    'user_mobile' => $user->mobile,
+
+                ]
+            ], AResponseStatusCode::SUCCESS);
+        } catch (\Exception $e) {
+            Log::error('error in sideData of seller auth' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    public function updateStoreMiniData(UpdateStoreInfoRequest $request)
+    {
+        try {
+            $store = Store::query()
+                ->where('user_id', $request->user_id)
+                ->first();
+
+            $validatedData = $request->validated();
+
+            if ($request->hasFile('logo')) {
+                Storage::disk('s3')->delete($store->logo);
+                 $validatedData['logo'] = UploadImage::uploadImageToStorage($request->logo, 'stores');
+            }
+
+            $store->save();
+
+            $store->update($validatedData);
+
+
+            $data['ref_id'] = $store->id;
+            $data['user_id'] = $request->seller_id;
+            $data['action'] = Activities::UPDATE_STORE;
+            $data['type'] = ActivityType::STORE;
+            ActivitiesRepository::log($data);
+            return response()->json([
+                "status" => true,
+                "message" => trans('messages.stores.profile_updated'),
+                "data" => ''
+            ], AResponseStatusCode::CREATED);
+        } catch (\Exception $e) {
+            Log::error('error in updateProfile of seller Profile ' . __LINE__ . $e);
             return $this->connectionError($e);
         }
     }
