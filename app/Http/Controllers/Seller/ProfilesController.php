@@ -16,6 +16,7 @@ use App\Http\Requests\Products\GetProductsRequest;
 use App\Http\Requests\SellerApp\Auth\UpdateSellerInfoRequest;
 use App\Http\Requests\SellerApp\Auth\UploadDocumentsRequest;
 use App\Http\Requests\SellerApp\Store\ChangeMobileNumberRequest;
+use App\Http\Requests\SellerApp\Store\ConfirmChangeMobileNumberRequest;
 use App\Http\Requests\SellerApp\Store\ContactsRequest;
 use App\Http\Requests\SellerApp\Store\UpdateStoreInfoRequest;
 use App\Http\Requests\SellerApp\Store\UpdateStoreRequest;
@@ -259,10 +260,16 @@ class ProfilesController extends BaseController
     {
         $storeId = StoreId::getStoreID($request);
 
+        $store = Store::find($storeId);
+
+        if ($store->mobile == $request->mobile) {
+            return $this->error(['message' => trans('messages.stores.choose_another_number')]);
+        }
+
         $confirmCode = mt_rand(0, 8) . mt_rand(1, 9) . mt_rand(10, 90);
 
         StoreMobileChanges::query()->firstOrCreate(
-            ['store_id' => $storeId, 'mobile' => $request->mobile],
+            ['store_id' => $storeId, 'mobile' => $request->mobile, 'has_changed' => false],
             ['confirm_code' => $confirmCode]
         );
 
@@ -273,14 +280,16 @@ class ProfilesController extends BaseController
 
 
     /**
-     * @param ChangeMobileNumberRequest $request
+     * @param ConfirmChangeMobileNumberRequest $request
      * @return void
      */
-    public function updateMobileConfirmation(ChangeMobileNumberRequest $request)
+    public function updateMobileConfirmation(ConfirmChangeMobileNumberRequest $request)
     {
         $storeId = StoreId::getStoreID($request);
 
         Store::query()->where('id', $storeId)->update(['mobile' => $request->mobile]);
+
+        StoreMobileChanges::query()->where([['store_id', $storeId], ['confirm_code', $request->confirm_code]])->update(['has_changed' => true]);
 
         return $this->success(['message' => 'Mobile Updated']);
     }

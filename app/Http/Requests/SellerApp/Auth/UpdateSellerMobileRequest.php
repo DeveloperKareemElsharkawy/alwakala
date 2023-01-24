@@ -26,7 +26,7 @@ class UpdateSellerMobileRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'mobile' => ['required', new EGPhoneNumber]
+            'mobile' => ['required', new EGPhoneNumber,'unique:users,mobile'],
         ];
 
     }

@@ -197,7 +197,9 @@ return [
         'updated' => 'store details updated',
         'stores_count' => 'followed stores count',
         'upload_documents' => 'Documents Uploaded Successfully',
-        'not_found' => 'Store not Found'
+        'not_found' => 'Store not Found',
+        'choose_another_number' => 'This is the number currently used, please use another number'
+
     ],
 
     'shipping' => [

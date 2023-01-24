@@ -9,5 +9,5 @@ class UserMobileChanges extends Model
 {
     use HasFactory;
 
-    protected $fillable= ['mobile','user_id','confirm_code'];
+    protected $fillable= ['mobile','user_id','confirm_code','has_changed'];
 }

@@ -5,6 +5,9 @@ namespace App\Http\Controllers\Seller;
 
 use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Http\Controllers\BaseController;
+use App\Http\Requests\SellerApp\Auth\ConfirmUpdateSellerEmailRequest;
+use App\Http\Requests\SellerApp\Auth\ConfirmUpdateSellerMobileRequest;
+use App\Http\Requests\SellerApp\Auth\UpdateSellerEmailRequest;
 use App\Http\Requests\SellerApp\Auth\UpdateSellerInfoRequest;
 use App\Http\Requests\SellerApp\Auth\UpdateSellerMobileRequest;
 use App\Http\Requests\SellerApp\Store\ChangeMobileNumberRequest;
@@ -12,6 +15,7 @@ use App\Lib\Log\ServerError;
 use App\Lib\Log\ValidationError;
 use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\User;
+use App\Models\UserEmailChanges;
 use App\Models\UserMobileChanges;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -86,7 +90,7 @@ class SellersController extends BaseController
         $confirmCode = mt_rand(0, 8) . mt_rand(1, 9) . mt_rand(10, 90);
 
         UserMobileChanges::query()->firstOrCreate(
-            ['user_id' => $userId, 'mobile' => $request->mobile],
+            ['user_id' => $userId, 'mobile' => $request->mobile, 'has_changed' => false],
             ['confirm_code' => $confirmCode]
         );
 
@@ -95,20 +99,55 @@ class SellersController extends BaseController
         ]]);
     }
 
-
     /**
      * @param UpdateSellerMobileRequest $request
      * @return JsonResponse
      */
-    public function updateMobileConfirmation(UpdateSellerMobileRequest $request)
+    public function updateMobileConfirmation(ConfirmUpdateSellerMobileRequest $request)
     {
         $userId = $request->user_id;
 
         User::query()->where('id', $userId)->update(['mobile' => $request->mobile]);
 
+        UserMobileChanges::query()->where([['user_id', $userId], ['confirm_code', $request->confirm_code]])->update(['has_changed' => true]);
+
         return $this->success(['message' => 'Mobile Updated']);
     }
 
+    /**
+     * @param UpdateSellerEmailRequest $request
+     * @return JsonResponse
+     */
+    public function sendUpdateEmailCode(UpdateSellerEmailRequest $request)
+    {
+        $userId = $request->user_id;
+
+        $confirmCode = mt_rand(0, 8) . mt_rand(1, 9) . mt_rand(10, 90);
+
+        UserEmailChanges::query()->firstOrCreate(
+            ['user_id' => $userId, 'email' => $request->email, 'has_changed' => false],
+            ['confirm_code' => $confirmCode]
+        );
+
+        return $this->success(['message' => 'Code Sent', 'data' => [
+            'confirm_code' => $confirmCode
+        ]]);
+    }
+
+    /**
+     * @param ConfirmUpdateSellerEmailRequest $request
+     * @return JsonResponse
+     */
+    public function updateEmailConfirmation(ConfirmUpdateSellerEmailRequest $request)
+    {
+        $userId = $request->user_id;
+
+        User::query()->where('id', $userId)->update(['email' => $request->email]);
+
+        UserEmailChanges::query()->where([['user_id', $userId], ['confirm_code', $request->confirm_code]])->update(['has_changed' => true]);
+
+        return $this->success(['message' => 'Email Updated']);
+    }
 
     public function show(Request $request)
     {

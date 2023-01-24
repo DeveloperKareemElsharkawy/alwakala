@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Http\Requests\SellerApp\Store;
+namespace App\Http\Requests\SellerApp\Auth;
 
-use App\Lib\Helpers\StoreId\StoreId;
 use App\Rules\General\EGPhoneNumber;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
+use App\Http\Requests\Shared\RegisterUserRequest;
 
-class ChangeMobileNumberRequest extends FormRequest
+class UpdateSellerEmailRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,16 +20,15 @@ class ChangeMobileNumberRequest extends FormRequest
 
     /**
      * Get the validation rules that apply to the request.
-     * @param Request $request
+     *
      * @return array
      */
-    public function rules(Request $request): array
+    public function rules(): array
     {
-        $storeId = StoreId::getStoreID($request);
-
         return [
-            'mobile' => ['required', new EGPhoneNumber, 'unique:stores,mobile'],
+            'email' => ['required','email','unique:users,email'],
         ];
+
     }
 
 }
