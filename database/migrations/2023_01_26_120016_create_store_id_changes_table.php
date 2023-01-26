@@ -17,8 +17,7 @@ class CreateStoreIdChangesTable extends Migration
             $table->id();
             $table->unsignedBigInteger('store_id');
             $table->foreign('store_id')->references('id')->on('stores');
-            $table->string('old_store_id');
-            $table->boolean('has_changed')->default(false);
+            $table->string('old_store_profile_id');
             $table->timestamps();
         });
     }

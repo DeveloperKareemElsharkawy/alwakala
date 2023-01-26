@@ -32,6 +32,7 @@ class UpdateStoreInfoRequest extends FormRequest
             'mobile' => ['sometimes', new EGPhoneNumber, 'size:11'],
             'latitude' => 'sometimes',
             'longitude' => 'sometimes',
+            'store_profile_id' => 'sometimes|unique:stores,store_profile_id',
             'categories' => 'sometimes|array',
             'categories.*' => 'sometimes|numeric|exists:categories,id',
             'city_id' => 'sometimes|numeric|exists:cities,id',

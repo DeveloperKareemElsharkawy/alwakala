@@ -51,6 +51,7 @@ use App\Models\Seller;
 use App\Models\SellerFavorite;
 use App\Models\SellerRate;
 use App\Models\Store;
+use App\Models\StoreIdChanges;
 use App\Models\StoreMobileChanges;
 use App\Models\StoreOpeningHour;
 use App\Models\User;
@@ -241,6 +242,10 @@ class ProfilesController extends BaseController
             if ($request->seller_name) {
                 unset($validatedData['seller_name']);
                 User::query()->where('id', $request->user_id)->update(['name' => $request->seller_name]);
+            }
+
+            if ($request->store_profile_id) {
+                StoreIdChanges::create(['store_id' => $store->id, 'old_store_profile_id' => $request->store_profile_id]);
             }
 
             $store->update($validatedData);

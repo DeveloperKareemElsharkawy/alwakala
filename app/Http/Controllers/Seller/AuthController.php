@@ -702,6 +702,8 @@ class AuthController extends BaseController
                 ->select(
                     'stores.id',
                     'stores.name',
+                    'stores.name',
+                    'stores.store_profile_id',
                     'stores.mobile',
                     'stores.logo',
                     'stores.cover',
@@ -724,6 +726,7 @@ class AuthController extends BaseController
                     'store_mobile' => $store->mobile,
                     'store_logo' => $store->logo,
                     'store_cover' => $store->cover,
+                    'store_profile_id' => $store->store_profile_id,
 
                     'seller_name' => $user->name,
                     'seller_email' => $user->email,

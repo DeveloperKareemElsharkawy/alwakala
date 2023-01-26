@@ -14,7 +14,7 @@ class AddStoreIdColumnToStoresTable extends Migration
     public function up()
     {
         Schema::table('stores', function (Blueprint $table) {
-            $table->string('store_id')->unique()->nullable();
+            $table->string('store_profile_id')->unique()->nullable();
         });
     }
 

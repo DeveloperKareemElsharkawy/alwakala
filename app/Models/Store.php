@@ -32,6 +32,7 @@ class Store extends Model
         'qr_code',
         'qr_code_image',
         'parent_id',
+        'store_profile_id',
         'is_main_branch'
     ];
 

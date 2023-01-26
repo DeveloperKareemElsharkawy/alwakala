@@ -146,6 +146,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
             Route::post('/update-mobile/resend-code', 'ProfilesController@sendUpdateMobileCode')->middleware('seller_can_access:sEditProfile');
             Route::post('/update-mobile/confirm', 'ProfilesController@updateMobileConfirmation')->middleware('seller_can_access:sEditProfile');
 
+
         });
         Route::post('sync-contacts-stores', 'ProfilesController@syncContactsStores')->middleware('seller_auth');
     });
