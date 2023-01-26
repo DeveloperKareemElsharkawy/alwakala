@@ -27,6 +27,7 @@ class UpdateStoreInfoRequest extends FormRequest
     {
         return [
             'name' => 'sometimes|string|max:255',
+            'seller_name' => 'sometimes|string|max:255',
             'address' => 'sometimes|string|max:255',
             'mobile' => ['sometimes', new EGPhoneNumber, 'size:11'],
             'latitude' => 'sometimes',
@@ -34,7 +35,7 @@ class UpdateStoreInfoRequest extends FormRequest
             'categories' => 'sometimes|array',
             'categories.*' => 'sometimes|numeric|exists:categories,id',
             'city_id' => 'sometimes|numeric|exists:cities,id',
-             'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2024',
+            'image' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2024',
             'logo' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2024',
             'license' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg|max:2024',
         ];

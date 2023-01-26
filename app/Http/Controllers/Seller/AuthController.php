@@ -698,7 +698,6 @@ class AuthController extends BaseController
                 ->first();
 
 
-
             $store = Store::query()
                 ->select(
                     'stores.id',
@@ -729,7 +728,6 @@ class AuthController extends BaseController
                     'seller_name' => $user->name,
                     'seller_email' => $user->email,
                     'seller_mobile' => $user->mobile,
-
                 ]
             ], AResponseStatusCode::SUCCESS);
         } catch (\Exception $e) {

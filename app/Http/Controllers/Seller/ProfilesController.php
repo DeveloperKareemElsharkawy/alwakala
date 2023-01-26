@@ -238,6 +238,11 @@ class ProfilesController extends BaseController
                 $validatedData['logo'] = UploadImage::uploadImageToStorage($request->logo, 'stores');
             }
 
+            if ($request->seller_name) {
+                unset($validatedData['seller_name']);
+                User::query()->where('id', $request->user_id)->update(['name' => $request->seller_name]);
+            }
+
             $store->update($validatedData);
 
             if ($request->categories)
