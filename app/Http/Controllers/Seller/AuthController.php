@@ -697,6 +697,8 @@ class AuthController extends BaseController
                 ->where('id', $request->user_id)
                 ->first();
 
+
+
             $store = Store::query()
                 ->select(
                     'stores.id',
@@ -724,48 +726,14 @@ class AuthController extends BaseController
                     'store_logo' => $store->logo,
                     'store_cover' => $store->cover,
 
-                    'user_email' => $user->email,
-                    'user_mobile' => $user->mobile,
+                    'seller_name' => $user->name,
+                    'seller_email' => $user->email,
+                    'seller_mobile' => $user->mobile,
 
                 ]
             ], AResponseStatusCode::SUCCESS);
         } catch (\Exception $e) {
             Log::error('error in sideData of seller auth' . __LINE__ . $e);
-            return $this->connectionError($e);
-        }
-    }
-
-    public function updateStoreMiniData(UpdateStoreInfoRequest $request)
-    {
-        try {
-            $store = Store::query()
-                ->where('user_id', $request->user_id)
-                ->first();
-
-            $validatedData = $request->validated();
-
-            if ($request->hasFile('logo')) {
-                Storage::disk('s3')->delete($store->logo);
-                 $validatedData['logo'] = UploadImage::uploadImageToStorage($request->logo, 'stores');
-            }
-
-            $store->save();
-
-            $store->update($validatedData);
-
-
-            $data['ref_id'] = $store->id;
-            $data['user_id'] = $request->seller_id;
-            $data['action'] = Activities::UPDATE_STORE;
-            $data['type'] = ActivityType::STORE;
-            ActivitiesRepository::log($data);
-            return response()->json([
-                "status" => true,
-                "message" => trans('messages.stores.profile_updated'),
-                "data" => ''
-            ], AResponseStatusCode::CREATED);
-        } catch (\Exception $e) {
-            Log::error('error in updateProfile of seller Profile ' . __LINE__ . $e);
             return $this->connectionError($e);
         }
     }

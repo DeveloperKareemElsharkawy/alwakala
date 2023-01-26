@@ -43,6 +43,7 @@ class AuthController extends BaseController
             $user = new User();
             $data['type_id'] = UserType::CONSUMER;
             $user->initializeUserFields($data);
+            $user->share_code = \Str::random(10).uniqid();
             $user->save();
 
             $settingUser = SettingUser::query()->create([
@@ -345,9 +346,9 @@ class AuthController extends BaseController
         }
     }
 
-    public function login(LoginRequest $request): \Illuminate\Http\JsonResponse
+    public function login(LoginRequest $request)
     {
-        $key = (filter_var(request('email'), FILTER_VALIDATE_EMAIL)) ? 'email' : 'mobile';
+         $key = (filter_var(request('email'), FILTER_VALIDATE_EMAIL)) ? 'email' : 'mobile';
         if (Auth::attempt([$key => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
             $token = $user->createToken('myApp')->accessToken;

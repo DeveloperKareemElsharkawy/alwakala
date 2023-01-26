@@ -26,7 +26,6 @@ class ReceiveConsumerOrder extends FormRequest
     {
         return [
             'order_id' => 'required|numeric|exists:orders,id',
-
         ];
     }
 

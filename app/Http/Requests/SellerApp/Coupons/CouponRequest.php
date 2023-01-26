@@ -19,26 +19,26 @@ class CouponRequest extends FormRequest
 
     protected function onCreate()
     {
-        // dd($this->store_id);
         return [
-            'name' => ['required' , 'string' , 'max:255'],
-            'code' => ['required' , 'unique:coupons,code'],
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'unique:coupons,code'],
 //            'type' => ['required'],
             'percentage' => ['required_if:amount,null'],
             'amount' => ['required_if:percentage,null'],
-            'quantity' => $this->unlimited == 0 ? ['required' , 'numeric'] : '',
+            'quantity' => $this->unlimited == 0 ? ['required', 'numeric'] : '',
+            'can_share' => 'required|bool',
             'unlimited' => 'required|boolean',
-            'start_date' => ['required' , 'date'],
-            'end_date' => ['required' , 'date'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date'],
 //            'purchased_amount' => ['required' , 'numeric'],
             'brand_id' => ['required_if:products,null'],
-            'products' => ['required','array' , 'required_if:brand_id,null'],
-            'products.*' => ['required','numeric','exists:products,id,owner_id,' . $this->user_id],
-            'discounts.*' => ['required','array','min:1'],
-            'discounts.*.amount_from' => ['required','numeric'],
-            'discounts.*.amount_to' => ['required','numeric'],
-            'discounts.*.discount_type' => 'required|in:1,2',
-            'discounts.*.discount' => ['required','numeric'],
+            'products' => ['required', 'array'],
+            'products.*' => ['required', 'numeric', 'exists:products,id,owner_id,' . $this->user_id],
+            'discounts.*' => ['required', 'array', 'min:1'],
+            'discounts.*.amount_from' => ['required', 'numeric'],
+            'discounts.*.amount_to' => ['required', 'numeric'],
+            'discounts.*.discount_type' =>$this->can_share == true ? ['required','in:2'] :  'required|in:1,2',
+            'discounts.*.discount' => ['required', 'numeric'],
         ];
     }
 
@@ -46,24 +46,24 @@ class CouponRequest extends FormRequest
     {
         return [
             'id' => 'required|exists:coupons,id',
-            'name' => ['required' , 'string' , 'max:255'],
-            'code' => ['required' , 'unique:coupons,code'],
+            'name' => ['required', 'string', 'max:255'],
+            'code' => ['required', 'unique:coupons,code'],
 //            'type' => ['required'],
             'percentage' => ['required_if:amount,null'],
             'amount' => ['required_if:percentage,null'],
-            'quantity' => $this->unlimited == 0 ? ['required' , 'numeric'] : '',
+            'quantity' => $this->unlimited == 0 ? ['required', 'numeric'] : '',
             'unlimited' => 'required|boolean',
-            'start_date' => ['required' , 'date'],
-            'end_date' => ['required' , 'date'],
+            'start_date' => ['required', 'date'],
+            'end_date' => ['required', 'date'],
 //            'purchased_amount' => ['required' , 'numeric'],
             'brand_id' => ['required_if:products,null'],
-            'products' => ['required','array' , 'required_if:brand_id,null'],
-            'products.*' => ['required','numeric','exists:products,id,owner_id,' . $this->user_id],
-            'discounts.*' => ['required','array','min:1'],
-            'discounts.*.amount_from' => ['required','numeric'],
-            'discounts.*.amount_to' => ['required','numeric'],
+            'products' => ['required', 'array', 'required_if:brand_id,null'],
+            'products.*' => ['required', 'numeric', 'exists:products,id,owner_id,' . $this->user_id],
+            'discounts.*' => ['required', 'array', 'min:1'],
+            'discounts.*.amount_from' => ['required', 'numeric'],
+            'discounts.*.amount_to' => ['required', 'numeric'],
             'discounts.*.discount_type' => 'required|in:1,2',
-            'discounts.*.discount' => ['required','numeric'],
+            'discounts.*.discount' => ['required', 'numeric'],
         ];
     }
 

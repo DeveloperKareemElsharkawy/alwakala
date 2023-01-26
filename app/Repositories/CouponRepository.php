@@ -4,8 +4,10 @@ namespace App\Repositories;
 
 use App\Enums\UserTypes\UserType;
 use App\Http\Resources\Seller\Coupons\CouponResource;
+use App\Lib\Helpers\StoreId\StoreId;
 use App\Models\Coupon;
 use App\Models\CouponDiscount;
+use App\Models\Store;
 use Illuminate\Support\Facades\DB;
 
 class CouponRepository
@@ -39,7 +41,9 @@ class CouponRepository
     {
         $coupon = Coupon::create($data);
 
-        $coupon->products()->sync($data['products']);
+        $storeId = Store::query()->select('id')->where('user_id', $data['user_id'])->first()->id;
+
+        $coupon->products()->syncWithPivotValues($data['products'], ['store_id' => $storeId]);
 
         foreach ($data['discounts'] as $discount) {
             $couponDiscount = new CouponDiscount;

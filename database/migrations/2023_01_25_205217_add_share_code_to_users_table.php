@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateCouponParticipantsTable extends Migration
+class AddShareCodeToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,8 @@ class CreateCouponParticipantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('coupon_participants', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('share_code')->unique()->nullable();
         });
     }
 
@@ -26,6 +25,8 @@ class CreateCouponParticipantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coupon_participants');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }

@@ -28,7 +28,7 @@ class CouponController extends BaseController
 
             $coupon = $this->couponsService->create($data);
 
-             return response()->json([
+            return response()->json([
                 'status' => true,
                 'message' => "coupon Create",
                 'data' => $coupon,

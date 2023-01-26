@@ -37,7 +37,7 @@ class ProductService
     {
         return Product::query()->whereHas('productStore', function ($q) use ($productId, $storeId) {
             $q->where([['product_id', $productId], ['store_id', $storeId]]);
-        })->with(['category', 'brand', 'material', 'shipping', 'images', 'productStore.store', 'productStore.productStoreStock'])->first();
+        })->with(['category', 'brand','material', 'shipping', 'images', 'productStore.shareCoupon.coupon.discounts', 'productStore.store', 'productStore.productStoreStock'])->first();
     }
 
     public function suggestedProducts($category_id = null, $productsSmilerTo = null, $paginated = 0, $request): _IH_Product_C|Collection|\Illuminate\Contracts\Pagination\LengthAwarePaginator|\Illuminate\Pagination\LengthAwarePaginator|array

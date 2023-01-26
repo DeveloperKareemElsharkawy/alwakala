@@ -37,4 +37,15 @@ class UserId
         return $userId ;
     }
 
+    public static function GetShareCodeByUserId($storeID)
+    {
+        $store = Store::query()->find($storeID);
+
+        $userId = null;
+        if ($store)
+            $userId = $store['user_id'];
+
+        return $userId ;
+    }
+
 }

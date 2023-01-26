@@ -58,4 +58,9 @@ class ProductStore extends Model
     {
         return $this->belongsTo(Store::class);
     }
+
+    public function shareCoupon()
+    {
+        return $this->hasOne(CouponProduct::class, 'product_id','product_id')->latest();
+    }
 }

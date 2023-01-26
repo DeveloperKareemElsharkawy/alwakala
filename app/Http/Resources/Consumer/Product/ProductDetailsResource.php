@@ -14,6 +14,7 @@ use App\Lib\Helpers\Favorite\FeedFavoriteHelper;
 use App\Lib\Helpers\Product\ProductVariationHelper;
 use App\Lib\Helpers\Rate\RateHelper;
 use App\Lib\Helpers\StoreId\StoreId;
+use App\Lib\Helpers\UserId\UserId;
 use App\Services\Product\ProductService;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -31,6 +32,7 @@ class ProductDetailsResource extends JsonResource
     {
         $storeId = StoreId::getStoreID($request);
         $userID = $request->user('api') ? $request->user('api')->id : 0;
+        $shareCode = UserId::GetShareCodeByUserId($userID);
 
         return [
             'id' => $this->id,
@@ -41,6 +43,7 @@ class ProductDetailsResource extends JsonResource
             'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
             'reviews' => SellerRateResource::collection(RateHelper::getProductReviews($this?->productStore?->store_id, $this->id)),
             "size_table_image" => $this->size_table_image ? config('filesystems.aws_base_url') . $this->size_table_image : null,
+            "share_coupon" => $this->productStore->shareCoupon,
 
             'pricing' => [
                 'price' => (double)$this->productStore->consumer_price,

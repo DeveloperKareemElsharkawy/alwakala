@@ -52,7 +52,6 @@ class Product extends Model
     public function material()
     {
         return $this->belongsTo(Material::class, 'material_id')->select('id', 'name_ar', 'name_en');
-
     }
 
     public function material_2()

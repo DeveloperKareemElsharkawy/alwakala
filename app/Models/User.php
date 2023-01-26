@@ -25,6 +25,7 @@ class User extends Authenticatable
         'image',
         'mobile',
         'activation',
+        'share_code',
         'type_id'
     ];
 

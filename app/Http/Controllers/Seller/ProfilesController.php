@@ -231,11 +231,17 @@ class ProfilesController extends BaseController
             $store = Store::query()
                 ->where('user_id', $request->user_id)->first();
 
-            $store->update($request->validated());
+            $validatedData = $request->validated();
+
+            if ($request->hasFile('logo')) {
+                Storage::disk('s3')->delete($store->logo);
+                $validatedData['logo'] = UploadImage::uploadImageToStorage($request->logo, 'stores');
+            }
+
+            $store->update($validatedData);
 
             if ($request->categories)
                 $store->storeCategories()->sync($request->categories);
-
 
             $data['ref_id'] = $store->id;
             $data['user_id'] = $request->seller_id;
