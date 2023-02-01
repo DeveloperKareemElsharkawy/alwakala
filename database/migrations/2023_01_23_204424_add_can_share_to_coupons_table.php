@@ -26,7 +26,7 @@ class AddCanShareToCouponsTable extends Migration
     public function down()
     {
         Schema::table('coupons', function (Blueprint $table) {
-            //
+            $table->dropColumn('can_share');
         });
     }
 }

@@ -26,7 +26,7 @@ class AddShareCodeToCartsTable extends Migration
     public function down()
     {
         Schema::table('carts', function (Blueprint $table) {
-            //
+            $table->dropColumn('share_coupon_code');
         });
     }
 }

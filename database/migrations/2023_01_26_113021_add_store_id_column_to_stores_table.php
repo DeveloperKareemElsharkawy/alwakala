@@ -26,7 +26,7 @@ class AddStoreIdColumnToStoresTable extends Migration
     public function down()
     {
         Schema::table('stores', function (Blueprint $table) {
-            //
+            $table->dropColumn('store_profile_id');
         });
     }
 }

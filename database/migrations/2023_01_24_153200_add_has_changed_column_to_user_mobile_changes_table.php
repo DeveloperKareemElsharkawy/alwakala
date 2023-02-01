@@ -26,7 +26,7 @@ class AddHasChangedColumnToUserMobileChangesTable extends Migration
     public function down()
     {
         Schema::table('user_mobile_changes', function (Blueprint $table) {
-            //
+            $table->dropColumn('has_changed');
         });
     }
 }

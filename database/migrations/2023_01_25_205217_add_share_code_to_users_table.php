@@ -26,7 +26,7 @@ class AddShareCodeToUsersTable extends Migration
     public function down()
     {
         Schema::table('users', function (Blueprint $table) {
-            //
+            $table->dropColumn('share_coupon_code');
         });
     }
 }
