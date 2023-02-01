@@ -71,13 +71,13 @@ class ProductDetailsResource extends JsonResource
     public function shareCoupon($shareCode)
     {
         $coupon = $this->productStore?->shareCoupon?->coupon;
-
+        $couponCode = false;
         if ($coupon) {
             $couponCode = $shareCode ? $coupon->code . '_share_from_' . $shareCode : null;
             $couponDiscounts = CouponDiscountsResource::collection($this->productStore->shareCoupon->coupon->discounts);
         }
 
-        return ['is_available' => $couponCode ?? false, 'coupon_code' => $couponCode ?? null, 'discount' => $couponDiscounts ?? []];
+        return ['is_available' => (bool)$couponCode, 'coupon_code' => $couponCode ?? null, 'discount' => $couponDiscounts ?? []];
 
     }
 
