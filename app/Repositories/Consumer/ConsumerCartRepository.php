@@ -122,6 +122,7 @@ class ConsumerCartRepository
         $coupon = CouponService::getCouponDiscount($userCart?->coupon_id, $request, $cartsList['stores']);;
 
         $cartsList['coupon'] = $coupon;
+        $cartsList['share_coupon_code'] = $userCart->share_coupon_code;
         $cartsList['cart_total'] = floor($cartTotal - $coupon['discountAmount']);
         $cartsList['cart_count'] = $cartCount;
         $cartsList['item_count'] = $itemCount;

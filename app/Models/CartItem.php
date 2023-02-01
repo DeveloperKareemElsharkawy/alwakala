@@ -23,9 +23,28 @@ class CartItem extends Model
         'quantity',
     ];
 
+    /**
+     * @return BelongsTo
+     */
     public function store(): BelongsTo
     {
         return $this->belongsTo(Store::class, 'store_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function cart(): BelongsTo
+    {
+        return $this->belongsTo(Cart::class, 'cart_id');
+    }
+
+    /**
+     * @return BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 
     public function product_store(): BelongsTo

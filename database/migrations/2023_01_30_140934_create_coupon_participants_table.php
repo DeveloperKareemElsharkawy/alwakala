@@ -13,7 +13,7 @@ class CreateCouponParticipantsTable extends Migration
      */
     public function up()
     {
-        Schema::create('coupon_participants', function (Blueprint $table) {
+        Schema::create('cart_coupon_participants', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->foreign('coupon_id')->references('id')->on('coupons');
@@ -21,7 +21,15 @@ class CreateCouponParticipantsTable extends Migration
             $table->unsignedBigInteger('user_id')->nullable();
             $table->foreign('user_id')->references('id')->on('users');
 
+            $table->unsignedBigInteger('cart_id')->nullable();
+            $table->foreign('cart_id')->references('id')->on('carts');
+
+            $table->unsignedBigInteger('main_participant_id')->nullable();
+            $table->foreign('main_participant_id')->references('id')->on('users');
+
             $table->boolean('is_main_participant')->default(false);
+
+            $table->string('share_coupon_code');
 
             $table->timestamps();
         });
@@ -34,6 +42,6 @@ class CreateCouponParticipantsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('coupon_participants');
+        Schema::dropIfExists('cart_coupon_participants');
     }
 }

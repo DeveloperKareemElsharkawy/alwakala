@@ -16,7 +16,8 @@ class Order extends Model
         'payment_method_id',
         'order_address_id',
         'coupon_id',
-        'barcode'
+        'barcode',
+        'share_coupon_code'
     ];
     /**
      * The attributes that should be casted to native types.
@@ -98,7 +99,7 @@ class Order extends Model
 
     public function user()
     {
-        return $this->belongsTo(User::class, 'user_id')->select('id', 'name');
+        return $this->belongsTo(User::class, 'user_id');
     }
 
     public function calculateTotalPrice()

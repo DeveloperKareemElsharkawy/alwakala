@@ -43,7 +43,7 @@ class AuthController extends BaseController
             $user = new User();
             $data['type_id'] = UserType::CONSUMER;
             $user->initializeUserFields($data);
-            $user->share_code = \Str::random(10).uniqid();
+            $user->share_coupon_code = \Str::random(10).uniqid();
             $user->save();
 
             $settingUser = SettingUser::query()->create([

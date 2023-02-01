@@ -9,6 +9,7 @@ use App\Http\Resources\Consumer\Product\Relations\ProductMaterialResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductPolicyResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductShippingResource;
 use App\Http\Resources\Consumer\Product\Relations\ProductStoreResource;
+use App\Http\Resources\Seller\Coupons\CouponDiscountsResource;
 use App\Http\Resources\Seller\Store\SellerRateResource;
 use App\Lib\Helpers\Favorite\FeedFavoriteHelper;
 use App\Lib\Helpers\Product\ProductVariationHelper;
@@ -42,8 +43,9 @@ class ProductDetailsResource extends JsonResource
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
             'rating_avg' => RateHelper::getProductAvgRating($this?->productStore?->store_id, $this->id),
             'reviews' => SellerRateResource::collection(RateHelper::getProductReviews($this?->productStore?->store_id, $this->id)),
-            "size_table_image" => $this->size_table_image ? config('filesystems.aws_base_url') . $this->size_table_image : null,
-            "share_coupon" => $this->productStore->shareCoupon,
+            'size_table_image' => $this->size_table_image ? config('filesystems.aws_base_url') . $this->size_table_image : null,
+            'has_share_coupon' => (bool)$this->productStore->shareCoupon,
+            'share_coupon' => $this->shareCoupon($shareCode),
 
             'pricing' => [
                 'price' => (double)$this->productStore->consumer_price,
@@ -66,5 +68,17 @@ class ProductDetailsResource extends JsonResource
         ];
     }
 
+    public function shareCoupon($shareCode)
+    {
+        $coupon = $this->productStore?->shareCoupon?->coupon;
+
+        if ($coupon) {
+            $couponCode = $shareCode ? $coupon->code . '_share_from_' . $shareCode : null;
+            $couponDiscounts = CouponDiscountsResource::collection($this->productStore->shareCoupon->coupon->discounts);
+        }
+
+        return ['coupon_code' => $couponCode ?? null, 'discount' => $couponDiscounts?? []];
+
+    }
 
 }

@@ -89,6 +89,7 @@ class OrdersController extends BaseController
     public function addOrder(Request $request, CreateConsumerOrderService $createOrderService)
     {
         try {
+
             $currentShoppingCarts = $this->cartRepository->getCartsByUserId($request);
             if (count($currentShoppingCarts['stores']) == 0)
                 return $this->error(['message' => trans('messages.order.no_cart_available', [])]);

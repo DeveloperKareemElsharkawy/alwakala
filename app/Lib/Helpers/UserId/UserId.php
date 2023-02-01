@@ -5,6 +5,7 @@ namespace App\Lib\Helpers\UserId;
 use App\Enums\UserTypes\UserType;
 use App\Models\Seller;
 use App\Models\Store;
+use App\Models\User;
 
 class UserId
 {
@@ -34,18 +35,23 @@ class UserId
         if ($store)
             $userId = $store['user_id'];
 
-        return $userId ;
+        return $userId;
     }
 
-    public static function GetShareCodeByUserId($storeID)
+    public static function GetShareCodeByUserId($userId)
     {
-        $store = Store::query()->find($storeID);
+        $user = User::query()->find($userId);
 
-        $userId = null;
-        if ($store)
-            $userId = $store['user_id'];
+        if (!$userId)
+            return null;
 
-        return $userId ;
+        if (!$user->share_coupon_code) {
+            $user->share_coupon_code = mt_rand(1, 99) . $user->id . mt_rand(1, 99).str_random(10);
+            $user->save();
+
+            return $user->share_coupon_code;
+        }
+        return $user->share_coupon_code;
     }
 
 }

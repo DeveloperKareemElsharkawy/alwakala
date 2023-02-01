@@ -12,7 +12,6 @@ class CouponDiscount extends Model
 
     protected $casts = [
         'amount_from' => 'double',
-        'amount_to' => 'double',
         'discount' => 'double',
     ];
 

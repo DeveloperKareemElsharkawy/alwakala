@@ -131,7 +131,7 @@ class CartController extends BaseController
         try {
             $userCart = $this->cartRepository->getCartsByUserId($request);
 
-            $applyCoupon = CouponService::ApplyCoupon($request->coupon_code, $request, $userCart['stores']);
+          return   $applyCoupon = CouponService::ApplyCoupon($request->validated(), $request, $userCart['stores']);
 
             if (!$applyCoupon['status']) {
                 return $this->error(['message' => $applyCoupon['message']]);
@@ -140,7 +140,6 @@ class CartController extends BaseController
             $carts = $this->cartRepository->getCartsByUserId($request);
 
             $suggestedProducts = $this->productService->suggestedProducts(null, null, 0, $request);
-
 
             return $this->success(['message' => trans('messages.general.listed'), 'data' => [
                 'cart' => new CartResource($carts),
@@ -209,7 +208,7 @@ class CartController extends BaseController
     }
 
     /**
-      * @return JsonResponse
+     * @return JsonResponse
      */
     public function emptyCart(Request $request)
     {

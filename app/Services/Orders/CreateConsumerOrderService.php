@@ -57,11 +57,13 @@ class CreateConsumerOrderService
             $order_address_id = $order_address->id;
         }
 
-         $order = new Order();
+
+        $order = new Order();
         $order->user_id = $request['user_id'];
         $order->coupon_data = json_encode($currentShoppingCarts['coupon']);
         $order->coupon_id = $currentShoppingCarts['cart']['coupon_id'];
         $order->discount = $currentShoppingCarts['coupon']['discountAmount'];
+        $order->share_coupon_code = $currentShoppingCarts['share_coupon_code'];
         $order->payment_method_id = $currentShoppingCarts['cart']['payment_method_id'];
         $order->total_price = $currentShoppingCarts['cart_total'];
         $order->order_address_id = $order_address_id;

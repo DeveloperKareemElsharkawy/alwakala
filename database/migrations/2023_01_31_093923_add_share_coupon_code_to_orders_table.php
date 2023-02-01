@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddShareCodeToUsersTable extends Migration
+class AddShareCouponCodeToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,8 +13,8 @@ class AddShareCodeToUsersTable extends Migration
      */
     public function up()
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->string('share_coupon_code')->unique()->nullable();
+        Schema::table('orders', function (Blueprint $table) {
+            $table->string('share_coupon_code')->nullable();
         });
     }
 
@@ -25,7 +25,7 @@ class AddShareCodeToUsersTable extends Migration
      */
     public function down()
     {
-        Schema::table('users', function (Blueprint $table) {
+        Schema::table('orders', function (Blueprint $table) {
             //
         });
     }
