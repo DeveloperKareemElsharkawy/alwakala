@@ -13,6 +13,8 @@ class AddShareCouponCodeToOrdersTable extends Migration
      */
     public function up()
     {
+        Schema::dropIfExists('coupon_participants');
+
         Schema::table('orders', function (Blueprint $table) {
             $table->string('share_coupon_code')->nullable();
         });
