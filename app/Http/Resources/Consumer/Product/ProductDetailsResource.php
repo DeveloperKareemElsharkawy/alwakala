@@ -77,7 +77,7 @@ class ProductDetailsResource extends JsonResource
             $couponDiscounts = CouponDiscountsResource::collection($this->productStore->shareCoupon->coupon->discounts);
         }
 
-        return ['is_available' => $couponCode ?? null, 'coupon_code' => $couponCode ?? null, 'discount' => $couponDiscounts ?? []];
+        return ['is_available' => $couponCode ?? false, 'coupon_code' => $couponCode ?? null, 'discount' => $couponDiscounts ?? []];
 
     }
 
