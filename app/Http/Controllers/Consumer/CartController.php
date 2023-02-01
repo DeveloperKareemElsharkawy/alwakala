@@ -131,7 +131,7 @@ class CartController extends BaseController
         try {
             $userCart = $this->cartRepository->getCartsByUserId($request);
 
-          return   $applyCoupon = CouponService::ApplyCoupon($request->validated(), $request, $userCart['stores']);
+            $applyCoupon = CouponService::ApplyCoupon($request->validated(), $request, $userCart['stores']);
 
             if (!$applyCoupon['status']) {
                 return $this->error(['message' => $applyCoupon['message']]);
