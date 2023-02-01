@@ -60,5 +60,6 @@ class CartResource extends JsonResource
                 return CouponService::getShareCoupon($cart->share_coupon_code, $coupon)['coupon_discount'];
             }
         }
+        return [];
     }
 }
