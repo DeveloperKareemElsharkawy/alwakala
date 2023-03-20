@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Seller;
 
+use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Http\Controllers\BaseController;
 use App\Http\Requests\SellerApp\Cart\AddCartRequest;
 use App\Http\Requests\SellerApp\Cart\ApplyCouponRequest;
@@ -12,6 +13,7 @@ use App\Http\Resources\Seller\Cart\CartResource;
 use App\Http\Resources\Seller\Cart\CartSummaryResource;
 use App\Lib\Helpers\Lang\LangHelper;
 use App\Models\Coupon;
+use App\Models\ShippingMethod;
 use App\Repositories\CartRepository;
 use Carbon\Carbon;
 use Exception;
@@ -52,7 +54,6 @@ class CartController extends BaseController
             ]);
         } catch (Exception $e) {
             Log::error('error in index of Seller Cart ' . __LINE__ . $e);
-            return $e;
             return $this->connectionError($e);
         }
     }
@@ -107,8 +108,7 @@ class CartController extends BaseController
             ]]);
         } catch (Exception $e) {
             Log::error('error in store of Seller Cart' . __LINE__ . $e);
-            return $e;
-            return $this->connectionError($e);
+             return $this->connectionError($e);
         }
     }
 
@@ -149,6 +149,26 @@ class CartController extends BaseController
     }
 
     /**
+     * @return JsonResponse
+     */
+    public function deliveryOptions(Request $request)
+    {
+        try {
+            $lang = LangHelper::getDefaultLang($request);
+
+            $ShipmentMethods = ShippingMethod::query()->select('id', 'name_' . $lang)->get();
+
+            return $this->success(['message' => trans('messages.general.listed'), 'data' => $ShipmentMethods]);
+
+        } catch (Exception $e) {
+            Log::error('error in store of Seller Cart' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+
+    }
+
+
+    /**
      * @param ChangeCartQuantityRequest $request
      * @return JsonResponse
      */
@@ -161,7 +181,6 @@ class CartController extends BaseController
                 'recommended_products' => $this->cartRepository->recommendedProducts(request())
             ]]);
         } catch (Exception $e) {
-            return $e;
             Log::error('error in store of Seller Cart' . __LINE__ . $e);
             return $this->connectionError($e);
         }

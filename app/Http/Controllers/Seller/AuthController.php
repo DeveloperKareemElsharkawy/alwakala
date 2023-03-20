@@ -75,45 +75,31 @@ class AuthController extends BaseController
         $this->upload = $upload;
     }
 
-    public function login(LoginRequest $request)
+    public function login_validation(LoginRequest $request)
     {
-        // dd($this->smsService->sendSms("01004504511",'اهلا بيك فى الوكالة أول ايكو سيستم للجملة والتجزئة'));
+//         dd($this->smsService->sendSms("01004504511",'اهلا بيك فى الوكالة أول ايكو سيستم للجملة والتجزئة'));
 
         $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'mobile';
+
         if (Auth::attempt([$loginType => request('email'), 'password' => request('password')])) {
             $user = Auth::user();
-            if ($user->type_id != UserType::SELLER) {
-                return response()->json([
-                    'status' => false,
-                    'message' => trans('messages.general.not_found'),
-                    'data' => ''
-                ], AResponseStatusCode::UNAUTHORIZED);
-            }
+
+            if ($user->type_id != UserType::SELLER)
+                return $this->error(['message' => trans('messages.general.not_found')]);
 
             $seller = Seller::query()->where('user_id', $user->id)->first();
+
             $store = Store::query()
                 ->select('id', 'name', 'user_id', 'store_type_id')
                 ->where('id', $seller->store_id)
                 ->first();
-            if (!$store) {
-                return response()->json(
-                    [
-                        'status' => false,
-                        'message' => trans('messages.auth.no_store'),
-                        'data', ''
-                    ],
-                    AResponseStatusCode::UNAUTHORIZED
-                );
-            }
 
-            //            // TODO make it separated on other function
-            //            $body = [
-            //                'store_id' => $store->id,
-            //                'user_id' => $user->id,
-            //            ];
-            //            $realtimeResponse = Http::post(env('REALTIME_BASE_URL') . '/generate/token', $body);
+            if (!$store)
+                return $this->error(['message' => trans('messages.auth.no_store')]);
 
-            $token = $user->createToken('myApp')->accessToken;
+            $user->verify_code = mt_rand(0, 8) . mt_rand(1, 9) . mt_rand(10, 90);
+            $user->save();
+
             return response()->json([
                 'status' => true,
                 'message' => trans('messages.auth.login'),
@@ -122,8 +108,7 @@ class AuthController extends BaseController
                     'store_name' => $store->name,
                     'store_type_id' => $store->store_type_id,
                     'activation' => $user->activation,
-                    'token' => $token,
-                    //                    'realtime_token' => $realtimeResponse['token']
+                    'verify_code' => (int)$user->verify_code,
                 ]
             ], AResponseStatusCode::SUCCESS);
         } else {
@@ -134,6 +119,55 @@ class AuthController extends BaseController
             ], AResponseStatusCode::UNAUTHORIZED);
         }
     }
+
+
+    public function login(LoginRequest $request)
+    {
+//         dd($this->smsService->sendSms("01004504511",'اهلا بيك فى الوكالة أول ايكو سيستم للجملة والتجزئة'));
+
+        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'mobile';
+
+        if (Auth::attempt([$loginType => request('email'), 'password' => request('password')])) {
+            $user = Auth::user();
+
+            if ($user->type_id != UserType::SELLER)
+                return $this->error(['message' => trans('messages.general.not_found')]);
+
+
+            $seller = Seller::query()->where('user_id', $user->id)->first();
+
+            $store = Store::query()
+                ->select('id', 'name', 'user_id', 'store_type_id')
+                ->where('id', $seller->store_id)
+                ->first();
+            if (!$store)
+                return $this->error(['message' => trans('messages.auth.no_store')]);
+
+
+            if ($user->verify_code != $request->verify_code)
+                return $this->error(['message' => trans('messages.auth.invalid_code')]);
+
+
+            return response()->json([
+                'status' => true,
+                'message' => trans('messages.auth.login'),
+                'data' => [
+                    'store_id' => $store->id,
+                    'store_name' => $store->name,
+                    'store_type_id' => $store->store_type_id,
+                    'activation' => $user->activation,
+                    'token' => $user->createToken('myApp')->accessToken,
+                ]
+            ], AResponseStatusCode::SUCCESS);
+        } else {
+            return response()->json([
+                'status' => false,
+                'message' => trans('messages.auth.invalid_login_data'),
+                'data' => ''
+            ], AResponseStatusCode::UNAUTHORIZED);
+        }
+    }
+
 
     public function logout(Request $request)
     {
@@ -692,7 +726,7 @@ class AuthController extends BaseController
     {
         try {
             $user = User::query()
-                ->select('id', 'email', 'name', 'image','mobile')
+                ->select('id', 'email', 'name', 'image', 'mobile')
                 ->withCount('favorites')
                 ->where('id', $request->user_id)
                 ->first();

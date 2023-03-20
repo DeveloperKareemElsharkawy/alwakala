@@ -7,6 +7,7 @@ namespace App\Repositories;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Seller\Store\StoreOpeningHoursResource;
 use App\Lib\Helpers\Rate\RateHelper;
+use App\Lib\Helpers\StoreId\StoreId;
 use App\Lib\Helpers\UserId\UserId;
 use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\CategoryStore;
@@ -209,7 +210,8 @@ class ProfileRepository extends Controller
     {
         try {
             $userId = UserId::UserId($data);
-            $store = $this->getStoreForUpdate($data['store_id'], $userId);
+            $storeId = StoreId::getStoreID($data);
+            $store = $this->getStoreForUpdate($storeId, $userId);
             if (empty($store)) {
                 return false;
             }

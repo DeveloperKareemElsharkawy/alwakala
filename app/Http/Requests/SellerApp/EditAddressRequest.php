@@ -25,6 +25,7 @@ class EditAddressRequest extends FormRequest
     {
         return [
             'id' => 'required|numeric|exists:addresses,id',
+            'type' => 'required|in:home,work',
             'name' => 'required|string|max:255',
             'city_id' => 'required|numeric|exists:cities,id',
             'address' => 'required|string|max:255',

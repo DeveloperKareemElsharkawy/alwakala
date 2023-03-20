@@ -150,7 +150,7 @@ class CartRepository
 
     public function getCartByUserId($request)
     {
-        return Cart::query()->where('user_id', $request['user_id'])->first();
+        return Cart::query()->where('user_id', $request['user_id'])->with('items')->first();
     }
 
     public function getCount($request)
@@ -282,8 +282,9 @@ class CartRepository
 
     public function removeCartItem($request): array
     {
-        $cart = $this->model->query()->find($request['cart_id'])
-            ->delete();
+        $cart = $this->model->query()->find($request['cart_item_id']);
+
+        $cart?->forceDelete();
 
         return $this->getCartsByUserId(['user_id' => $request['user_id']]);
     }

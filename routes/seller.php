@@ -15,6 +15,7 @@ use App\Lib\Helpers\Categories\CategoryHelper;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
+    Route::post('/login-validate', 'AuthController@login_validation');
     Route::post('/login', 'AuthController@login');
     Route::post('/register', 'AuthController@register');
     Route::post('/register-validate', 'AuthController@validateFirstScreen');
@@ -468,6 +469,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
         Route::get('summary ', 'CartController@summary');
         Route::post('add', 'CartController@addCart');
         Route::post('apply-coupon', 'CartController@applyCoupon');
+        Route::get('delivery-options', 'CartController@deliveryOptions');
         Route::post('change-quantity', 'CartController@changeCartQuantity');
         Route::post('remove-cart', 'CartController@removeCart');
     });
@@ -506,6 +508,7 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
 
     Route::group(['prefix' => 'settings'], function () {
         Route::get('social', 'SettingsController@getSocial');
+        Route::get('global', 'SettingsController@getGlobal');
     });
 
     Route::group(['prefix' => 'pages'], function () {

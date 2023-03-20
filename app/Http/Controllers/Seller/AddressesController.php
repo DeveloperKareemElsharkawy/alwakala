@@ -34,6 +34,7 @@ class AddressesController extends BaseController
         try {
             $sellerAddress = new Address;
             $sellerAddress->name = $request->name;
+            $sellerAddress->type = $request->type;
             $sellerAddress->user_id = $request->user_id;
             $sellerAddress->mobile = $request->mobile;
             $sellerAddress->address = $request->address;
@@ -85,6 +86,7 @@ class AddressesController extends BaseController
                     'addresses.id as address_id',
                     'addresses.user_id',
                     'addresses.name',
+                    'addresses.type',
                     'addresses.address',
                     'addresses.latitude',
                     'addresses.longitude',

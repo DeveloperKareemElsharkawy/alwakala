@@ -4,7 +4,7 @@ namespace App\Http\Requests\Shared;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class ValidateLoginRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -25,7 +25,6 @@ class LoginRequest extends FormRequest
     {
         return [
             'email' => 'required|max:50|exists:users,' . $this->username(),
-            'verify_code' => 'required',
             'password' => 'required|min:6|max:25'
         ];
     }
@@ -37,7 +36,7 @@ class LoginRequest extends FormRequest
             'email.required' => trans('seller_validation.required'),
             'email.max' => trans('seller_validation.max'),
             'password.required' => trans('seller_validation.required'),
-             'password.min' => trans('seller_validation.min'),
+            'password.min' => trans('seller_validation.min'),
             'password.max' => trans('seller_validation.max'),
         ];
     }

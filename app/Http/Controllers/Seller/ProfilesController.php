@@ -22,6 +22,7 @@ use App\Http\Requests\SellerApp\Store\UpdateStoreInfoRequest;
 use App\Http\Requests\SellerApp\Store\UpdateStoreRequest;
 use App\Http\Resources\Seller\AppTv\AppTvResource;
 use App\Http\Resources\Seller\Categories\CategoriesResource;
+use App\Http\Resources\Seller\Feeds\StoreHomeFeedResource;
 use App\Http\Resources\Seller\Store\MyStoreConsumersCollection;
 use App\Http\Resources\Seller\Store\SellerRateCollection;
 use App\Http\Resources\Seller\Store\StoreOpeningHoursResource;
@@ -43,6 +44,7 @@ use App\Models\AppTv;
 use App\Models\Category;
 use App\Models\CategoryStore;
 use App\Models\DaysOfWeek;
+use App\Models\Feed;
 use App\Models\FollowedStore;
 use App\Models\Order;
 use App\Models\Product;
@@ -386,16 +388,10 @@ class ProfilesController extends BaseController
     {
         try {
 
-            if (!Store::query()->where('id', $storeId)->first()) {
-                return response()->json([
-                    'status' => false,
-                    'message' => trans('messages.stores.store_not_found'),
-                    'data' => ''
+            if (!Store::query()->where('id', $storeId)->first())
+                return $this->error(['message' => trans('messages.stores.store_not_found')]);
 
-                ], AResponseStatusCode::BAD_REQUEST);
-            }
             $userId = UserId::UserId($request);
-
 
             $categories = Category::query()
                 ->select('categories.id', 'categories.name_' . $this->lang . ' as name', 'categories.image')
@@ -410,37 +406,44 @@ class ProfilesController extends BaseController
 
             $slider = AppTvResource::collection(AppTv::query()->get());
 
+
             $following = false;
+
             if (!is_null($userId)) {
                 $isFollow = FollowedStore::query()
-                    //->where('favoriter_type', User::class)
                     ->where('store_id', $storeId)
-                    // ->where('favorited_type', Store::class)
                     ->where('user_id', $userId)
                     ->first();
-                if ($isFollow) {
+
+                if ($isFollow)
                     $following = true;
-                } else {
-                    $following = false;
-                }
-            } else {
-                $following = false;
+
             }
+
             $products = $this->newArrival($request, $storeId, $userId, true);
-            $response = [
-                'categories' => $categories,
-                'slider' => $slider,
-                'hot_offers' => $products,
-                'best_selling' => $products,
-                'new_arrival' => $this->newArrival($request, $storeId, $userId, true),
-                'is_follow' => $following,
-            ];
+
+            $feeds = Feed::query()->with('store')->where('store_id', $storeId)->get();
+
+            foreach ($feeds as $feed) {
+                $feed['products'] = ProductStore::query()->where('store_id', $feed->store_id)
+                    ->whereIn('product_id', $feed->products)->with('product.image')
+                    ->get();
+            }
+
             event(new VisitStore($request, $userId, $storeId));
-            return response()->json([
-                'status' => true,
-                'message' => trans('messages.stores.store_home'),
-                'data' => $response
-            ], AResponseStatusCode::CREATED);
+
+            return $this->success(['message' => trans('messages.general.listed'),
+                'data' => [
+                    'feeds' => StoreHomeFeedResource::collection($feeds),
+                    'categories' => $categories,
+                    'slider' => $slider,
+                    'hot_offers' => $products,
+                    'best_selling' => $products,
+                    'new_arrival' => $this->newArrival($request, $storeId, $userId, true),
+                    'is_follow' => $following,
+                ]
+            ]);
+
         } catch (\Exception $e) {
             Log::error('error in storeHome of seller Profile ' . __LINE__ . $e);
             return $this->connectionError($e);
@@ -836,18 +839,12 @@ class ProfilesController extends BaseController
     public function uploadStoreDocument(UploadDocumentsRequest $request): JsonResponse
     {
         try {
-            if (!$this->profileRepo->uploadStoreDocument($request)) {
-                return response()->json([
-                    "status" => false,
-                    "message" => trans('messages.auth.access_denied'),
-                    "data" => []
-                ], AResponseStatusCode::UNAUTHORIZED);
-            }
-            return response()->json([
-                "status" => true,
-                "message" => trans('messages.stores.upload_documents'),
-                "data" => []
-            ], AResponseStatusCode::CREATED);
+            if (!$this->profileRepo->uploadStoreDocument($request))
+                return $this->error(['message' => trans('messages.auth.access_denied')]);
+
+
+            return $this->success(['message' => trans('messages.stores.upload_documents')]);
+
 
         } catch (\Exception $e) {
             Log::error('error in upload store documents' . __LINE__ . $e);

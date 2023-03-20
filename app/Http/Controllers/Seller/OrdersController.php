@@ -23,6 +23,7 @@ use App\Http\Requests\Orders\ReceiveOrders;
 use App\Http\Requests\Orders\SendPurchasedProductToInventoryRequest;
 use App\Http\Requests\Orders\RejectOrderProductRequest;
 use App\Http\Requests\SellerApp\Order\AddOrderRequest;
+use App\Http\Requests\SellerApp\Order\MakeOrderRequest;
 use App\Http\Requests\SellerApp\Order\OrderGetRequest;
 use App\Http\Requests\SellerApp\Order\OrdersGetRequest;
 use App\Http\Resources\Dashboard\Orders\OrderProductResource;
@@ -165,18 +166,20 @@ class OrdersController extends BaseController
     }
 
     /**
-     * @param Request $request
+     * @param MakeOrderRequest $request
      * @param CreateOrderService $createOrderService
      * @return JsonResponse
      */
-    public function addOrderV2(Request $request, CreateOrderService $createOrderService)
+    public function addOrderV2(MakeOrderRequest $request, CreateOrderService $createOrderService)
     {
         try {
             $currentShoppingCarts = $this->cartRepository->getCartByUserId($request);
-            if (count($currentShoppingCarts->items) == 0)
+
+            if (!$currentShoppingCarts || count($currentShoppingCarts->items) == 0)
                 return $this->error(['message' => trans('messages.order.no_cart_available', [])]);
 
-            DB::beginTransaction();
+
+             DB::beginTransaction();
             $response = $createOrderService->createOrder($currentShoppingCarts, $request);
             if (!$response['status']) {
                 DB::rollBack();
@@ -422,7 +425,7 @@ class OrdersController extends BaseController
                 ->where('added_to_inventory', false)
                 ->whereIn('order_id', $ordersIds)->find($request->order_product_id);
 
-             $productStore = ProductStore::query()->where([['store_id', $orderProduct->store_id], ['product_id', $orderProduct->product_id]])->first();
+            $productStore = ProductStore::query()->where([['store_id', $orderProduct->store_id], ['product_id', $orderProduct->product_id]])->first();
 
             if (!$orderProduct) {
                 return $this->error(['message' => trans('messages.order.no_products_to_approve')]);
@@ -506,7 +509,7 @@ class OrdersController extends BaseController
     public function PurchaseOrders(Request $request)
     {
         try {
-            $pageSize = $request->pageSize ? $request->pageSize : 10;
+             $pageSize = $request->pageSize ? $request->pageSize : 10;
             $userId = $request->user_id;
             $query = Order::query()
                 ->where('orders.user_id', $userId)
@@ -728,12 +731,9 @@ class OrdersController extends BaseController
                 $data = $this->orderRepository->getRequestedOrdersByUser($request, $user_id);
             }
 
+            return $this->success(['message' => trans('messages.general.listed'), 'data' => ($data)]);
 
-            return response()->json([
-                'status' => true,
-                'message' => 'orders',
-                'data' => $data,
-            ], AResponseStatusCode::SUCCESS);
+
         } catch (\Exception $e) {
             dd($e);
             Log::error('error in salesOrders of seller Order' . __LINE__ . $e);

@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Requests\SellerApp\Cart;
+namespace App\Http\Requests\SellerApp\Order;
 
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class GetCartSummaryRequest extends FormRequest
+class MakeOrderRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      *
      * @return bool
      */
-    public function authorize(): bool
+    public function authorize()
     {
         return true;
     }
@@ -22,18 +22,17 @@ class GetCartSummaryRequest extends FormRequest
      *
      * @return array
      */
-    public function rules(): array
+    public function rules()
     {
         return [
             'address_id' => [
-                'sometimes',
-                'nullable',
+                'required',
                 'integer',
                 Rule::exists('addresses', 'id')->where(function ($query) {
                     $query->where('user_id', request()->user('api')->id);
                 }),
             ],
-            'payment_method_id' => 'sometimes|integer|exists:payment_methods,id',
-         ];
+            'payment_method_id' => 'required|integer|exists:payment_methods,id',
+        ];
     }
 }

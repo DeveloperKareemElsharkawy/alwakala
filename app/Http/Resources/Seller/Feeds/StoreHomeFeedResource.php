@@ -21,7 +21,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class FeedsResource extends JsonResource
+class StoreHomeFeedResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -43,16 +43,15 @@ class FeedsResource extends JsonResource
             'images' => (bool)$this['images'] ? $this->imagesResponse($this['images']) : null,
             'has_images' => (bool)$this['images'],
 
+
             'youtube_url' => $this['youtube_url'],
             'has_youtube_url' => (bool)$this['youtube_url'],
             'youtube_thumbnail_image' => FeedHelper::getYouTubeVideoThumbURL($this['youtube_url']),
 
             'is_favorite' => FeedFavoriteHelper::isFavorite($userID, $this['id'], $storeId),
-
-
             'views' => ViewsHelper::getViewsCount($this->id, Feed::class),
 
-            'store' => [
+             'store' => [
                 'id' => $this->store->id,
                 'name' => $this->store->name,
                 'logo' => $this->store->logo ? config('filesystems.aws_base_url') . $this->logo : null,
@@ -60,9 +59,10 @@ class FeedsResource extends JsonResource
                     ->where([['user_id', \request()->user_id ?? 0], ['store_id', $this->store->id]])->first(),
 
             ],
-            'products' => ProductsFeedsResource::collection($this['products']),
-            'time' => $this['created_at']->format('d-m-Y h:i A')
 
+            'products' => ProductsFeedsResource::collection($this['products']),
+
+            'time' => $this['created_at']->format('d-m-Y h:i A')
         ];
     }
 

@@ -18,7 +18,7 @@ class CartItemResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            'cart_id' => $this['id'],
+            'cart_item_id' => $this['id'],
             'product_id' => $this['product_id'],
             'product_name' => $this['product_name'],
             'product_image' => $this['image'] ? config('filesystems.aws_base_url') . $this['image'] : null,

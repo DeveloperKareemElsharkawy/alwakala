@@ -25,6 +25,7 @@ class AddAddressRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
+            'type' => 'required|in:home,work',
             'city_id' => 'required|numeric|exists:cities,id',
             'address' => 'required|string|max:255',
             'latitude' => 'required',

@@ -27,8 +27,7 @@ class UploadDocumentsRequest extends FormRequest
             'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
             'licence' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
             'cover' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:1024',
-            'store_id' => 'required|numeric|exists:stores,id'
-        ];
+         ];
 
     }
 }

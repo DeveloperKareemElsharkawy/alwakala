@@ -9,6 +9,7 @@ use App\Events\Order\PlaceOrder;
 use App\Lib\Helpers\Address\AddressHelper;
 use App\Lib\Helpers\Offers\OffersHelper;
 use App\Lib\Services\ImageUploader\UploadImage;
+use App\Models\Address;
 use App\Models\Cart;
 use App\Models\CartItem;
 use App\Models\Order;
@@ -48,8 +49,8 @@ class CreateOrderService
     public function createOrder($currentShoppingCarts, $request)
     {
         $order_address_id = null;
-        if ($currentShoppingCarts->address_id) {
-            $address = $currentShoppingCarts->address->toArray();
+        if ($request->address_id) {
+            $address = Address::query()->find($request->address_id)->toArray();
             unset($address['id']);
             $order_address = OrderAddress::create($address);
             $order_address_id = $order_address->id;
@@ -58,7 +59,7 @@ class CreateOrderService
         $order = new Order();
         $order->user_id = $userId;
         $order->discount = 0;
-        $order->payment_method_id = $currentShoppingCarts->payment_method_id;
+        $order->payment_method_id = $request->payment_method_id;
         $order->total_price = 0;
         $order->order_address_id = $order_address_id;
         $order->number = 'S-' . $userId . '-' . time();

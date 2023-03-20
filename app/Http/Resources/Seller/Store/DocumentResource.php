@@ -19,9 +19,11 @@ class DocumentResource extends JsonResource
             "logo" => $this->logo ? config('filesystems.aws_base_url') . $this->logo : "",
             "licence" => $this->logo ? config('filesystems.aws_base_url') . $this->licence : "",
             "cover" => $this->logo ? config('filesystems.aws_base_url') . $this->cover : "",
+
             "is_verified_logo" => ($this->is_verified_logo === null) ? 'pending' : (($this->is_verified_logo == 1) ? 'accepted' : 'rejected'),
             "is_verified_cover" => ($this->is_verified_cover === null) ? 'pending' : (($this->is_verified_cover == 1) ? 'accepted' : 'rejected'),
             "is_verified_licence" => ($this->is_verified_licence === null) ? 'pending' : (($this->is_verified_licence == 1) ? 'accepted' : 'rejected'),
+
         ];
     }
 }

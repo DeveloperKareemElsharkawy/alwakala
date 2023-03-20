@@ -15,6 +15,7 @@ class OrdersStoresResource extends JsonResource
      */
     public function toArray($request)
     {
+
         $store = Store::query()
             ->select('id')
             ->where('user_id', $request->user_id)
@@ -29,7 +30,7 @@ class OrdersStoresResource extends JsonResource
             "product_count" => $this->items()->where('store_id', $store->id)->sum('quantity'),
             "status" => $this->when($this->last_status, new OrderStatusResource($this->last_status)),
             "order_address" => $this->when($this->order_address, new OrderAddressResource($this->order_address)),
-            'products' => ProductsListResource::collection(collect($this->products)->slice(0, 3)),
+            'product' => new ProductsListResource(collect($this->products)->first()),
             'products_more_counter' => $this->productsMoreCounter()
         ];
     }
