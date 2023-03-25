@@ -35,6 +35,8 @@ class CouponRequest extends FormRequest
             'products' => ['required', 'array'],
             'products.*' => ['required', 'numeric', 'exists:products,id,owner_id,' . $this->user_id],
             'discounts.*' => ['required', 'array', 'min:1'],
+            'discounts.*.description_ar' => ['required', 'string'],
+            'discounts.*.description_en' => ['required', 'string'],
             'discounts.*.amount_from' => ['required', 'numeric'],
             'discounts.*.amount_to' => ['required', 'numeric'],
             'discounts.*.discount_type' =>$this->can_share == true ? ['required','in:2'] :  'required|in:1,2',

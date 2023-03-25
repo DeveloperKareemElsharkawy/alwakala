@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Builder;
 
 class Coupon extends Model
 {
@@ -89,5 +91,14 @@ class Coupon extends Model
                 return 'مفعل';
                 break;
         }
+    }
+
+
+    /**
+     * Scope a query to only include popular users.
+     */
+    public function scopeActive(Builder $query): void
+    {
+        $query->where('start_date', '<=', Carbon::now())->where('end_date', '>=', Carbon::now());
     }
 }

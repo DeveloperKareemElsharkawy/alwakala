@@ -30,6 +30,8 @@ class OrdersStoresResource extends JsonResource
             "product_count" => $this->items()->where('store_id', $store->id)->sum('quantity'),
             "status" => $this->when($this->last_status, new OrderStatusResource($this->last_status)),
             "order_address" => $this->when($this->order_address, new OrderAddressResource($this->order_address)),
+            "contact_email" => $this->contact_email,
+            "contact_mobile" => $this->contact_mobile,
             'product' => new ProductsListResource(collect($this->products)->first()),
             'products_more_counter' => $this->productsMoreCounter()
         ];

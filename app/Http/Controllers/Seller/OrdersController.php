@@ -22,6 +22,7 @@ use App\Http\Requests\Orders\CancelOrders;
 use App\Http\Requests\Orders\ReceiveOrders;
 use App\Http\Requests\Orders\SendPurchasedProductToInventoryRequest;
 use App\Http\Requests\Orders\RejectOrderProductRequest;
+use App\Http\Requests\SellerApp\Order\AddOrderContactInfoRequest;
 use App\Http\Requests\SellerApp\Order\AddOrderRequest;
 use App\Http\Requests\SellerApp\Order\MakeOrderRequest;
 use App\Http\Requests\SellerApp\Order\OrderGetRequest;
@@ -179,7 +180,7 @@ class OrdersController extends BaseController
                 return $this->error(['message' => trans('messages.order.no_cart_available', [])]);
 
 
-             DB::beginTransaction();
+            DB::beginTransaction();
             $response = $createOrderService->createOrder($currentShoppingCarts, $request);
             if (!$response['status']) {
                 DB::rollBack();
@@ -189,6 +190,39 @@ class OrdersController extends BaseController
             DB::commit();
 
             return $this->success(['message' => trans('messages.order.add'), 'data' => []]);
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ServerError::handle($e);
+            Log::error('error in addOrder of seller Order' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
+    }
+
+    /**
+     * @param $orderId
+     * @param AddOrderContactInfoRequest $request
+     * @param CreateOrderService $createOrderService
+     * @return JsonResponse
+     */
+    public function submitContactInfo($orderId, AddOrderContactInfoRequest $request, CreateOrderService $createOrderService)
+    {
+        try {
+            DB::beginTransaction();
+
+            $userId = UserId::UserId($request);
+            $order = Order::query()->where('id', $orderId)->where('user_id', $userId)->first();
+
+            if (!$order)
+                return $this->error(['message' => trans('messages.general.not_found')]);
+
+            $order->contact_email = $request->contact_email;
+            $order->contact_mobile = $request->contact_mobile;
+            $order->save();
+
+            DB::commit();
+
+            return $this->success(['message' => trans('messages.general.success')]);
 
         } catch (\Exception $e) {
             DB::rollBack();
@@ -509,7 +543,7 @@ class OrdersController extends BaseController
     public function PurchaseOrders(Request $request)
     {
         try {
-             $pageSize = $request->pageSize ? $request->pageSize : 10;
+            $pageSize = $request->pageSize ? $request->pageSize : 10;
             $userId = $request->user_id;
             $query = Order::query()
                 ->where('orders.user_id', $userId)

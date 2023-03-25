@@ -25,6 +25,8 @@ class OrdersResource extends JsonResource
             "status" => $this->when($this->last_status, new OrderStatusResource($this->last_status)),
             "order_address" => $this->when($this->order_address, new OrderAddressResource($this->order_address)),
             'product' => new ProductsListResource(collect($this->products)->first()),
+            "contact_email" => $this->contact_email,
+            "contact_mobile" => $this->contact_mobile,
             'products_more_counter' => $this->productsMoreCounter()
         ];
     }

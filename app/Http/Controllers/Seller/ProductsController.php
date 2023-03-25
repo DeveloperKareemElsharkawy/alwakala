@@ -9,6 +9,7 @@ use App\Http\Controllers\BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Products\GetProductRequest;
 use App\Http\Requests\Products\GetProductsRequest;
+use App\Http\Resources\Seller\Products\ProductCouponsResource;
 use App\Http\Resources\Seller\Store\SellerRateCollection;
 use App\Http\Resources\Seller\Store\SellerRateResource;
 use App\Lib\Helpers\Lang\LangHelper;
@@ -21,6 +22,7 @@ use App\Lib\Log\ValidationError;
 use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\BarcodeProduct;
 use App\Models\Color;
+use App\Models\Coupon;
 use App\Models\PackingUnit;
 use App\Models\PackingUnitProduct;
 use App\Models\PackingUnitProductAttribute;
@@ -170,6 +172,8 @@ class ProductsController extends BaseController
                 $productStore->barcode = config('filesystems.aws_base_url') . $productStore->barcode;
             }
 
+            $productStore->is_favourit = false;
+
             if ($userId) {
                 $isFav = SellerFavorite::query()
                     ->where('favoriter_type', User::class)
@@ -179,11 +183,7 @@ class ProductsController extends BaseController
                     ->first();
                 if ($isFav) {
                     $productStore->is_favourit = true;
-                } else {
-                    $productStore->is_favourit = false;
                 }
-            } else {
-                $productStore->is_favourit = false;
             }
 
             if (is_null($productStore)) {
@@ -285,7 +285,6 @@ class ProductsController extends BaseController
                     }
                 }
 
-
                 foreach ($sizes as $size) {
                     $packingUnitSize = $packingUnitAttrs->where('size_id', $size->size_id)->first();
                     $size->unit_quantity = 0;
@@ -298,6 +297,7 @@ class ProductsController extends BaseController
                     }
                 }
             }
+
             $productStore->sizes = $sizes;
             $productStore->is_available = $productAvailableStatus;
 
@@ -343,6 +343,14 @@ class ProductsController extends BaseController
             }
             $productStore->images_slider = $allImages;
             $productStore->status = ProductHelper::productStatus($productStore->available_stock, $productStore->publish_app_at, true);
+
+
+            $coupon = Coupon::query()->active()->with('discounts')->whereHas('coupon_products', function ($q) use ($productStore) {
+                $q->where('product_id', $productStore->product_id);
+                $q->where('store_id', $productStore->store_id);
+            })->first();
+
+            $productStore->coupon = new ProductCouponsResource($coupon);
 
             event(new VisitProduct($request, $userId, $request->product_id));
 

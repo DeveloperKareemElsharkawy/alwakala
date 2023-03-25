@@ -98,6 +98,10 @@ return [
         'ended' => 'Coupon isn\'t valid anymore',
         'qty_is_over' => 'The maximum limit for this coupon has been used',
         'no_products_for_this_coupon' => 'There are no products for this coupon',
+
+
+        'offer_title' => 'Get :amount%',
+        'offer_sub_title' => 'When you buy up to  :amount LE',
     ],
 
 

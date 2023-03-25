@@ -48,6 +48,8 @@ class CouponRepository
         foreach ($data['discounts'] as $discount) {
             $couponDiscount = new CouponDiscount;
             $couponDiscount->coupon_id = $coupon->id;
+            $couponDiscount->description_ar = $discount['description_ar'];
+            $couponDiscount->description_en = $discount['description_en'];
             $couponDiscount->amount_from = $discount['amount_from'];
             $couponDiscount->amount_to = $discount['amount_to'];
             $couponDiscount->discount_type = $discount['discount_type'];

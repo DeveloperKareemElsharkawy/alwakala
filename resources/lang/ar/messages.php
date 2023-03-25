@@ -99,6 +99,9 @@ return [
         'inactive' => 'هذا الكوبون غير متاح حاليا',
         'ended' => 'الكوبون غير متاح للفتره الحاليه',
         'no_products_for_this_coupon' => 'لا يوجد منتجات لهذا الكوبون',
+
+        'offer_title' => '%إحصل على :amount',
+        'offer_sub_title' => 'عند شراء ما يصل إلى  :amount جنيه',
     ],
 
     'status' => [
