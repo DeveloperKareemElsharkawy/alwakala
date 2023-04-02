@@ -15,7 +15,7 @@ use App\Lib\Helpers\Categories\CategoryHelper;
 use Illuminate\Support\Facades\Route;
 
 Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
-    Route::post('/login-validate', 'AuthController@login_validation');
+    Route::post('/mobile-validate', 'AuthController@mobile_validation');
     Route::post('/login', 'AuthController@login');
     Route::post('/register', 'AuthController@register');
     Route::post('/register-validate', 'AuthController@validateFirstScreen');

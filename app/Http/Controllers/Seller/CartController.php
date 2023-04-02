@@ -143,7 +143,6 @@ class CartController extends BaseController
             ]]);
         } catch (Exception $e) {
             Log::error('error in applying coupon in cart' . __LINE__ . $e);
-            dd($e->getMessage());
             return $this->connectionError($e);
         }
     }

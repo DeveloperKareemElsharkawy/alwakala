@@ -2,8 +2,11 @@
 
 namespace App\Http\Requests\SellerApp\Cart;
 
+use App\Enums\StoreTypes\StoreType;
+use App\Lib\Helpers\StoreId\StoreId;
 use App\Models\PackingUnitProduct;
 use App\Models\ProductStore;
+use App\Models\Store;
 use App\Rules\Seller\Cart\CheckCartItemOwnerShip;
 use App\Rules\Seller\Cart\QuantityCheck;
 use App\Rules\Seller\Cart\UnitCountCheck;
@@ -30,8 +33,10 @@ class AddCartRequest extends FormRequest
      */
     public function rules(): array
     {
+
         return [
             'product_id' => 'required|exists:products,id',
+            'is_retailer' => ['required', 'numeric',],
             'store_id' => ['required', 'numeric', 'exists:stores,id', new CheckCartItemOwnerShip()],
             'color_id' => 'required|numeric|exists:colors,id',
             'quantity' => ['required', new QuantityCheck()],//, new UnitCountCheck()],
@@ -40,16 +45,17 @@ class AddCartRequest extends FormRequest
 
     protected function prepareForValidation()
     {
+        $storeId = StoreId::getStoreID($this->request);
+        $store = Store::query()->where('id', $storeId)->where('store_type_id', StoreType::RETAILER)->first();
+
         $packingUnit = PackingUnitProduct::query()
-            // ->with('attributes')
-            // ->where('packing_unit_product.basic_unit_count', '>', 1)
             ->where('product_id', '=', request()['product_id'])
             ->first();
 
         $this->merge([
+            'is_retailer' => (bool)$store,
             'packing_unit_id' => $packingUnit->packing_unit_id ?? null,
             'basic_unit_count' => $packingUnit->basic_unit_count ?? null,
-            // 'product_store_id' => $productStore->id,
         ]);
     }
 

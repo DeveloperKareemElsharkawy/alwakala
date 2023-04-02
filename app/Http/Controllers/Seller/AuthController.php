@@ -75,53 +75,27 @@ class AuthController extends BaseController
         $this->upload = $upload;
     }
 
-    public function login_validation(LoginRequest $request)
+    public function mobile_validation(LoginRequest $request)
     {
-//         dd($this->smsService->sendSms("01004504511",'اهلا بيك فى الوكالة أول ايكو سيستم للجملة والتجزئة'));
+        $user = User::query()->where('mobile', $request)->first();
+        $user->verify_code = mt_rand(0, 8) . mt_rand(1, 9) . mt_rand(10, 90);
+        $user->save();
 
-        $loginType = filter_var($request->email, FILTER_VALIDATE_EMAIL) ? 'email' : 'mobile';
+        // dd($this->smsService->sendSms("01004504511",'اهلا بيك فى الوكالة أول ايكو سيستم للجملة والتجزئة'));
 
-        if (Auth::attempt([$loginType => request('email'), 'password' => request('password')])) {
-            $user = Auth::user();
+        return response()->json([
+            'status' => true,
+            'message' => trans('messages.general.success'),
+            'data' => [
+                'verify_code' => (int)$user->verify_code,
+            ]
+        ], AResponseStatusCode::SUCCESS);
 
-            if ($user->type_id != UserType::SELLER)
-                return $this->error(['message' => trans('messages.general.not_found')]);
-
-            $seller = Seller::query()->where('user_id', $user->id)->first();
-
-            $store = Store::query()
-                ->select('id', 'name', 'user_id', 'store_type_id')
-                ->where('id', $seller->store_id)
-                ->first();
-
-            if (!$store)
-                return $this->error(['message' => trans('messages.auth.no_store')]);
-
-            $user->verify_code = mt_rand(0, 8) . mt_rand(1, 9) . mt_rand(10, 90);
-            $user->save();
-
-            return response()->json([
-                'status' => true,
-                'message' => trans('messages.auth.login'),
-                'data' => [
-                    'store_id' => $store->id,
-                    'store_name' => $store->name,
-                    'store_type_id' => $store->store_type_id,
-                    'activation' => $user->activation,
-                    'verify_code' => (int)$user->verify_code,
-                ]
-            ], AResponseStatusCode::SUCCESS);
-        } else {
-            return response()->json([
-                'status' => false,
-                'message' => trans('messages.auth.invalid_login_data'),
-                'data' => ''
-            ], AResponseStatusCode::UNAUTHORIZED);
-        }
     }
 
 
-    public function login(LoginRequest $request)
+    public
+    function login(LoginRequest $request)
     {
 //         dd($this->smsService->sendSms("01004504511",'اهلا بيك فى الوكالة أول ايكو سيستم للجملة والتجزئة'));
 
@@ -142,11 +116,6 @@ class AuthController extends BaseController
                 ->first();
             if (!$store)
                 return $this->error(['message' => trans('messages.auth.no_store')]);
-
-
-            if ($user->verify_code != $request->verify_code)
-                return $this->error(['message' => trans('messages.auth.invalid_code')]);
-
 
             return response()->json([
                 'status' => true,
@@ -169,7 +138,8 @@ class AuthController extends BaseController
     }
 
 
-    public function logout(Request $request)
+    public
+    function logout(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
@@ -198,7 +168,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function register(RegisterSellerRequest $request)
+    public
+    function register(RegisterSellerRequest $request)
     {
         try {
 //            DB::beginTransaction();
@@ -302,7 +273,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function validateFirstScreen(validateFirstScreenRequest $request)
+    public
+    function validateFirstScreen(validateFirstScreenRequest $request)
     {
         try {
             return response()->json([
@@ -316,7 +288,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function updateDeviceToken(UpdateDeviceTokenRequest $request)
+    public
+    function updateDeviceToken(UpdateDeviceTokenRequest $request)
     {
         try {
             UserDeviceToken::query()->updateOrCreate(
@@ -335,7 +308,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function testPushNotificationOld(Request $request)
+    public
+    function testPushNotificationOld(Request $request)
     {
         try {
             // dd("monem");
@@ -374,7 +348,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function testPushNotification(Request $request)
+    public
+    function testPushNotification(Request $request)
     {
         try {
             $userToken = UserDeviceToken::query()->where('user_id', '=', $request->user_id)->first();
@@ -407,7 +382,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function resetPassword(Request $request)
+    public
+    function resetPassword(Request $request)
     {
         try {
             if (filter_var(request()['email'], FILTER_VALIDATE_EMAIL)) {
@@ -457,7 +433,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function validateConfirmCode(Request $request)
+    public
+    function validateConfirmCode(Request $request)
     {
         try {
 
@@ -523,7 +500,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function changePassword(ChangePasswordRequest $request)
+    public
+    function changePassword(ChangePasswordRequest $request)
     {
         try {
             $user = UserResetPassword::query()
@@ -573,7 +551,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function sideData(Request $request)
+    public
+    function sideData(Request $request)
     {
         try {
             $user = User::query()
@@ -722,7 +701,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function storeMiniData(Request $request)
+    public
+    function storeMiniData(Request $request)
     {
         try {
             $user = User::query()
@@ -773,7 +753,8 @@ class AuthController extends BaseController
         }
     }
 
-    private function sendResetCodeToMobile($mobile)
+    private
+    function sendResetCodeToMobile($mobile)
     {
         $user = User::query()->where('mobile', $mobile)->first();
         $generateRandomCode = rand(1000, 9999);
@@ -786,7 +767,8 @@ class AuthController extends BaseController
         return $generateRandomCode;
     }
 
-    private function sendResetCodeToEmail($email)
+    private
+    function sendResetCodeToEmail($email)
     {
         $user = User::query()->where('email', $email)->first();
 
@@ -810,7 +792,8 @@ class AuthController extends BaseController
 
     }
 
-    public function getAgreement($type, $app)
+    public
+    function getAgreement($type, $app)
     {
         try {
             $operation = '=';
@@ -834,7 +817,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function updatePassword(UpdatePasswordRequest $request)
+    public
+    function updatePassword(UpdatePasswordRequest $request)
     {
         try {
             User::query()->where('id', $request->user('api')->id)
@@ -853,7 +837,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function syncContacts(SyncContactsRequest $request)
+    public
+    function syncContacts(SyncContactsRequest $request)
     {
         try {
 
@@ -902,7 +887,8 @@ class AuthController extends BaseController
         }
     }
 
-    public function checkToken(Request $request)
+    public
+    function checkToken(Request $request)
     {
         try {
             $isValid = Auth::guard('api')->check();
