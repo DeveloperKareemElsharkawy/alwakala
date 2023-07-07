@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Lib\Services\ImageUploader\UploadImage;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -13,42 +14,41 @@ class Offer extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name',
-        'description',
-        'activation',
-        'type_id',
-        'user_id',
-        'from',
-        'to',
+        'name_ar',
+        'name_en',
+        'description_ar',
+        'description_en',
+        'image',
+
         'discount_value',
         'discount_type',
-        'bulk_price',
-        'retail_price',
+
+        'type',
+        'target',
+
+
+        'is_active',
+        'user_id',
+        'store_id',
+
+        'start_date',
+        'start_time',
+
+        'end_date',
+        'end_time',
+
         'deleted_at',
-        'has_end_date',
-        'total_purchased_items'
     ];
 
-    public function initializeOfferFields($data)
-    {
-        $this->name_ar = $data['name_ar'];
-        $this->name_en = $data['name_en'];
-        $this->description = $data['description'];
-        $this->activation = $data['activation'];
-        $this->user_id = $data['presenter_id'];
-        $this->type_id = $data['type_id'];
-        $this->discount_value = $data['discount_value'];
-        $this->discount_type = $data['discount_type'];
-        $this->total_price = $data['total_price'];
-        $this->total_purchased_items = $data['total_purchased_items'];
-        $this->from = $data['from'];
-        $this->to = $data['to'];
-        $this->bulk_price = $data['bulk_price'];
-        $this->retail_price = $data['retail_price'];
-        $this->max_usage_count = $data['max_usage_count'];
-        $this->image = UploadImage::uploadImageToStorage($data['image'], 'offers');
 
+    protected $appends = ['imageUrl'];
+
+
+    public function getImageUrlAttribute(): string
+    {
+        return config('filesystems.aws_base_url') . $this->image;
     }
+
 
     /**
      * Scope a query to only include popular users.
@@ -58,7 +58,7 @@ class Offer extends Model
      */
     public function scopeActive($q): Builder
     {
-        return $q->whereDate('to', '>=', Carbon::today()->toDateString())->orWhere('has_end_date', false);
+        return $q->whereDate('start_date', '>=', Carbon::today()->toDateString())->where('is_active', true);
     }
 
 

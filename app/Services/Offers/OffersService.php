@@ -9,6 +9,7 @@ use App\Models\OfferProduct;
 use App\Models\OfferStore;
 use App\Models\OrderProduct;
 use App\Models\Product;
+use App\Models\ProductStore;
 use App\Repositories\OffersRepository;
 use Carbon\Carbon;
 
@@ -27,7 +28,8 @@ class OffersService
 
         $offer->products()->sync($data['products']);
 
-        $buyers = OrderProduct::query()->whereIn('product_id', $data['products'])->get()->pluck('store_id')->toArray();
+
+        $buyers = ProductStore::query()->whereNotIn('product_id', $data['products'])->get()->pluck('store_id')->toArray();
 
         foreach ($buyers as $buyer) {
             OfferStore::query()->create([

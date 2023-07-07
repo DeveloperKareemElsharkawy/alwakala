@@ -60,7 +60,8 @@ class OffersRepository
 
     public function  create($data)
     {
-        return $this->model->newQuery()
+
+        return $this->model
             ->create($data);
     }
 

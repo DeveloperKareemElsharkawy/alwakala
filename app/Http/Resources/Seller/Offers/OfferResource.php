@@ -6,6 +6,7 @@ use App\Enums\DiscountTypes\DiscountTypes;
 use App\Http\Resources\Dashboard\Orders\UserResource;
 use App\Http\Resources\Seller\Store\StoreMiniDataResource;
 use App\Http\Resources\Seller\StoreResource;
+use App\Lib\Helpers\Lang\LangHelper;
 use App\Models\OfferStore;
 use App\Models\Product;
 use App\Repositories\StoreRepository;
@@ -23,6 +24,8 @@ class OfferResource extends JsonResource
     public function toArray($request): array
     {
 
+        $lang = LangHelper::getDefaultLang($request);
+
         $store = StoreRepository::getStoreByUserId($this->user_id);
 
         $myStore = StoreRepository::getStoreByUserId($request->user_id);
@@ -31,20 +34,31 @@ class OfferResource extends JsonResource
 
         return [
             "id" => $this->id,
-            "name" => $this->name,
+
+            "name" => $this->{'name_'.$lang},
             "description" => $this->description,
-            "from" => $this->from,
-            "to" => $this->to,
+            "image" => $this->imageUrl,
+
+            "start_date" => $this->start_date,
+            "start_time" => $this->start_time,
+            "end_date" => $this->end_date,
+            "end_time" => $this->end_time,
+
             "is_owner" => (bool)$this->user_id == $request->user_id,
-            "activation" => (bool)$this->activation,
+            "activation" => (bool)$this->is_avtive,
             'can_approve_offer' => $this->canApproveOffer($request, $offerStore),
-            'status' => $offerStore ? $offerStore->status : '',
-            "has_end_date" => (bool)$this->has_end_date,
-            "discount_type" => DiscountTypes::getDiscountType($this->discount_type),
+
+
+            "type" => $this->type,
+            "target" => $this->target,
+
+
+            'status' => $offerStore ? $offerStore->status : 'pending',
+
             'discount_type_key' => (int)$this->discount_type,
+            "discount_type" => DiscountTypes::getDiscountType($this->discount_type),
             "discount_value" => (double)$this->discount_value,
-            'bulk_price' => (double)$this->bulk_price,
-            'retail_price' => (double)$this->retail_price,
+
             'store' => new StoreMiniDataResource($store),
             "products" => $this->when($this->offers_products, OfferProductResource::collection($this->offers_products)),
             'created_at' => $this->created_at,

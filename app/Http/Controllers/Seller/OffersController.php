@@ -21,6 +21,7 @@ use App\Lib\Helpers\Lang\LangHelper;
 use App\Lib\Helpers\Offers\OffersHelper;
 use App\Lib\Helpers\StoreId\StoreId;
 use App\Lib\Helpers\UserId\UserId;
+use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\Address;
 use App\Models\Offer;
 use App\Models\OfferNotification;
@@ -38,6 +39,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\DB;
 
 class OffersController extends BaseController
 {
@@ -56,23 +58,21 @@ class OffersController extends BaseController
         $this->storesRepo = $storeRepository;
     }
 
+    /**
+     * @param AddOfferRequest $request
+     * @return JsonResponse
+     */
     public function addOffer(AddOfferRequest $request)
     {
         try {
 
             $data = $request->validated();
 
-            if ($data['discount_type'] == DiscountTypes::AMOUNT) {
-                $data['discount_value'] = 0;
-            } elseif ($data['discount_type'] == DiscountTypes::PERCENTAGE) {
-                $data['bulk_price'] = 0;
-                $data['retail_price'] = 0;
-            }
-
             $myProductsWithOffers = Offer::query()->active()->where([
                 ['user_id', $request->user_id],
-                ['activation', true],
+                ['is_active', true],
             ])->with('offers_products.product')->get();
+
 
             foreach ($myProductsWithOffers as $myProductsWithOffer) {
                 foreach ($myProductsWithOffer->offers_products as $offerProduct) {
@@ -81,6 +81,9 @@ class OffersController extends BaseController
                     }
                 }
             }
+
+
+            $data['image'] = UploadImage::uploadImageToStorage($request->image, 'Offers/');
 
             $offer = $this->offersService->create($data);
 
@@ -104,7 +107,7 @@ class OffersController extends BaseController
             return response()->json([
                 'status' => true,
                 'message' => "Offer Create",
-                'data' => $offer,
+                'data' => new OfferResource($offer),
             ]);
         } catch (Exception $e) {
             Log::error('error in addOffer of seller' . __LINE__ . $e);
@@ -143,7 +146,7 @@ class OffersController extends BaseController
             return response()->json([
                 'status' => true,
                 'message' => 'Offer',
-                'data' => $data,
+                'data' => new OfferResource($data),
             ], AResponseStatusCode::SUCCESS);
         } catch (Exception $e) {
             Log::error('error in getOffer of Seller ' . __LINE__ . $e);
@@ -166,11 +169,11 @@ class OffersController extends BaseController
                 return $this->error(['message' => trans('messages.offers.offer_ownership_err')]);
             }
 
-            if (!$offer->activation) {
+            if (!$offer->is_active) {
                 return $this->error(['message' => trans('messages.offers.offer_already_closed')]);
             }
 
-            $offer->activation = false;
+            $offer->is_active = false;
             $offer->save();
 
             return $this->success(['message' => trans('messages.offers.offer_closed')]);
@@ -233,7 +236,6 @@ class OffersController extends BaseController
             return $this->respondWithPagination(OfferStoresStatusesResource::collection($rejectedStores));
         } catch (Exception $e) {
             Log::error('error in getOffer of Seller ' . __LINE__ . $e);
-            return $e;
             return $this->connectionError($e);
         }
     }
@@ -279,6 +281,7 @@ class OffersController extends BaseController
             return $this->connectionError($e);
         }
     }
+
     /**
      * @param GetOfferRequest $request
      * @param $offerId

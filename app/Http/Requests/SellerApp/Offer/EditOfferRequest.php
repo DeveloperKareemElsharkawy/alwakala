@@ -2,6 +2,9 @@
 
 namespace App\Http\Requests\SellerApp\Offer;
 
+use App\Enums\DiscountTypes\DiscountTypes;
+use App\Enums\Product\APolicyTypes;
+use App\Lib\Helpers\Lang\LangHelper;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditOfferRequest extends FormRequest
@@ -23,16 +26,34 @@ class EditOfferRequest extends FormRequest
      */
     public function rules()
     {
-        return [
+
+        $lang = LangHelper::getDefaultLang(request());
+
+        $rules = [
             'id' => 'required|numeric|exists:offers,id,user_id,' . $this->user_id,
-            'name' => 'required|string|max:255',
-            'from' => '',
-            'to' => '',
-            'activation'=>'',
-            'bulk_price' => ['required' , 'numeric'],
-            'retail_price' => ['required' , 'numeric'],
+            'image' => 'sometimes|image',
+
+            'start_date' => 'required|date|before:end_date|after:yesterday',
+            'start_time' => 'required|date_format:H:i',
+
+            'end_date' => 'required|date|after:yesterday',
+            'end_time' => 'required|date_format:H:i',
+
+            'discount_type' => 'required|in:' . DiscountTypes::AMOUNT . ',' . DiscountTypes::PERCENTAGE,
+            'type' => 'required|in:purchases,bundles',
+
+            'target' => 'required|numeric',
+            'discount_value' => 'required',
+
+            'store_id' => 'required|exists:stores,id',
             'products' => 'required|array',
-            'products.*.product_id' => 'required|numeric|exists:products,id,owner_id,' . $this->user_id,
+            'products.*' => 'required|numeric|exists:products,id,owner_id,' . $this->user_id . '|exists:products,id,policy_id,' . APolicyTypes::WekalaPrime,
         ];
+
+
+        $rules['name_' . $lang] = 'required|string|max:255';
+        $rules['description_' . $lang] = 'nullable|string';
+
+        return $rules;
     }
 }

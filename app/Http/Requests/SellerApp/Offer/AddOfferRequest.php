@@ -5,6 +5,7 @@ namespace App\Http\Requests\SellerApp\Offer;
 use App\Enums\DiscountTypes\DiscountTypes;
 use App\Enums\Product\APolicyTypes;
 use App\Enums\Product\AProductStatus;
+use App\Lib\Helpers\Lang\LangHelper;
 use App\Lib\Helpers\StoreId\StoreId;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -27,24 +28,33 @@ class AddOfferRequest extends FormRequest
      */
     public function rules(): array
     {
+        $lang = LangHelper::getDefaultLang(request());
 
-        return [
-            'store_id' => 'required|exists:stores,id',
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'type_id' => 'required',
+        $rules = [
             'user_id' => 'required',
-            'total_purchased_items' => 'required',
-            'from' => 'required|date',
-            'to' => 'date',
-            'activation' => 'required|boolean',
+            'image' => 'required|image',
+
+            'start_date' => 'required|date|before:end_date|after:yesterday',
+            'start_time' => 'required|date_format:H:i',
+
+            'end_date' => 'required|date|after:yesterday',
+            'end_time' => 'required|date_format:H:i',
+
             'discount_type' => 'required|in:' . DiscountTypes::AMOUNT . ',' . DiscountTypes::PERCENTAGE,
-            'discount_value' => 'required_if:discount_type,' . DiscountTypes::PERCENTAGE,
-            'bulk_price' => ['required_if:discount_type,' . DiscountTypes::AMOUNT, 'numeric'],
-            'retail_price' => ['required_if:discount_type,' . DiscountTypes::AMOUNT, 'numeric'],
+            'type' => 'required|in:purchases,bundles',
+
+            'target' => 'required|numeric',
+            'discount_value' => 'required',
+
+            'store_id' => 'required|exists:stores,id',
             'products' => 'required|array',
             'products.*' => 'required|numeric|exists:products,id,owner_id,' . $this->user_id . '|exists:products,id,policy_id,' . APolicyTypes::WekalaPrime,
-         ];
+        ];
+
+        $rules['name_' . $lang] = 'required|string|max:255';
+        $rules['description_' . $lang] = 'nullable|string';
+
+        return $rules;
     }
 
 
@@ -59,11 +69,7 @@ class AddOfferRequest extends FormRequest
 
         $this->merge([
             'store_id' => $storeId,
-            'has_end_date' => (bool)$this->input('to'),
-            'type_id' => 1,
             'user_id' => request()->user_id,
-            'total_purchased_items' => count(request()->products),
-            'products.*.bulk_price' => count(request()->products),
         ]);
     }
 
