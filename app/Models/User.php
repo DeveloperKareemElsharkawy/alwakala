@@ -29,6 +29,17 @@ class User extends Authenticatable
         'type_id'
     ];
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if(isset($this->image)){
+            return config('filesystems.aws_base_url') . $this->image;
+        }else{
+            return \URL::asset('/admin/assets/images/users/48/girl.png');
+        }
+    }
+
     public function AauthAcessToken()
     {
         return $this->hasMany(OauthAccessToken::class);
@@ -37,7 +48,9 @@ class User extends Authenticatable
     public function initializeUserFields($data)
     {
         $this->name = $data['name'];
-        $this->password = bcrypt($data['password']);
+        if(isset($data['password'])){
+            $this->password = bcrypt($data['password']);
+        }
         if (isset($data['email']))
             $this->email = $data['email'];
         $this->mobile = $data['mobile'];
@@ -48,16 +61,19 @@ class User extends Authenticatable
 
         }
         if ($data['type_id'] == UserType::ADMIN) {
-            $this->image = UploadImage::uploadImageToStorage($data['image'], 'admins');
+            if (isset($data['image'])) {
+                $this->image = UploadImage::uploadImageToStorage($data['image'], 'admins');
+            }
             $this->activation = $data['activation'];
         } elseif ($data['type_id'] == UserType::CONSUMER) {
-            if ($this->image) {
+            if (isset($data['image'])) {
                 $this->image = UploadImage::uploadImageToStorage($data['image'], 'consumer');
             }
         } else {
             $this->activation = false;
 //            $this->image = UploadImage::uploadImageToStorage($data['image'], 'sellers');
         }
+        $this->activation = $data['activation'] ? $data['activation'] : false;
     }
 
     public function seller()
