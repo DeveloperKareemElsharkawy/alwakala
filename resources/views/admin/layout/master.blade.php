@@ -25,7 +25,6 @@
         <!-- Start Content -->
         <!-- ============================================================== -->
         <div class="main-content {{ Route::currentRouteName() == 'adminHome'  ? 'index-home' : ''}}">
-            @include('common.done')
             @section('backend-main')
             @show
         </div>

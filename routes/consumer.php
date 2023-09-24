@@ -154,7 +154,7 @@ Route::group(['prefix' => 'consumer-app', 'middleware' => 'consumer_auth'], func
 });
 
 
-Route::group(['prefix' => 'coupons', 'middleware' => 'consumer_auth'], function () {
+Route::group(['prefix' => 'coupons', 'middleware' => 'consumer_auth' , 'namespace' => 'Consumer'], function () {
     Route::get('/', 'CouponController@getCoupons');
     Route::get('{id}', 'CouponController@getCoupon');
     Route::post('/create', 'CouponController@addCoupon');
@@ -162,7 +162,7 @@ Route::group(['prefix' => 'coupons', 'middleware' => 'consumer_auth'], function 
     Route::post('/activate/{id}', 'CouponController@activate');
 });
 
-Route::group(['prefix' => 'warehouses', 'middleware' => 'consumer_auth'], function () {
+Route::group(['prefix' => 'warehouses', 'middleware' => 'consumer_auth', 'namespace' => 'Consumer'], function () {
     Route::get('', 'WareHouseController@index');
     Route::get('{id}', 'WareHouseController@show');
     Route::delete('{id}', 'WareHouseController@destroy');

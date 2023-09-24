@@ -100,65 +100,57 @@
 {{--                    </div>--}}
 {{--                </li>--}}
 
-{{--                <li class="nav-item">--}}
-{{--                    <a href="#suppliers" class="nav-link menu-link collapsed " data-bs-toggle="collapse"--}}
-{{--                       role="button" aria-expanded="false" aria-controls="suppliers">--}}
-{{--                        <i class="bi bi-box"></i> <span data-key="t-ecommerce">متاجر الجملة / براندات</span>--}}
-{{--                    </a>--}}
-{{--                    <div class="collapse  menu-dropdown" id="suppliers">--}}
-{{--                        <ul class="nav nav-sm flex-column">--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="new-vendor.html" class="nav-link" data-key="t-products">اضافة متجر جديد</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="pending-vendors.html" class="nav-link"--}}
-{{--                                   data-key="t-products-grid">متاجر في انتظار الموافقة</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="all-vendors.html" class="nav-link"--}}
-{{--                                   data-key="t-product-Details">متاجر مفعلة</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="inactive-vendors.html" class="nav-link"--}}
-{{--                                   data-key="t-product-Details">متاجر معطلة</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="#" class="nav-link"--}}
-{{--                                   data-key="t-product-Details">التقارير</a>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                    </div>--}}
-{{--                </li>--}}
+                <li class="nav-item">
+                    <a href="#suppliers" class="nav-link menu-link collapsed " data-bs-toggle="collapse"
+                       role="button" aria-expanded="false" aria-controls="suppliers">
+                        <i class="bi bi-box"></i> <span data-key="t-ecommerce">متاجر الجملة / براندات</span>
+                    </a>
+                    <div class="collapse  menu-dropdown" id="suppliers">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?add_new=true&type=supplier&active=true') }}" class="nav-link" data-key="t-products">اضافة متجر جديد</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?type=supplier&active=true&verified=false') }}" class="nav-link"
+                                   data-key="t-products-grid">متاجر في انتظار الموافقة</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?type=supplier&active=true') }}" class="nav-link"
+                                   data-key="t-product-Details">متاجر مفعلة</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?type=supplier&active=false&verified=false') }}" class="nav-link"
+                                   data-key="t-product-Details">متاجر معطلة</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
-{{--                <li class="nav-item">--}}
-{{--                    <a href="#suppliersss" class="nav-link menu-link collapsed " data-bs-toggle="collapse"--}}
-{{--                       role="button" aria-expanded="false" aria-controls="suppliersss">--}}
-{{--                        <i class="bi bi-box"></i> <span data-key="t-ecommerce">متاجر القطاعي</span>--}}
-{{--                    </a>--}}
-{{--                    <div class="collapse  menu-dropdown" id="suppliersss">--}}
-{{--                        <ul class="nav nav-sm flex-column">--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="new-vendor.html" class="nav-link" data-key="t-products">اضافة متجر جديد</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="pending-vendors.html" class="nav-link"--}}
-{{--                                   data-key="t-products-grid">متاجر في انتظار الموافقة</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="all-vendors.html" class="nav-link"--}}
-{{--                                   data-key="t-product-Details">متاجر مفعلة</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="inactive-vendors.html" class="nav-link"--}}
-{{--                                   data-key="t-product-Details">متاجر معطلة</a>--}}
-{{--                            </li>--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="#" class="nav-link"--}}
-{{--                                   data-key="t-product-Details">التقارير</a>--}}
-{{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                    </div>--}}
-{{--                </li>--}}
+                <li class="nav-item">
+                    <a href="#suppliersss" class="nav-link menu-link collapsed " data-bs-toggle="collapse"
+                       role="button" aria-expanded="false" aria-controls="suppliersss">
+                        <i class="bi bi-box"></i> <span data-key="t-ecommerce">متاجر القطاعي</span>
+                    </a>
+                    <div class="collapse  menu-dropdown" id="suppliersss">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?add_new=true&type=retail&active=true') }}" class="nav-link" data-key="t-products">اضافة متجر جديد</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?type=retail&active=true&verified=false') }}" class="nav-link"
+                                   data-key="t-products-grid">متاجر في انتظار الموافقة</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?type=retail&active=true') }}" class="nav-link"
+                                   data-key="t-product-Details">متاجر مفعلة</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/vendors?type=retail&active=false&verified=false') }}" class="nav-link"
+                                   data-key="t-product-Details">متاجر معطلة</a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
 
 {{--                <li class="nav-item">--}}
 {{--                    <a href="#orders" class="nav-link menu-link collapsed " data-bs-toggle="collapse"--}}

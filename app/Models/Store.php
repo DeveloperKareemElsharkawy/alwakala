@@ -41,6 +41,52 @@ class Store extends Model
         return $this->hasMany(CityStore::class);
     }
 
+    protected $appends = ['image_url' , 'cover_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if(isset($this->logo)){
+            return config('filesystems.aws_base_url') . $this->logo;
+        }else{
+            return \URL::asset('/admin/assets/images/users/48/empty.png');
+        }
+    }
+
+    public function getCoverUrlAttribute()
+    {
+        if(isset($this->cover)){
+            return config('filesystems.aws_base_url') . $this->cover;
+        }else{
+            return \URL::asset('/admin/assets/images/users/48/empty.png');
+        }
+    }
+    public function getBadge() {
+        $badge = '';
+        if($this->activation == true && $this->is_verified == true){
+            $badge = '<span class="badge bg-success-subtle text-success">Active</span>';
+        }
+        if($this->activation == false && $this->is_verified == true){
+            $badge = '<span class="badge bg-danger-subtle text-danger">Inactive</span>';
+        }
+        if($this->activation == false && $this->is_verified == false){
+            $badge = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
+        }
+        if($this->activation == true && $this->is_verified == false){
+            $badge = '<span class="badge bg-warning-subtle text-warning">Pending</span>';
+        }
+        return $badge;
+    }
+
+    public function followers()
+    {
+        return $this->hasMany(FollowedStore::class , 'store_id' , 'id');
+    }
+
+    public function views()
+    {
+        return $this->hasMany(View::class , 'item_id' , 'id')->where('item_type','STORE');
+    }
+
     public function categories()
     {
         return $this->hasMany(CategoryStore::class)
@@ -109,6 +155,11 @@ class Store extends Model
 //            ->with('productPrice')
             ->with('productImage')
             ->limit(4);
+    }
+
+    public function allProducts()
+    {
+        return $this->belongsToMany(Product::class);
     }
 
     public function productStores(): \Illuminate\Database\Eloquent\Relations\HasMany
@@ -249,6 +300,11 @@ class Store extends Model
     {
         return $this->hasMany(Order::class, 'store_id')
             ->select('id', 'order_price', 'total_price', 'discount', 'address', 'store_id', 'delivery_date', 'number');
+    }
+
+    public function allOrders(): \Illuminate\Database\Eloquent\Relations\HasMany
+    {
+        return $this->hasMany(Order::class, 'store_id');
     }
 
     public function ScopeDistance($query, $latitude, $longitude, $distance)
