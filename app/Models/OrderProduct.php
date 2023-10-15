@@ -28,6 +28,10 @@ class OrderProduct extends Model
             ->with('productImage')
             ->select('id', 'name');
     }
+    public function productt()
+    {
+        return $this->belongsTo(Product::class , 'product_id' , 'id');
+    }
 
     public function color(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

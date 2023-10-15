@@ -14,6 +14,7 @@
 <script src="{{ asset('admin') }}/assets/libs/datatable/excel.dataTables.min.css"></script>
 <script src="{{ asset('admin') }}/assets/libs/datatable/buttons.html5.min.js"></script>
 <script src="{{ asset('admin') }}/assets/libs/datatable/buttons.print.min.js"></script>
+<script src="{{ asset('admin') }}/assets/libs/simplebar/simplebar.min.js"></script>
 <script src="{{ asset('admin') }}/assets/js/pages/password-addon.init.js"></script>
 
 
@@ -54,3 +55,15 @@
 <!-- App js -->
 <script src="{{ asset('admin') }}/assets/js/app.js"></script>
 <script src="{{ asset('admin') }}/assets/js/custom.js"></script>
+
+@if (session()->has('error'))
+    <script>
+        Swal.fire('error', '<?php echo Session::get('error'); ?>', 'error');
+    </script>
+@endif
+
+@if (session()->has('success'))
+    <script>
+        Swal.fire('success', '<?php echo Session::get('success'); ?>', 'success');
+    </script>
+@endif

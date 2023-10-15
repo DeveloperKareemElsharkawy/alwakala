@@ -46,26 +46,7 @@
                                 <div class="col-md-3">
                                     <div id="vendor_sidebar">
                                         <div class="container-fluid p-0">
-                                            <ul class="navbar-nav">
-                                                <li class="nav-item active">
-                                                    <a class="nav-link menu-link" href="show-vendor.html">
-                                                        <i class="ph-record-fill"></i> <span
-                                                            data-key="t-dashboards">معلومات رئيسية</span>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item active">
-                                                    <a class="nav-link menu-link" href="#">
-                                                        <i class="ph-record-fill"></i> <span
-                                                            data-key="t-dashboards">معلومات المتجر</span>
-                                                    </a>
-                                                </li>
-                                                <li class="nav-item">
-                                                    <a class="nav-link menu-link" href="branches.html">
-                                                        <i class="ph-record-fill"></i> <span
-                                                            data-key="t-dashboards">الفروع </span>
-                                                    </a>
-                                                </li>
-                                            </ul>
+                                            @include('admin.vendors.store_sidebar')
                                         </div>
                                         <!-- Sidebar -->
                                     </div>

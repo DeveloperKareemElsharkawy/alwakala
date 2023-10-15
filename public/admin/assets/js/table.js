@@ -173,7 +173,7 @@ var table5 = $('.purchases_table').DataTable({
     "buttons": [
         // { extend: 'excel', text: 'استخراج ملف اكسل' }
     ],
-    "pageLength": 8,
+    "pageLength": 100,
     "language": {
         "searchPlaceholder": "البحث عن طريق الاسم, اسم المالك , هاتف المالك , ايميل المالك ....",
         "sProcessing": "جارٍ التحميل...",
