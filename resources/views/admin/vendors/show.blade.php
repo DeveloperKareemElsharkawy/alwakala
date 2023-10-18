@@ -59,7 +59,7 @@
                                                     <div class="card text-center">
                                                         <div class="card-body text-center">
 
-                                                            <h4 class="mb-4"><span class="counter-value" data-target="258">258</span> الف </h4>
+                                                            <h4 class="mb-4"><span class="counter-value" data-target="{{ count($store->allProducts) }}">{{ count($store->allProducts) }}</span> </h4>
 
                                                             <p class="fw-medium text-uppercase mb-0">عدد المنتجات</p>
                                                         </div>
@@ -69,7 +69,7 @@
                                                     <div class="card text-center">
                                                         <div class="card-body text-center">
 
-                                                            <h4 class="mb-4"><span class="counter-value" data-target="258">258</span> الف </h4>
+                                                            <h4 class="mb-4"><span class="counter-value" data-target="{{ count($store->owner->orders) }}">{{ count($store->owner->orders) }}</span>  </h4>
 
                                                             <p class="fw-medium text-uppercase mb-0">عدد الطلبات</p>
                                                         </div>
@@ -78,8 +78,8 @@
                                                 <div class="col-xxl-2 col-md-4">
                                                     <div class="card text-center">
                                                         <div class="card-body text-center">
-
-                                                            <h4 class="mb-4"><span class="counter-value" data-target="258">258</span> الف </h4>
+                                                            <?php $orders = \App\Models\OrderProduct::where('store_id',$store['id'])->get()->unique('order_id'); ?>
+                                                            <h4 class="mb-4"><span class="counter-value" data-target="{{ count($orders) }}">{{ count($orders) }}</span> </h4>
 
                                                             <p class="fw-medium text-uppercase mb-0">عدد المبيعات</p>
                                                         </div>

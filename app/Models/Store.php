@@ -302,10 +302,6 @@ class Store extends Model
             ->select('id', 'order_price', 'total_price', 'discount', 'address', 'store_id', 'delivery_date', 'number');
     }
 
-    public function allOrders(): \Illuminate\Database\Eloquent\Relations\HasMany
-    {
-        return $this->hasMany(Order::class, 'store_id');
-    }
 
     public function ScopeDistance($query, $latitude, $longitude, $distance)
     {

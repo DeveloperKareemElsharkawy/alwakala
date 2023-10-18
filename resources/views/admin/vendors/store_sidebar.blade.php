@@ -11,6 +11,12 @@
                 data-key="t-dashboards">معلومات المتجر</span>
         </a>
     </li>
+    <li class="nav-item {{ Request::is('admin_panel/shipping_addresses/'.$store['id']) ? 'active' : ''}}">
+        <a class="nav-link menu-link" href="{{ url('admin_panel/shipping_addresses', $store['id']) }}">
+            <i class="ph-record-fill"></i> <span
+                data-key="t-dashboards">مدن التوصيل</span>
+        </a>
+    </li>
     <li class="nav-item {{ Request::is('admin_panel/orders/'.$store['id']) || Request::is('admin_panel/order/*') ? 'active' : ''}}">
         <a href="#purchase" class="nav-link menu-link {{ Request::is('admin_panel/orders/'.$store['id']) || Request::is('admin_panel/order/*') ? '' : 'collapsed'}}"
            data-bs-toggle="collapse"

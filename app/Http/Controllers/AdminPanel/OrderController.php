@@ -26,7 +26,7 @@ class OrderController extends Controller
     {
         $store_type = request()->store_type ? request()->store_type : 2;
         $store = Store::whereNull('parent_id')->where('id', $store_id)->first();
-          $orders = Order::where('user_id', $store['user']['id'])->whereHas('items', function ($q) use ($store_type) {
+        $orders = Order::where('user_id', $store['user']['id'])->whereHas('items', function ($q) use ($store_type) {
             $q->whereHas('store', function ($qq) use ($store_type) {
                 $qq->where('store_type_id', $store_type);
             });

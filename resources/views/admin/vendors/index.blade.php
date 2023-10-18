@@ -508,7 +508,7 @@
                                                                     طلبات
                                                                 </div>
                                                                 <div class="counter">
-                                                                    0
+                                                                    {{ count($store->owner->orders) }}
                                                                 </div>
                                                             </li>
                                                             <li class="border-solid rounded border">

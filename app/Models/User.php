@@ -116,4 +116,11 @@ class User extends Authenticatable
         return $this->hasMany(Warehouse::class);
     }
 
+    public function orders()
+    {
+        return $this->hasMany(Order::class)->whereHas('items', function ($q) {
+            $q->whereHas('store');
+        });
+    }
+
 }
