@@ -5,10 +5,17 @@
                 data-key="t-dashboards">معلومات رئيسية</span>
         </a>
     </li>
+
     <li class="nav-item {{ Request::is('admin_panel/vendors/'.$store['id']) && request()->type != 'branches' ? 'active' : ''}}">
         <a class="nav-link menu-link" href="{{ url('admin_panel/vendors', $store['id']) }}">
             <i class="ph-record-fill"></i> <span
                 data-key="t-dashboards">معلومات المتجر</span>
+        </a>
+    </li>
+    <li class="nav-item {{ Request::is('admin_panel/products/'.$store['id']) ? 'active' : ''}}">
+        <a class="nav-link menu-link" href="{{ url('admin_panel/products', $store['id']) }}">
+            <i class="ph-record-fill"></i> <span
+                data-key="t-dashboards">المنتجات</span>
         </a>
     </li>
     <li class="nav-item {{ Request::is('admin_panel/shipping_addresses/'.$store['id']) ? 'active' : ''}}">

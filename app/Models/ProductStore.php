@@ -31,6 +31,17 @@ class ProductStore extends Model
     ];
     protected $table = 'product_store';
 
+    protected $appends = ['barcode_url'];
+
+    public function getBarcodeUrlAttribute()
+    {
+        if(isset($this->barcode)){
+            return config('filesystems.aws_base_url') . $this->barcode;
+        }else{
+            return \URL::asset('/admin/assets/images/users/48/empty.png');
+        }
+    }
+
     public function productImage()
     {
         return $this->hasOne(ProductImage::class, 'product_id', 'product_id')
