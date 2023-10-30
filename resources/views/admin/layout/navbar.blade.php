@@ -231,23 +231,23 @@
 {{--                    </a>--}}
 {{--                </li>--}}
 
-{{--                <li class="nav-item">--}}
-{{--                    <a href="#settings" class="nav-link menu-link collapsed " data-bs-toggle="collapse"--}}
-{{--                       role="button" aria-expanded="false" aria-controls="subscription">--}}
-{{--                        <i class="ri-settings-5-fill"></i> <span data-key="t-ecommerce">الاعدادات</span>--}}
-{{--                    </a>--}}
-{{--                    <div class="collapse  menu-dropdown" id="settings">--}}
-{{--                        <ul class="nav nav-sm flex-column">--}}
-{{--                            <li class="nav-item">--}}
-{{--                                <a href="settings-lang.html" class="nav-link" data-key="t-products">اعدادات رئيسية </a>--}}
-{{--                            </li>--}}
+                <li class="nav-item">
+                    <a href="#settings" class="nav-link menu-link collapsed {{ Request::is('admin_panel/settings') || Request::is('admin_panel/settings/*') ? 'active' : '' }}" data-bs-toggle="collapse"
+                       role="button" aria-expanded="false" aria-controls="subscription">
+                        <i class="ri-settings-5-fill"></i> <span data-key="t-ecommerce">الاعدادات</span>
+                    </a>
+                    <div class="collapse  menu-dropdown {{ Request::is('admin_panel/settings') || Request::is('admin_panel/settings/*') ? 'show' : '' }}" id="settings">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/settings/brands') }}" class="nav-link" data-key="t-products">اعدادات رئيسية </a>
+                            </li>
 {{--                            <li class="nav-item">--}}
 {{--                                <a href="settings-w-coupons.html" class="nav-link"--}}
 {{--                                   data-key="t-products-grid">اعدادات نظام الوكالة </a>--}}
 {{--                            </li>--}}
-{{--                        </ul>--}}
-{{--                    </div>--}}
-{{--                </li>--}}
+                        </ul>
+                    </div>
+                </li>
 
             </ul>
         </div>
