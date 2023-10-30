@@ -19,6 +19,16 @@ class Category extends Model
     ];
     public $timestamps = true;
 
+    protected $appends = ['image_url'];
+
+    public function getImageUrlAttribute()
+    {
+        if(isset($this->image)){
+            return config('filesystems.aws_base_url') . $this->image;
+        }else{
+            return null;
+        }
+    }
 
     public function sizes()
     {
@@ -63,5 +73,10 @@ class Category extends Model
     public function products()
     {
         return $this->hasMany(Product::class, 'category_id');
+    }
+
+    public function stores()
+    {
+        return $this->hasMany(CategoryStore::class);
     }
 }

@@ -201,41 +201,41 @@
                     </ul>
                 </div>
             </li>
-{{--            <li class="nav-item">--}}
-{{--                <a href="#categories" class="nav-link menu-link {{ $active == 'sizes' ? '' : 'collapsed' }}"--}}
-{{--                   data-bs-toggle="collapse"--}}
-{{--                   role="button" aria-expanded="false" aria-controls="purchase">--}}
-{{--                    <i class="ph-record-fill"></i> <span data-key="t-layouts">التصنيفات</span>--}}
-{{--                    <i class="ri-arrow-left-s-fill fs-5"></i>--}}
-{{--                </a>--}}
-{{--                <div class="collapse menu-dropdown {{ $active == 'categories' || $active == 'subcategories' || $active == 'subsubcategories' || $active == 'subsubcategories' ? 'show' : '' }}" id="categories">--}}
-{{--                    <ul class="nav nav-sm flex-column">--}}
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="{{ url('admin_panel/settings/categories') }}" class="nav-link {{ $active == 'categories' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-categories">--}}
-{{--                                <i class="bx bx-circle"></i>--}}
-{{--                                التصنيفات الرئيسية--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="{{ url('admin_panel/settings/subcategories?type=archived') }}" class="nav-link {{ $active == 'subcategories' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-categories">--}}
-{{--                                <i class="bx bx-circle"></i>--}}
-{{--                                التصنيفات الفرعية--}}
-{{--                            </a>--}}
-{{--                        </li><li class="nav-item">--}}
-{{--                            <a href="{{ url('admin_panel/settings/subsubcategories?type=archived') }}" class="nav-link {{ $active == 'subsubcategories' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-categories">--}}
-{{--                                <i class="bx bx-circle"></i>--}}
-{{--                                التصنيفات الفرعية الثانية--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                        <li class="nav-item">--}}
-{{--                            <a href="{{ url('admin_panel/settings/categories_trees') }}" class="nav-link {{ $active == 'categories_trees' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-categories">--}}
-{{--                                <i class="bx bx-circle"></i>--}}
-{{--                                شجره التصنيفات--}}
-{{--                            </a>--}}
-{{--                        </li>--}}
-{{--                    </ul>--}}
-{{--                </div>--}}
-{{--            </li>--}}
+            <li class="nav-item">
+                <a href="#categories" class="nav-link menu-link {{ $active == 'sizes' ? '' : 'collapsed' }}"
+                   data-bs-toggle="collapse"
+                   role="button" aria-expanded="false" aria-controls="purchase">
+                    <i class="ph-record-fill"></i> <span data-key="t-layouts">التصنيفات</span>
+                    <i class="ri-arrow-left-s-fill fs-5"></i>
+                </a>
+                <div class="collapse menu-dropdown {{ $active == 'categories' || $active == 'subcategories' || $active == 'subsubcategories' || $active == 'subsubcategories' ? 'show' : '' }}" id="categories">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/categories') }}" class="nav-link {{ $active == 'categories' ? 'active' : '' }}" data-key="t-categories">
+                                <i class="bx bx-circle"></i>
+                                التصنيفات الرئيسية
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/subcategories') }}" class="nav-link {{ $active == 'subcategories' ? 'active' : '' }}" data-key="t-categories">
+                                <i class="bx bx-circle"></i>
+                                التصنيفات الفرعية
+                            </a>
+                        </li><li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/subsubcategories') }}" class="nav-link {{ $active == 'subsubcategories' ? 'active' : '' }}" data-key="t-categories">
+                                <i class="bx bx-circle"></i>
+                                التصنيفات الفرعية الثانية
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/categories_trees') }}" class="nav-link {{ $active == 'categories_trees' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-categories">
+                                <i class="bx bx-circle"></i>
+                                شجره التصنيفات
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
 {{--            <li class="nav-item">--}}
 {{--                <a href="#sales" class="nav-link menu-link collapsed"--}}
 {{--                   data-bs-toggle="collapse"--}}

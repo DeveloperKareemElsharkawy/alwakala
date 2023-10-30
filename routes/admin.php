@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminPanel\BrandController;
 use App\Http\Controllers\AdminPanel\ColorController;
 use App\Http\Controllers\AdminPanel\SizeController;
 use App\Http\Controllers\AdminPanel\MaterialController;
+use App\Http\Controllers\AdminPanel\CategoryController;
 
 \App::setLocale('ar');
 view()->share('lang', \App::getLocale());
@@ -77,6 +78,19 @@ Route::group(array('prefix' => 'admin_panel/settings'), function () {
     //    materials
     Route::resource('materials', MaterialController::class)->except(['create']);
     Route::get('materials/archive/{id}', [MaterialController::class , 'archive']);
-});
 
+    //    categories
+    Route::resource('categories', CategoryController::class)->except(['create']);
+    Route::get('categories/archive/{id}', [CategoryController::class , 'archive']);
+    //    subcategories
+    Route::resource('subcategories', CategoryController::class)->except(['create']);
+    Route::get('subcategories/archive/{id}', [CategoryController::class , 'archive']);
+    //    subsubcategories
+    Route::resource('subsubcategories', CategoryController::class)->except(['create']);
+    Route::get('subsubcategories/archive/{id}', [CategoryController::class , 'archive']);
+
+    Route::get('categories_trees', [CategoryController::class , 'tree']);
+
+});
+Route::get('ajax_subcatgeories', [CategoryController::class , 'ajax_subcatgeories']);
 Route::get('city_ajax', [AdminController::class , 'city_ajax']);

@@ -2,10 +2,10 @@
     <i class="ri-close-line"></i>
 </button>
 <div class="modal-header d-block text-center">
-    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل البراند {{ $brand['name_'.$lang] }} </h5>
+    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل التصنيف {{ $category['name_'.$lang] }} </h5>
 </div>
 <div class="modal-body px-5">
-    <form class="my_form px-5" method="post" action="{{route('brands.update' , $brand->id)}}" enctype="multipart/form-data" autocomplete="off">
+    <form class="my_form px-5" method="post" action="{{route('categories.update' , $category->id)}}" enctype="multipart/form-data" autocomplete="off">
         {{ csrf_field() }}
         {{ method_field('PATCH') }}
         <div class="row g-3">
@@ -20,31 +20,61 @@
                     </div>
                     <div class="avatar-preview">
                         <div id="imagePreview2"
-                             style="background-image: url({{ $brand['image_url'] }})">
+                             style="background-image: url({{ $category['image_url'] }})">
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-12 col-12">
-                <div class="select-div">
-                    <label for="validationDefault02" class="form-label">التصنيفات </label>
-                    <select class="form-select select-modal" name="category_ids[]" id="validationDefault02" multiple>
-                        @foreach($categories as $cat_key => $category)
-                            <?php
-                                $found = \App\Models\BrandCategory::where('brand_id' , $brand['id'])->where('category_id' ,$category['id'])->first();
-                                ?>
-                            <option {{ $found ? 'selected' : '' }} value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
-                        @endforeach
-                    </select>
-                    @error('category_ids')
-                    <span class="text-danger">{{ $message }}</span>
-                    @enderror
-                </div>
-            </div><!--end col-->
+            @if($url == url('admin_panel/settings/subcategories') || $url == url('admin_panel/settings/subsubcategories'))
+                <div class="col-md-12 col-12">
+                    <div class="select-div">
+                        <label for="category_id" class="form-label">التصنيف الرئيسي </label>
+                        <select class="form-select select-modal" name="category_id"
+                                id="category_id">
+                            @if(Request::is('admin_panel/settings/subcategories'))
+                            @foreach($main_categories as $cat_key => $categoryy)
+                                <option {{ $categoryy['id'] == $category->category_id ? 'selected' : '' }}
+                                    value="{{ $categoryy['id'] }}">{{ $categoryy['name_'.$lang] }}</option>
+                            @endforeach
+                            @endif
+                            @if($url == url('admin_panel/settings/subsubcategories'))
+                            @foreach($main_categories as $cat_key => $categoryy)
+                                <option {{ $categoryy['id'] == $category->parent->id ? 'selected' : '' }}
+                                    value="{{ $categoryy['id'] }}">{{ $categoryy['name_'.$lang] }}</option>
+                            @endforeach
+                            @endif
+                        </select>
+                        @error('category_id')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div><!--end col-->
+            @endif
+            @if($url == url('admin_panel/settings/subsubcategories'))
+                <div class="col-md-12 col-12">
+                    <div class="select-div">
+                        <label for="subcategory_id" class="form-label">التصنيف الفرعي </label>
+                        <?php
+                           $subca = \App\Models\Category::where('id' , $category['category_id'])->first();
+                           $subcats = \App\Models\Category::where('category_id' , $subca['category_id'])->get();
+                        ?>
+                        <select class="form-select select-modal" name="subcategory_id"
+                                id="subcategory_id">
+                            @foreach($subcats as $subcat)
+                                <option {{ $subcat['id'] == $category['category_id'] ? 'selected' : '' }}
+                                    value="{{ $subcat['id'] }}">{{ $subcat['name_'.$lang] }}</option>
+                            @endforeach
+                        </select>
+                        @error('subcategory_id')
+                        <span class="text-danger">{{ $message }}</span>
+                        @enderror
+                    </div>
+                </div><!--end col-->
+            @endif
             <div class="col-md-12 col-12">
                 <div>
                     <label for="name_ar" class="form-label">الاسم بالعربية</label>
-                    <input type="text" name="name_ar" class="form-control" id="name_ar" value="{{ $brand['name_ar'] }}" placeholder="">
+                    <input type="text" name="name_ar" class="form-control" id="name_ar" value="{{ $category['name_ar'] }}" placeholder="">
                     @error('name_ar')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -54,7 +84,7 @@
             <div class="col-md-12 col-12">
                 <div>
                     <label for="name_en" class="form-label">الاسم بالانجليزية</label>
-                    <input type="text" name="name_en" class="form-control" id="name_en" value="{{ $brand['name_en'] }}" placeholder="">
+                    <input type="text" name="name_en" class="form-control" id="name_en" value="{{ $category['name_en'] }}" placeholder="">
                     @error('name_en')
                     <span class="text-danger">{{ $message }}</span>
                     @enderror
@@ -70,25 +100,78 @@
         </div><!--end row-->
     </form>
 </div>
-
+<script src="{{ asset('admin') }}/assets/libs/select2/select2.min.js"></script>
 <script src="{{ asset('admin') }}/assets/js/custom.js"></script>
 <script src="{{ asset('admin') }}/assets/js/additional-methods.min.js"></script>
 <script src="{{ asset('admin') }}/assets/js/jquery.validate.min.js"></script>
+@if(Request::is('admin_panel/settings/categories'))
+    <script>
+        $(document).ready(function () {
+            $(".my_form").validate({
+                rules: {
+                    name_ar: "required",
+                    name_en: "required",
+                    image: "required",
+                },
+                messages: {
+                    name_ar: "اسم البراند بالعربية مطلوب",
+                    name_en: "اسم البراند بالانجليزية مطلوب",
+                    image: "صورة البراند مطلوبة",
+                }
+            });
+        });
+    </script>
+@endif
+@if(Request::is('admin_panel/settings/subcategories'))
+    <script>
+        $(document).ready(function () {
+            $(".my_form").validate({
+                rules: {
+                    name_ar: "required",
+                    name_en: "required",
+                    image: "required",
+                    category_id: "required"
+                },
+                messages: {
+                    name_ar: "اسم البراند بالعربية مطلوب",
+                    name_en: "اسم البراند بالانجليزية مطلوب",
+                    image: "صورة البراند مطلوبة",
+                    category_id: "من فضلك اختر تصنيف"
+                }
+            });
+        });
+    </script>
+@endif
+@if(Request::is('admin_panel/settings/subsubcategories'))
+    <script>
+        $(document).ready(function () {
+            $(".my_form").validate({
+                rules: {
+                    name_ar: "required",
+                    name_en: "required",
+                    image: "required",
+                    category_id: "required",
+                    subcategory_id: "required"
+                },
+                messages: {
+                    name_ar: "اسم البراند بالعربية مطلوب",
+                    name_en: "اسم البراند بالانجليزية مطلوب",
+                    image: "صورة البراند مطلوبة",
+                    category_id: "من فضلك اختر تصنيف",
+                    subcategory_id: "من فضلك اختر تصنيف فرعي"
+                }
+            });
+        });
+    </script>
+@endif
 <script>
-    $(document).ready(function() {
-        $(".my_form").validate({
-            rules: {
-                name_ar: "required",
-                name_en: "required",
-                image: "required",
-                "category[]": "required"
-            },
-            messages: {
-                name_ar: "اسم البراند بالعربية مطلوب",
-                name_en: "اسم البراند بالانجليزية مطلوب",
-                image: "صورة البراند مطلوبة",
-                "category[]": "من فضلك اختر تصنيف"
-            }
+    $('#category_id').on('change', function() {
+        var category_id = $(this).val();
+        $.get(link + '/ajax_subcatgeories?category_id=' + category_id, function (data) {
+            $('#subcategory_id').empty();
+            $.each(data, function (index, subcatObj) {
+                $('#subcategory_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+            });
         });
     });
 </script>
