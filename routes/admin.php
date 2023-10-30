@@ -9,6 +9,13 @@ use App\Http\Controllers\AdminPanel\ShippingAddressController;
 use App\Http\Controllers\AdminPanel\ProductController;
 use App\Http\Controllers\AdminPanel\AdminController;
 use App\Http\Controllers\AdminPanel\AttributeController;
+use App\Http\Controllers\AdminPanel\BrandController;
+use App\Http\Controllers\AdminPanel\ColorController;
+use App\Http\Controllers\AdminPanel\SizeController;
+use App\Http\Controllers\AdminPanel\MaterialController;
+
+\App::setLocale('ar');
+view()->share('lang', \App::getLocale());
 
 Route::get('/admin_panel/home', function () {
     return view('admin.home');
@@ -56,6 +63,20 @@ Route::group(array('prefix' => 'admin_panel'), function () {
     Route::get('attributes/{attribute_id}/show', [AttributeController::class , 'attribute_info']);
     Route::patch('attributes/{attribute_id}/edit', [AttributeController::class , 'update']);
     Route::delete('attributes/{attribute_id}', [AttributeController::class , 'destroy']);
+});
+Route::group(array('prefix' => 'admin_panel/settings'), function () {
+    //    brands
+    Route::resource('brands', BrandController::class)->except(['create']);
+    Route::get('brands/archive/{id}', [BrandController::class , 'archive']);
+    //    colors
+    Route::resource('colors', ColorController::class)->except(['create']);
+    Route::get('colors/archive/{id}', [ColorController::class , 'archive']);
+    //    sizes
+    Route::resource('sizes', SizeController::class)->except(['create']);
+    Route::get('sizes/archive/{id}', [SizeController::class , 'archive']);
+    //    materials
+    Route::resource('materials', MaterialController::class)->except(['create']);
+    Route::get('materials/archive/{id}', [MaterialController::class , 'archive']);
 });
 
 Route::get('city_ajax', [AdminController::class , 'city_ajax']);

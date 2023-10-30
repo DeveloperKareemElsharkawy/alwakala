@@ -69,7 +69,7 @@ class AttributeController extends Controller
      */
     public function store(Request $request,$product_store_id)
     {
-        try{
+//        try{
             $found = ProductStoreStock::where('color_id',$request->color_id)->where('size_id',$request->size_id)->where('product_store_id',$product_store_id)->first();
             if($found){
                 $request->session()->flash('error', 'تم الاضافة مسبقا');
@@ -94,13 +94,13 @@ class AttributeController extends Controller
 //            $image->color_id = $request->color_id;
 //            $image->image = UploadImage::uploadImageToStorage($request->image, 'products/' . $product->id);
 //            $image->save();
-        }catch (\Exception $e){
-            DB::rollBack();
-            Log::error('error in add product from admin panel ' . __LINE__ . $e);
-            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
-
-            return redirect()->back();
-        }
+//        }catch (\Exception $e){
+//            DB::rollBack();
+//            Log::error('error in add product from admin panel ' . __LINE__ . $e);
+//            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+//
+//            return redirect()->back();
+//        }
     }
 
     /**

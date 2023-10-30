@@ -10,4 +10,8 @@ class Material extends Model
     {
         return $this->hasMany(Product::class,'material_id','id')->select('id', 'name_ar','name_en');
     }
+    public function Products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }

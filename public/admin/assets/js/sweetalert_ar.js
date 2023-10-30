@@ -34,7 +34,7 @@ $('.sa-warning').click(function (e) {
             })
             $.ajax({
                 type: button_type == 'delete' ? 'delete' : 'get',
-                url: '/admin_panel/' + d_url + id,
+                url: '/admin_panel/' + d_url + id + "?type=" + button_type,
                 data: {
                     _token: $('meta[name="csrf-token"]').attr('content')
                 },
