@@ -63,6 +63,25 @@ $lang = app()->getLocale();
                                                 Step 1
                                             </p>
                                         </div>
+                                        <div class="col-md-12 text-center">
+                                            <div class="avatar-upload branch_manager">
+                                                <div class="avatar-edit">
+                                                    <input type='file' id="imageUpload" name="image" class="imageUpload" accept=".png, .jpg, .jpeg"/>
+                                                    <label for="imageUpload">
+                                                             <span>
+                                                    </span>
+                                                        <i class="bx bxs-plus-circle"></i>
+                                                    </label>
+                                                </div>
+                                                <div class="avatar-preview">
+                                                    <div class="imagePreview" id="imagePreview"
+                                                         style="background-image: url({{ asset('admin') }}/assets/images/users/48/empty.png);">
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <label class="form-label mt-2">الصورة الرئيسية للمنتج</label>
+                                        </div>
                                         <div class="col-md-6">
                                             <div class="row">
                                                 <div class="col-md-12 col-12">
@@ -322,8 +341,8 @@ $lang = app()->getLocale();
                                                         اغلاق
                                                     </button>
                                                     <button type="button"
-                                                            class="btn btn-light btn-label previestab  d-none"
-                                                            data-previous="steparrow-description-info-tab"><i
+                                                            class="btn btn-light btn-label previestab "
+                                                            data-previous="steparrow-gen-info-tab"><i
                                                             class="ri-arrow-left-line label-icon align-middle fs-lg me-2"></i>
                                                         الرجوع
                                                     </button>

@@ -31,7 +31,7 @@
                 <div class="modal-body px-5">
 
                     <div class="card-body form-steps new_branch_modal">
-                        <form id="wizard" method="post" action="{{ url('admin_panel/branch') }}" enctype="multipart/form-data">
+                        <form class="my_form" id="wizard" method="post" action="{{ url('admin_panel/branch') }}" enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="step-arrow-nav mb-4 d-none">
                                 <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
@@ -70,7 +70,7 @@
                                                 </div>
                                                 <div class="avatar-preview">
                                                     <div class="imagePreview" id="imagePreview2"
-                                                         style="background-image: url(assets/images/users/48/empty.png);">
+                                                         style="background-image: url({{ asset('admin') }}/assets/images/users/48/empty.png);">
                                                     </div>
                                                 </div>
                                             </div>
@@ -106,6 +106,13 @@
                                                     <label for="phonee" class="form-label">رقم الهاتف</label>
                                                     <input type="tel" minlength="11" maxlength="11" class="form-control  password-input"
                                                            id="phonee" placeholder="" name="store_phone" oninput="this.value = this.value.replace(/[^0-9+()]/g, '');" pattern=".{11,11}" required>
+                                                </div>
+                                            </div><!--end col-->
+                                            <div class="mb-2 col-md-6 col-12">
+                                                <div>
+                                                    <label for="landing_number" class="form-label">رقم الهاتف الارضي</label>
+                                                    <input type="tel" class="form-control  password-input"
+                                                           id="landing_number" placeholder="" name="landing_number" required>
                                                 </div>
                                             </div><!--end col-->
                                             <div class="mb-2 col-md-6 col-12">
@@ -167,11 +174,17 @@
                                                                oninput="this.value = this.value.replace(/[^0-9+()]/g, '');" pattern=".{11,11}"
                                                                required>
                                                     </div>
+                                                    <div>
+                                                        <label for="password" class="form-label">الرقم السري</label>
+                                                        <input name="password" type="password" value="" class="form-control password-input"
+                                                               id="password" placeholder=""
+                                                               required>
+                                                    </div>
                                                 </div>
                                                 <div class="col-md-6 text-center">
                                                     <div class="avatar-upload branch_manager">
                                                         <div class="avatar-edit">
-                                                            <input type='file' id="imageUpload" name="user" class="imageUpload" accept=".png, .jpg, .jpeg"/>
+                                                            <input type='file' id="imageUpload" name="image" class="imageUpload" accept=".png, .jpg, .jpeg"/>
                                                             <label for="imageUpload">
                                                              <span>
                                                         اضافه صورة
@@ -195,7 +208,7 @@
                                     </div><!--end row-->
                                     <div class="hstack gap-2 mt-5 justify-content-center">
                                         <button type="button" class="btn btn-light" data-bs-dismiss="modal">اغلاق</button>
-                                        <button type="button" class="btn btn-light btn-label previestab d-none" data-previous="steparrow-gen-info-tab"><i class="ri-arrow-left-line label-icon align-middle fs-lg me-2"></i> الرجوع</button>
+                                        <button type="button" class="btn btn-light btn-label previestab " data-previous="steparrow-gen-info-tab"><i class="ri-arrow-left-line label-icon align-middle fs-lg me-2"></i> الرجوع</button>
                                         <button type="button" class="btn btn-gradient nexttab nexttab" data-nexttab="pills-experience-tab">التالي</button>
 
                                     </div>
@@ -227,7 +240,7 @@
                                                     </span>
                                                                 <i class="bx bxs-plus-circle"></i>
                                                             </p>
-                                                            <input type="file" class="image-upload" accept="image/*" />
+                                                            <input type="file" name="identity" class="image-upload" accept="image/*" />
                                                         </label>
                                                     </div>
                                                     <div class="js--image-preview mt-3"></div>
@@ -249,7 +262,7 @@
                                                     </span>
                                                                 <i class="bx bxs-plus-circle"></i>
                                                             </p>
-                                                            <input type="file" class="image-upload" accept="image/*" />
+                                                            <input type="file" name="text_card" class="image-upload" accept="image/*" />
                                                         </label>
                                                     </div>
                                                     <div class="js--image-preview mt-3"></div>
@@ -271,7 +284,7 @@
                                                     </span>
                                                                 <i class="bx bxs-plus-circle"></i>
                                                             </p>
-                                                            <input type="file" class="image-upload" accept="image/*" />
+                                                            <input type="file" name="licence" class="image-upload" accept="image/*" />
                                                         </label>
                                                     </div>
                                                     <div class="js--image-preview mt-3"></div>
@@ -368,10 +381,10 @@
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach($store->branches as $branch)
-                                                        <tr>
+                                                    @foreach($store->branches as $key => $branch)
+                                                        <tr class="image_class{{ $branch['id'] }}">
                                                             <td class="d-none">
-                                                                1
+                                                                {{ $key + 1 }}
                                                             </td>
                                                             <td>
                                                                 <div class="card border-solid border">
@@ -382,9 +395,9 @@
                                                                                     <i class="bx bx-dots-horizontal-rounded"></i>
                                                                                 </button>
                                                                                 <div class="dropdown-menu">
-                                                                                    <a class="dropdown-item text-primary fw-bold" data-bs-toggle="modal"
-                                                                                       data-bs-target="#exampleModalgrid" href="#">EDIT</a>
-                                                                                    <a class="dropdown-item text-danger fw-bold sa-warning" href="#">DELETE</a>
+                                                                                    <a title="archive" delete_url="archive/store/"
+                                                                                       object_id="{{ $branch['id'] }}" data-bs-toggle="tooltip"
+                                                                                       data-bs-placement="top" button_type="archive" class="dropdown-item text-danger fw-bold sa-warning" href="#">ارشفة</a>
                                                                                 </div>
                                                                             </div>
                                                                         </div>
@@ -406,26 +419,28 @@
                                                                                 <strong>رقم الهاتف : </strong>
                                                                                 {{ $branch->mobile }}
                                                                             </li>
+                                                                            @if($branch->land_number)
                                                                             <li>
                                                                                 <strong>الخط الساخن : </strong>
                                                                                 {{ $branch->land_number }}
                                                                             </li>
-                                                                            <li>
-                                                                                <div class="map_input">
-                                                                                    <a class="show_location" data-bs-toggle="modal"
-                                                                                       data-bs-target="#exampleModalgridedit" href="#">
-                                                                                        <span>View Location On Map</span>
-                                                                                        <i class="ri-map-pin-fill"></i>
-                                                                                    </a>
-                                                                                </div>
-                                                                            </li>
+                                                                            @endif
+{{--                                                                            <li>--}}
+{{--                                                                                <div class="map_input">--}}
+{{--                                                                                    <a class="show_location" data-bs-toggle="modal"--}}
+{{--                                                                                       data-bs-target="#exampleModalgridedit" href="#">--}}
+{{--                                                                                        <span>View Location On Map</span>--}}
+{{--                                                                                        <i class="ri-map-pin-fill"></i>--}}
+{{--                                                                                    </a>--}}
+{{--                                                                                </div>--}}
+{{--                                                                            </li>--}}
                                                                         </ul>
                                                                         <div class="branch_footer">
                                                                             <span class="map_default">
-                                                                                Branch Manager Name :
+                                                                                مدير الفرع :
                                                                                 <span>{{ $branch->user->name }}</span>
                                                                             </span>
-                                                                            <a href="#">
+                                                                            <a href="{{ url('admin_panel/vendors/' . $branch->id . '?type=branch') }}">
                                                                                 زيارة المورد
                                                                                 <i class="bx bx-arrow-back"></i>
                                                                             </a>
@@ -474,11 +489,73 @@
     <!-- Sweet Alerts js -->
     <script src="{{ asset('admin') }}/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     @if(request()->add_new == 'true')
-    <script type="text/javascript">
-        window.onload = () => {
-            $('#exampleModalgrid').modal('show');
-        }
-    </script>
+        <script type="text/javascript">
+            window.onload = () => {
+                $('#exampleModalgrid').modal('show');
+            }
+        </script>
     @endif
     <script src="{{ asset('admin') }}/assets/js/sweetalert_ar.js"></script>
+    <script src="{{ asset('admin') }}/assets/js/additional-methods.min.js"></script>
+    <script src="{{ asset('admin') }}/assets/js/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".my_form").validate({
+                rules: {
+                    cover: {
+                        required: {{ $store->cover ? 'false' : 'true' }},
+                    },
+                    image: {
+                        required: {{ $store->user->image ? 'false' : 'true' }},
+                    },
+                    logo: {
+                        required: {{ $store->logo ? 'false' : 'true' }},
+                    },
+                    store_name: "required",
+                    store_address: "required",
+                    city_id: "required",
+                    category_id: "required",
+                    user_name: "required",
+                    email: "required",
+                    user_phone: "required",
+                    text_card: {
+                        required: {{ $store->text_card ? 'false' : 'true' }},
+                    },
+                    licence: {
+                        required: {{ $store->licence ? 'false' : 'true' }},
+                    },
+                    identity: {
+                        required: {{ $store->identity ? 'false' : 'true' }},
+                    },
+                },
+                messages: {
+                    cover: {
+                        required: " صورة الكفر مطلوبة",
+                    },
+                    image: {
+                        required: " صورة  مطلوبة",
+                    },
+                    logo: {
+                        required: "لوجو الشركة مطلوب",
+                    },
+                    store_name: "اسم المتجر مطلوب",
+                    store_address: "العنوان للمتجر مطلوب",
+                    city_id: "الولاية مطلوبة",
+                    category_id: "التصنيف مطلوب",
+                    user_name: "اسم المستخدم كامل مطلوب",
+                    email: "البريد مطلوب",
+                    user_phone: "رقم هاتف المستخدم مطلوب",
+                    text_card: {
+                        required: "البطاقة النصية مطلوبة",
+                    },
+                    licence: {
+                        required: "السجل الضريبي مطلوب",
+                    },
+                    identity: {
+                        required: "الهوية الوطنية مطلوبة",
+                    },
+                }
+            });
+        });
+    </script>
 @endsection

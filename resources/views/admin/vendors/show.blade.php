@@ -11,6 +11,11 @@
     <link href="{{ asset('admin') }}/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
     <!-- select2 css -->
     <link href="{{ asset('admin') }}/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css">
+    <style>
+        .wrapper .upload-options label{
+            display: block;
+        }
+    </style>
 @endsection
 @section('backend-main')
     <?php
@@ -116,7 +121,7 @@
                                                 </div><!--end col-->
                                             </div>
                                         </div><!--end col-->
-                                        <form method="post" action="{{ route('vendors.update' , $store->id) }}" enctype="multipart/form-data">
+                                        <form class="my_form" method="post" action="{{ route('vendors.update' , $store->id) }}" enctype="multipart/form-data">
                                             {{ csrf_field() }}
                                             {{ method_field('PATCH') }}
                                             <div class="row">
@@ -233,7 +238,7 @@
                                                                         <div class="col-md-4">
                                                                             <div style="display: flex;justify-content: center" class="avatar-upload">
                                                                                 <div class="avatar-edit">
-                                                                                    <input type='file' id="imageUpload" name="image" class="imageUpload" accept=".png, .jpg, .jpeg"/>
+                                                                                    <input type='file' id="imageUpload" name="image" class="imageUpload" accept=".png, .jpg, .jpeg" required/>
                                                                                     <label for="imageUpload">
                                                                                         <i class="bx bxs-plus-circle"></i>
                                                                                     </label>
@@ -289,10 +294,14 @@
                                                                                     <div class="upload-options">
                                                                                         <label>
                                                                                             <p><i class="bx bxs-plus-circle"></i> </p>
-                                                                                            <input type="file" class="image-upload" accept="image/*" />
+                                                                                            <input type="file" name="identity" class="image-upload" accept="image/*" />
                                                                                         </label>
                                                                                     </div>
-                                                                                    <div class="js--image-preview mt-3"></div>
+                                                                                    @if($store->identity)
+                                                                                        <div style="background-image:url({{ $store->identity ? $store->identity->image_url : '' }})" class="js--image-preview mt-3"></div>
+                                                                                    @else
+                                                                                        <div class="js--image-preview mt-3"></div>
+                                                                                    @endif
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-4">
@@ -304,15 +313,18 @@
                                                                                                 يجب ان تكون الصورة ذو امتداد (.jpg - .png - .jpeg)
                                                                                             </p>
                                                                                         </div>
-
                                                                                     </div>
                                                                                     <div class="upload-options">
                                                                                         <label>
                                                                                             <p><i class="bx bxs-plus-circle"></i> </p>
-                                                                                            <input type="file" class="image-upload" accept="image/*" />
+                                                                                            <input type="file" name="text_card" class="image-upload" accept="image/*" />
                                                                                         </label>
                                                                                     </div>
-                                                                                    <div class="js--image-preview mt-3"></div>
+                                                                                    @if($store->text_card)
+                                                                                    <div style="background-image:url({{ $store->text_card ? $store->text_card->image_url : '' }})" class="js--image-preview mt-3"></div>
+                                                                                    @else
+                                                                                        <div class="js--image-preview mt-3"></div>
+                                                                                    @endif
                                                                                 </div>
                                                                             </div>
                                                                             <div class="col-md-4">
@@ -328,21 +340,28 @@
                                                                                     <div class="upload-options">
                                                                                         <label>
                                                                                             <p><i class="bx bxs-plus-circle"></i> </p>
-                                                                                            <input type="file" class="image-upload" accept="image/*" />
+                                                                                            <input type="file" name="licence" class="image-upload" accept="image/*" />
                                                                                         </label>
                                                                                     </div>
-                                                                                    <div class="js--image-preview mt-3"></div>
+                                                                                    @if($store->licence)
+                                                                                        <div style="background-image:url({{ $store->licence ? $store->licence_url : '' }})" class="js--image-preview mt-3"></div>
+                                                                                    @else
+                                                                                        <div class="js--image-preview mt-3"></div>
+                                                                                    @endif
                                                                                 </div>
                                                                             </div>
+
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
                                                         </div><!--end col-->
+                                                        <div class="col-md-12">
+                                                            <button id="finish" type="submit" class="btn btn-gradient w-100">حفظ</button>
+                                                        </div>
                                                     </div><!--end row-->
                                                 </div>
                                             </div>
-                                            <input type="submit" hidden />
                                         </form>
                                     </div>
                                 </div><!--end col-->
@@ -384,4 +403,95 @@
     </script>
     @endif
     <script src="{{ asset('admin') }}/assets/js/sweetalert_ar.js"></script>
+    <script src="{{ asset('admin') }}/assets/js/additional-methods.min.js"></script>
+    <script src="{{ asset('admin') }}/assets/js/jquery.validate.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $(".my_form").validate({
+                rules: {
+                    cover: {
+                        required: {{ $store->cover ? 'false' : 'true' }},
+                    },
+                    image: {
+                        required: {{ $store->user->image ? 'false' : 'true' }},
+                    },
+                    logo: {
+                        required: {{ $store->logo ? 'false' : 'true' }},
+                    },
+                    store_name: {
+                        required: true,
+                    },
+                    store_address: {
+                        required: true,
+                    },
+                    city_id: {
+                        required: true,
+                    },
+                    category_id: {
+                        required: true,
+                    },
+                    user_name: {
+                        required: true,
+                    },
+                    email: {
+                        required: true,
+                    },
+                    user_phone: {
+                        required: true,
+                    },
+                    text_card: {
+                        required: {{ $store->text_card ? 'false' : 'true' }},
+                    },
+                    licence: {
+                        required: {{ $store->licence ? 'false' : 'true' }},
+                    },
+                    identity: {
+                        required: {{ $store->identity ? 'false' : 'true' }},
+                    },
+                },
+                messages: {
+                    cover: {
+                        required: " صورة الكفر مطلوبة",
+                    },
+                    image: {
+                        required: " صورة  مطلوبة",
+                    },
+                    logo: {
+                        required: "لوجو الشركة مطلوب",
+                    },
+                    store_name:{
+                        required: "اسم المتجر مطلوب",
+                    },
+                    store_address:{
+                        required: "العنوان للمتجر مطلوب",
+                    },
+                    city_id:{
+                        required: "الولاية مطلوبة",
+                    },
+                    category_id:{
+                        required: "التصنيف مطلوب",
+                    },
+                    user_name:{
+                        required: "اسم المستخدم كامل مطلوب",
+                    },
+                    email:{
+                        required: "البريد مطلوب",
+                    },
+                    user_phone:{
+                        required: "رقم هاتف المستخدم مطلوب",
+                    },
+                    text_card: {
+                        required: "البطاقة النصية مطلوبة",
+                    },
+                    licence: {
+                        required: "السجل الضريبي مطلوب",
+                    },
+                    identity: {
+                        required: "الهوية الوطنية مطلوبة",
+                    },
+                }
+            });
+        });
+    </script>
+
 @endsection

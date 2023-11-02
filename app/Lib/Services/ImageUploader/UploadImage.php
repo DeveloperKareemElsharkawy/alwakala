@@ -13,11 +13,15 @@ use Intervention\Image\ImageManagerStatic as Image;
 
 class UploadImage
 {
-    public static function uploadImageToStorage($file, $directory)
+    public static function uploadImageToStorage($file, $directory , $text = null)
     {
         try {
             $extension = $file->getClientOriginalExtension();
-            $file_name = time() . rand(10, 99) . '.' . $extension;
+            if($text){
+                $file_name = $text . time() . rand(10, 99) . '.' . $extension;
+            }else{
+                $file_name = time() . rand(10, 99) . '.' . $extension;
+            }
             $path = '/images/' . $directory . '/' . $file_name;
             Storage::disk('s3')->put($path, file_get_contents($file));
             return $path;

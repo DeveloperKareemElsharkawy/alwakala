@@ -41,7 +41,7 @@ class Store extends Model
         return $this->hasMany(CityStore::class);
     }
 
-    protected $appends = ['image_url' , 'cover_url'];
+    protected $appends = ['image_url' , 'cover_url' , 'licence_url'];
 
     public function getImageUrlAttribute()
     {
@@ -56,6 +56,15 @@ class Store extends Model
     {
         if(isset($this->cover)){
             return config('filesystems.aws_base_url') . $this->cover;
+        }else{
+            return \URL::asset('/admin/assets/images/users/48/empty.png');
+        }
+    }
+
+    public function getLicenceUrlAttribute()
+    {
+        if(isset($this->licence)){
+            return config('filesystems.aws_base_url') . $this->licence;
         }else{
             return \URL::asset('/admin/assets/images/users/48/empty.png');
         }
@@ -85,6 +94,16 @@ class Store extends Model
     public function views()
     {
         return $this->hasMany(View::class , 'item_id' , 'id')->where('item_type','STORE');
+    }
+
+    public function identity()
+    {
+        return $this->hasOne(StoreDocument::class , 'store_id' , 'id')->where('type','identity');
+    }
+
+    public function text_card()
+    {
+        return $this->hasOne(StoreDocument::class , 'store_id' , 'id')->where('type','text_card');
     }
 
     public function categories()
@@ -123,7 +142,7 @@ class Store extends Model
 
     public function branches()
     {
-        return $this->hasMany(self::class, 'parent_id');
+        return $this->hasMany(self::class, 'parent_id')->where('archive' , false);
     }
 
     public function initializeStoreData($data)

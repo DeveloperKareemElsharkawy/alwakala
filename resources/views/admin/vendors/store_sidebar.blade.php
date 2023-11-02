@@ -42,10 +42,12 @@
             </ul>
         </div>
     </li>
+    @if(request()->type != 'branch')
     <li class="nav-item {{ Request::is('admin_panel/vendors/'.$store['id']) && request()->type == 'branches' ? 'active' : '' }}">
         <a class="nav-link menu-link" href="{{ url('admin_panel/vendors/'.$store['id'].'?type=branches') }}">
             <i class="ph-record-fill"></i> <span
                 data-key="t-dashboards">الفروع </span>
         </a>
     </li>
+    @endif
 </ul>

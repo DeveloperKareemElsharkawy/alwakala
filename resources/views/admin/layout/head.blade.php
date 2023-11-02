@@ -17,6 +17,15 @@
 <!-- App Css-->
 <link href="{{ asset('admin') }}/assets/css/app-rtl.css" rel="stylesheet" type="text/css">
 <link href="{{ asset('admin') }}/assets/css/custom.css" rel="stylesheet" type="text/css">
+<style>
+    .error{
+        color:red
+    }
+    .wrapper .upload-options label.error{
+        display: block!important;
+        background: white;
+    }
+</style>
 
 @section('backend-head')
 @show

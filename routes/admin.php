@@ -34,7 +34,8 @@ Route::group(array('prefix' => 'admin_panel'), function () {
     Route::get('restore/user/{id}', [UserController::class, 'restore']);
 
 //    Vendors
-    Route::resource('vendors', VendorController::class)->except(['create' , 'edit']);
+    Route::resource('vendors', VendorController::class)->except(['create' , 'edit','destroy']);
+    Route::get('archive/store/{id}', [VendorController::class , 'archive']);
     Route::post('branch/{branch?}', [VendorController::class, 'branch']);
     Route::patch('branch/{branch?}', [VendorController::class, 'branch']);
 
