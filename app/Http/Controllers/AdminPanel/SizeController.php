@@ -60,7 +60,7 @@ class SizeController extends Controller
             $size = new Size();
             $size->activation = true;
             $size->size = $request->size;
-            $size->size_type = 2;
+            $size->size_type_id = 2;
             $size->save();
             $category_ids = $request->category_ids;
             foreach ($category_ids as $category_id){
