@@ -83,7 +83,7 @@
                                                 </div>
                                                 <div class="avatar-preview">
                                                     <div class="imagePreview" id="imagePreview3"
-                                                         style="background-image: url(assets/images/users/48/empty.png);">
+                                                         style="background-image: url({{asset('admin')}}/assets/images/users/48/empty.png);">
                                                     </div>
                                                 </div>
                                             </div>
@@ -93,6 +93,7 @@
                                                 <div>
                                                     <label for="store_name" class="form-label">اسم المتجر</label>
                                                     <input type="text" class="form-control" name="store_name" id="store_name" placeholder="">
+                                                    <input name="store_id" id="store_id" value="{{ $store['id'] }}" hidden="">
                                                 </div>
                                             </div><!--end col-->
                                             <div class="mb-2 col-md-6 col-12">
@@ -117,9 +118,8 @@
                                             </div><!--end col-->
                                             <div class="mb-2 col-md-6 col-12">
                                                 <div class="input-group has-validation select-div">
-                                                    <label for="estate_id" class="form-label">الولاية</label>
-                                                    <select class="form-select p-2 select-modal" id="estate_id" required="">
-                                                        <option selected="" disabled="" value=""></option>
+                                                    <label for="city_id" class="form-label">الولاية</label>
+                                                    <select name="city_id" class="form-select p-2 select-modal" id="city_id" required="">
                                                         @foreach($cities as $city)
                                                             <option {{ $city->id == $store->city_id ? 'selected' : '' }} value="{{ $city->id }}">{{ $city['name_'.$lang] }}</option>
                                                         @endforeach
@@ -132,7 +132,7 @@
                                                 ?>
                                                 <div class="input-group has-validation select-div">
                                                     <label for="category_id" class="form-label">التصنيف</label>
-                                                    <select class="form-select p-2 select-modal" id="category_id" required="">
+                                                    <select class="form-select p-2 select-modal" name="category_id" id="category_id" required="">
                                                         <option selected="" disabled="" value=""></option>
                                                         @foreach($categories as $category)
                                                             <option {{ $category->id == $categoryy->category_id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category['name_'.$lang] }}</option>

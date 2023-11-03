@@ -4,6 +4,7 @@ namespace App\Http\Controllers\AdminPanel;
 
 use App\Enums\UserTypes\UserType;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AdminPanel\VendorRequest;
 use App\Lib\Log\ValidationError;
 use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\BrandStore;
@@ -207,13 +208,12 @@ class VendorController extends Controller
         }
     }
 
-    public function branch($store_id = null ,Request $request)
+    public function branch(Request $request,$store_id = null)
     {
         try{
             DB::beginTransaction();
             $data = $request->all();
-
-            $main_store = Store::where('id' , $request->store_id);
+            $main_store = Store::where('id' , $request->store_id)->first();
             if($store_id == null){
                 $user = new User();
                 $data['type_id'] = UserType::SELLER;
@@ -221,6 +221,7 @@ class VendorController extends Controller
                 $data['mobile'] = $request['user_phone'];
                 $data['email'] = $request['user_email'];
                 $data['password'] = $request['password'];
+                $data['name'] = $request['user_name'];
                 $user->initializeUserFields($data);
                 $user->save();
 
@@ -234,6 +235,7 @@ class VendorController extends Controller
                 $data['type_id'] = UserType::SELLER;
                 $data['activation'] = true;
                 $data['mobile'] = $request['user_phone'];
+                $data['name'] = $request['user_name'];
                 $data['email'] = $request['user_email'];
                 if(isset($request['password'])){
                     $data['password'] = $request['password'];
@@ -241,11 +243,11 @@ class VendorController extends Controller
                 $user->initializeUserFields($data);
                 $user->save();
             }
-            $store->name = $data['store_name'];
+
             $store->latitude = '31.0062392';
             $store->longitude = '31.3840003';
             $store->name = $data['store_name'];
-            $store->store_type_id = $data['store_type_id'];
+            $store->store_type_id = isset($main_store['store_type_id']) ? $main_store['store_type_id'] : 1;
             $store->mobile = $data['store_phone'];
             $store->address = $data['store_address'];
             $store->city_id = $data['city_id'];
@@ -265,6 +267,8 @@ class VendorController extends Controller
                 Storage::disk('s3')->delete($store->licence);
                 $store->licence = UploadImage::uploadImageToStorage($request->licence, 'stores');
             }
+            $store->save();
+
             if($request->hasFile('identity')){
                 if($store_typo == 'old'){
                     Storage::disk('s3')->delete($store->identity->image);
@@ -297,7 +301,6 @@ class VendorController extends Controller
                 $text_card->image = UploadImage::uploadImageToStorage($request->text_card, 'stores','text_card');
                 $text_card->save();
             }
-            $store->save();
             $category = new CategoryStore();
             $category->store_id = $store->id;
             $category->category_id = $data['category_id'];
