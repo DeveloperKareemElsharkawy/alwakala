@@ -43,7 +43,7 @@ class ProductController extends Controller
     {
         $colors = Color::where('activation', 'true')->where('archive', 'false')->get();
         $store = Store::find($store_id);
-        $categories = Category::whereNotNull('category_id')->get();
+        $categories = Category::whereNull('category_id')->get();
         $materials = Material::all();
         $policies = Policy::all();
         $brands = Brand::all();
@@ -80,7 +80,7 @@ class ProductController extends Controller
             $product->description = $request->description;
             $product->material_rate = '100';
             $product->brand_id = $request->brand_id;
-            $product->category_id = $request->category_id;
+            $product->category_id = $request->subsubcategory_id;
             $product->owner_id = $store->user_id;
             $product->reviewed = true;
             $product->channel = 'seller-app';

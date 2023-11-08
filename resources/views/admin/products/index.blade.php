@@ -14,9 +14,16 @@ $lang = app()->getLocale();
     <link href="{{ asset('admin') }}/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
     <!-- select2 css -->
     <link href="{{ asset('admin') }}/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css">
+    <style>
+        .my_form .wrapper .upload-options label.error {
+            background: transparent !important;
+            height: 10% !important;
+            top: 0;
+            position: absolute;
+        }
+    </style>
 @endsection
 @section('backend-main')
-
 
     <!-- Grids in modals -->
     <div class="modal fade product_new_modal" id="exampleModalgrid" data-bs-backdrop="static" tabindex="-1"
@@ -31,7 +38,7 @@ $lang = app()->getLocale();
                 </div>
                 <div class="modal-body px-5">
                     <div class="card-body form-steps">
-                        <form id="wizard" method="post"
+                        <form id="wizard" method="post" class="my_form"
                               action="{{ url('admin_panel/products/'. $store->id .'/create') }}"
                               enctype="multipart/form-data">
                             {{ csrf_field() }}
@@ -105,7 +112,7 @@ $lang = app()->getLocale();
                                                         <label for="wholesale_price" class="form-label">سعر
                                                             الجملة</label>
                                                         <input type="number" class="form-control"
-                                                               id="wholesale_price" name="price" placeholder="">
+                                                               id="wholesale_price" name="price" placeholder="" required>
                                                     </div>
                                                 </div><!--end col-->
                                                 <div class="col-md-6 col-12">
@@ -143,7 +150,7 @@ $lang = app()->getLocale();
                                                             القطاعي</label>
                                                         <input type="number" class="form-control"
                                                                id="consumer_old_price" name="consumer_old_price"
-                                                               placeholder="">
+                                                               placeholder="" required>
                                                     </div>
                                                 </div><!--end col-->
                                                 <div class="col-md-6 col-12">
@@ -194,6 +201,34 @@ $lang = app()->getLocale();
                                                     </div>
                                                 </div><!--end col-->
 
+                                                    <div class="col-md-12 col-12">
+                                                        <div class="select-div">
+                                                            <label for="subcategory_id" class="form-label">التصنيف الفرعي </label>
+                                                            <select class="form-select select-modal" name="subcategory_id"
+                                                                    id="subcategory_id">
+                                                                <option
+                                                                    value="" disabled selected>اختر التصنيف الرئيسي اولا</option>
+                                                            </select>
+                                                            @error('subcategory_id')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div><!--end col-->
+
+                                                <div class="col-md-12 col-12">
+                                                        <div class="select-div">
+                                                            <label for="subsubcategory_id" class="form-label">التصنيف الفرعي الثاني</label>
+                                                            <select class="form-select select-modal" name="subsubcategory_id"
+                                                                    id="subsubcategory_id">
+                                                                <option
+                                                                    value="" disabled selected>اختر التصنيف الفرعي اولا</option>
+                                                            </select>
+                                                            @error('subsubcategory_id')
+                                                            <span class="text-danger">{{ $message }}</span>
+                                                            @enderror
+                                                        </div>
+                                                    </div><!--end col-->
+
                                                 <div class="col-md-12 col-12">
                                                     <div class="select-div">
                                                         <label for="brand_id" class="form-label">الماركة</label>
@@ -206,11 +241,14 @@ $lang = app()->getLocale();
                                                                     value="{{ $brand['id'] }}">{{ $brand['name_'.$lang] }}</option>
                                                             @endforeach
                                                         </select>
+                                                        @error('brand_id')
+                                                        <span class="text-danger">{{ $message }}</span>
+                                                        @enderror
                                                     </div>
                                                 </div><!--end col-->
                                                 <div class="col-md-12 col-12">
                                                     <div class="select-div custom-check">
-                                                        <label for="subsubcategory_id"
+                                                        <label for="material_id"
                                                                class="form-label">الخامات</label>
                                                         <div class="inputs_cutom">
                                                             @foreach($materials as $key => $material)
@@ -334,7 +372,7 @@ $lang = app()->getLocale();
                                                 <div class="col-md-12 col-12">
                                                     <div>
                                                         <label for="barcode" class="form-label">BARCODE</label>
-                                                        <input type="text" class="form-control" id="barcode"
+                                                        <input type="text" class="form-control" id="barcode" name="barcode_text"
                                                                placeholder="">
                                                     </div>
                                                 </div><!--end col-->
@@ -516,8 +554,10 @@ $lang = app()->getLocale();
                                                                                                                 <a class="dropdown-item text-success fw-bold"
                                                                                                                    href="{{ url('admin_panel/attributes/'.$p_store['id']) }}">الخصائص</a>
                                                                                                             @endif
-                                                                                                            <a style="cursor: pointer" class="dropdown-item text-success fw-bold add_attribute"
-                                                                                                               product_id="{{ $product['id'] }}" data-bs-toggle="modal"
+                                                                                                            <a style="cursor: pointer"
+                                                                                                               class="dropdown-item text-success fw-bold add_attribute"
+                                                                                                               product_id="{{ $product['id'] }}"
+                                                                                                               data-bs-toggle="modal"
                                                                                                                data-bs-target="#exampleModalgridattr"
                                                                                                                store_id="{{ $store['id'] }}">اضافة
                                                                                                                 خصائص
@@ -526,7 +566,8 @@ $lang = app()->getLocale();
                                                                                                                object_id="{{ $product['id'] }}"
                                                                                                                data-bs-toggle="tooltip"
                                                                                                                data-bs-placement="top"
-                                                                                                               button_type="delete" class="dropdown-item text-danger fw-bold sa-warning"
+                                                                                                               button_type="delete"
+                                                                                                               class="dropdown-item text-danger fw-bold sa-warning"
                                                                                                                href="#">حذف</a>
                                                                                                         </div>
                                                                                                     </div>
@@ -646,9 +687,74 @@ $lang = app()->getLocale();
 
 @endsection
 @section('backend-footer')
+
+    <!-- select2 js -->
+    <script src="{{ asset('admin') }}/assets/libs/select2/select2.min.js"></script>
+    <script>
+        var link = '<?php echo url('/'); ?>';
+        $('#category_id').on('change', function () {
+            var category_id = $(this).val();
+            $.get(link + '/ajax_subcatgeories?category_id=' + category_id, function (data) {
+                $('#subcategory_id').empty();
+                $('#subcategory_id').append('<option value="" disabled selected>قم بإختيار  </option>');
+                $.each(data, function (index, subcatObj) {
+                    $('#subcategory_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                });
+            });
+        });
+    </script>
+    <script>
+        $('#subcategory_id').on('change', function () {
+            var subcategory_id = $(this).val();
+            $.get(link + '/ajax_subcatgeories?category_id=' + subcategory_id, function (data) {
+                $('#subsubcategory_id').empty();
+                $('#subsubcategory_id').append('<option value="" disabled selected>قم بإختيار  </option>');
+                $.each(data, function (index, subcatObj) {
+                    $('#subsubcategory_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                });
+            });
+        });
+    </script>
+    <script src="{{ asset('admin') }}/assets/js/additional-methods.min.js"></script>
+    <script src="{{ asset('admin') }}/assets/js/jquery.validate.min.js"></script>
+    <script>
+        $('.nexttab').click(function () {
+            $(".my_form").validate({
+                rules: {
+                    name: "required",
+                    description: "required",
+                    publish_app_at: "required",
+                    price: "required",
+                    consumer_old_price: "required",
+                    brand_id: "required",
+                    material_id: "required",
+                    shipping_method_id: "required",
+                    policy_id: "required",
+                    free_shipping: "required",
+                    barcode: "required",
+                    barcode_text: "required",
+                },
+                messages: {
+                    name: "مطلوب",
+                    description: "مطلوب",
+                    publish_app_at: "مطلوب",
+                    price: "مطلوب",
+                    consumer_old_price: "مطلوب",
+                    brand_id: "مطلوب",
+                    material_id: "مطلوب",
+                    shipping_method_id: "مطلوب",
+                    policy_id: "مطلوب",
+                    free_shipping: "مطلوب",
+                    barcode: "مطلوب",
+                    barcode_text: "مطلوب",
+                }
+            });
+        });
+    </script>
+
     @if(Session::get('type') == 'add_new')
         <script>
-            $( document ).ready(function() {
+            $(document).ready(function () {
                 var store_id = {{ Session::get('store_id') }};
                 var product_id = {{ Session::get('product_id') }};
                 $('#exampleModalgridattr').modal('show');
@@ -681,8 +787,7 @@ $lang = app()->getLocale();
         });
 
     </script>
-    <!-- select2 js -->
-    <script src="{{ asset('admin') }}/assets/libs/select2/select2.min.js"></script>
+
     <!-- Sweet Alerts js -->
     <script src="{{ asset('admin') }}/assets/libs/sweetalert2/sweetalert2.min.js"></script>
     @if(request()->add_new == 'true')
