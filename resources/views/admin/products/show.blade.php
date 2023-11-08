@@ -235,23 +235,17 @@ $lang = app()->getLocale();
                                                                            id="material" value="{{ $product->material['name_'.$lang] }}" readonly>
                                                                 </div>
                                                             </div><!--end col-->
+                                                                @foreach($colors as $color)
                                                             <div class="col-md-12 col-12">
                                                                 <div class="property-options">
-                                                                    <div class="property-label">
-                                                                        <label for="material" class="form-label">الالوان</label>
-                                                                    </div>
                                                                     <div class="add_div" id="first">
-                                                                        @foreach($colors as $color)
-                                                                            <?php
-                                                                                $stockk = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->where('color_id' , $color['id'])->first();
-                                                                            ?>
+
                                                                         <div>
+                                                                            اللون
                                                                             <input class="colorSelector"
                                                                                    type="color" value="{{ $color['hex'] }}" readonly>
-                                                                            <div class="result"></div>
-                                                                            <input type="number" value="{{ $stockk['available_stock'] }}" readonly>
+
                                                                         </div>
-                                                                        @endforeach
                                                                     </div>
                                                                 </div><!--end col-->
                                                             </div>
@@ -267,11 +261,11 @@ $lang = app()->getLocale();
                                                                     <div class="add_div size_div" id="second">
                                                                         @foreach($sizes as $size)
                                                                                 <?php
-                                                                                $stockkk = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->where('size_id' , $size['id'])->first();
+                                                                                $stockkk = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->where('color_id' , $color['id'])->where('size_id' , $size['id'])->first();
                                                                                 ?>
                                                                         <div>
                                                                             <div class="gradient-box"><input
-                                                                                    type="text" style="font-size: 10px" value="{{ $size['size'] }}" disabled>
+                                                                                    type="text" style="font-size: 10px" value="{{ $size['size'] }}" readonly>
                                                                             </div>
                                                                             <div class="result"></div>
                                                                             <input type="text" style="font-size: 10px" value="{{ $stockkk['available_stock'] }}" readonly disabled>
@@ -281,6 +275,8 @@ $lang = app()->getLocale();
 
                                                                 </div>
                                                             </div><!--end col-->
+                                                                    <hr>
+                                                                @endforeach
                                                         </div><!--end col-->
                                                     </div><!--end row-->
                                                 </div>

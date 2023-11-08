@@ -56,14 +56,17 @@ Route::group(array('prefix' => 'admin_panel'), function () {
 //    products
     Route::get('products/{store_id}', [ProductController::class , 'index']);
     Route::get('products/{store_id}/{product_id}/show', [ProductController::class , 'show']);
+    Route::get('product_attr/{product_id}/{store_id}', [ProductController::class , 'product_attr']);
+    Route::post('product_attr_save', [ProductController::class , 'product_attr_save']);
     Route::post('products/{store_id}/create', [ProductController::class , 'store']);
     Route::patch('products/{product_id}/edit', [ProductController::class , 'update']);
     Route::get('products/{product_id}/{store_id}/edit', [ProductController::class , 'edit']);
+    Route::delete('products/{product_id}', [ProductController::class , 'destroy']);
 //    product attribute
     Route::get('attributes/{product_store_id}', [AttributeController::class , 'index']);
     Route::post('attributes/{product_store_id}/create', [AttributeController::class , 'store']);
     Route::get('attributes/{attribute_id}/show', [AttributeController::class , 'attribute_info']);
-    Route::patch('attributes/{attribute_id}/edit', [AttributeController::class , 'update']);
+    Route::patch('attributess/{attribute_id}/edit', [AttributeController::class , 'update']);
     Route::delete('attributes/{attribute_id}', [AttributeController::class , 'destroy']);
 });
 Route::group(array('prefix' => 'admin_panel/settings'), function () {

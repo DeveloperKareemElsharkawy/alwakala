@@ -17,68 +17,37 @@ $lang = app()->getLocale();
 @endsection
 @section('backend-main')
     <!-- Grids in modals -->
-    <div class="modal fade" id="exampleModalgrid" data-bs-backdrop="static" tabindex="-1"
-         aria-labelledby="exampleModalgridLabel" aria-modal="true">
-        <div class="modal-dialog">
+    <div class="modal fade product_new_modal" id="exampleModalgridattr" data-bs-backdrop="static" tabindex="-1"
+         aria-labelledby="exampleModalgridLabb" aria-modal="true">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
                     <i class="ri-close-line"></i>
                 </button>
                 <div class="modal-header d-block text-center">
-                    <h5 class="modal-title" id="exampleModalgridLab">اضافة خاصية جديدة للمنتج</h5>
+                    <h5 class="modal-title" id="exampleModalgridLabb">اضافة خصائص جديدة</h5>
                 </div>
-                <div class="modal-body px-5">
-                    <form class=" px-5" method="post" action="{{ url('admin_panel/attributes/'.$product_store['id'].'/create') }}">
-                        {{ csrf_field() }}
-                        <div class="row g-3">
-                            <div class="col-md-12 col-12">
-                                <div class="select-div">
-                                    <label for="size_id" class="form-label">الحجم</label>
-                                    <select name="size_id" class="form-select select-modal" id="size_id" required="">
-                                        <option selected="" disabled="" value="" hidden></option>
-                                        @foreach($sizes as $statee)
-                                            <option value="{{ $statee['id'] }}">{{ $statee['size'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div><!--end col-->
+                <div class="modal-body attr_body px-5">
 
-                            <div class="col-md-12 col-12">
-                                <div class="select-div">
-                                    <label for="color_id" class="form-label">اللون</label>
-                                    <select name="color_id" class="form-select select-modal" id="color_id" required="">
-                                        <option selected="" disabled="" value="" hidden></option>
-                                        @foreach($colors as $state)
-                                            <option value="{{ $state['id'] }}">{{ $state['name_'.$lang] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div><!--end col-->
-                            <div class="col-md-12 col-12">
-                                <div class="select-div">
-                                    <label for="stock" class="form-label">المخزون الكلي</label>
-                                    <input name="stock" type="number" class="form-control">
-                                </div>
-                            </div><!--end col-->
-
-                            <div class="col-lg-12">
-                                <div class="hstack gap-2 mt-5 justify-content-center">
-                                    <button type="submit" class="btn btn-gradient">حفظ</button>
-                                </div>
-                            </div><!--end col-->
-                        </div><!--end row-->
-                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Grids in modals -->
-    <div class="modal fade" id="exampleModalgridedit" data-bs-backdrop="static" tabindex="-1"
+    <div class="modal fade product_new_modal" id="exampleModalgridedit" data-bs-backdrop="static" tabindex="-1"
          aria-labelledby="exampleModalgridLabeledit" aria-modal="true">
-        <div class="modal-dialog">
-            <div class="modal-content" id="exampleModalgrideditform">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ri-close-line"></i>
+                </button>
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title" id="exampleModalgridLabeledit">تعديل خاصية </h5>
+                </div>
+                <div id="exampleModalgrideditform" class="modal-body px-5">
 
+                </div>
             </div>
         </div>
     </div>
@@ -123,9 +92,9 @@ $lang = app()->getLocale();
                                     <div class="card store-places">
                                         <div class="card-body p-0">
                                             <div class="add-btns mb-2 justify-content-end">
-                                                <a href="#" data-bs-toggle="modal"
-                                                   data-bs-target="#exampleModalgrid"
-                                                   class="btn btn-warning role-add">
+                                                <a href="#" product_id="{{ $product['id'] }}" data-bs-toggle="modal"
+                                                   data-bs-target="#exampleModalgridattr"
+                                                   store_id="{{ $store['id'] }}" class="btn btn-warning role-add add_attribute">
                                                     <i class=" bx bx-plus"></i>
                                                     اضافة خاصية جديدة
                                                 </a>
@@ -145,26 +114,28 @@ $lang = app()->getLocale();
                                                     </tr>
                                                     </thead>
                                                     <tbody>
-                                                    @foreach($attributes as $key => $attribute)
+                                                    @foreach($attributess as $key => $attribute)
+                                                        <?php $attributs = \App\Models\ProductStoreStock::where('product_store_id' , $product_store['id'])->where('color_id' , $attribute['color']['id'])->orderBy('id' , 'desc')->get(); ?>
                                                         <tr class="image_class{{ $attribute->id }}">
                                                             <td>{{ $key + 1 }}</td>
                                                             <td style="justify-content: start" class="user-row">
                                                                 {{ $attribute['color']['name_'.$lang] }}
                                                                  <span style="width: 20px;height: 20px;background: {{ $attribute['color']['hex'] }};border-radius: 50px;margin:0 3px"></span>
                                                             </td>
-                                                            <td>{{ $attribute->size ? $attribute->size['size'] : '---' }}</td>
+                                                            <td>@foreach($attributs as $sizo) {{ $sizo->size ? $sizo->size['size'] : '---' }} <br> @endforeach</td>
                                                             <td>
-                                                                {{ $attribute['stock'] }}
+                                                                {{ $attributs->sum('stock') }}
                                                             </td>
-                                                            <td>{{ $attribute['sold'] }}</td>
+                                                            <td>{{ $attributs->sum('sold') }}</td>
                                                             <td>
-                                                                {{ $attribute['stock'] - $attribute['sold'] }}
+                                                                {{ $attributs->sum('stock') - $attributs->sum('sold') }}
                                                             </td>
                                                             <td>
                                                                 <ul class="actions-list">
                                                                     <li>
                                                                         <a title="quick edit" attribute="{{ $attribute['id'] }}"
-                                                                           class="edit-btn edit_user" href="#">
+                                                                           class="edit-btn edit_user" href="#" data-bs-toggle="modal"
+                                                                           data-bs-target="#exampleModalgridedit">
                                                                             <i class="bi bi-pencil"></i>
                                                                         </a>
                                                                     </li>
@@ -228,6 +199,24 @@ $lang = app()->getLocale();
         });
 
     </script>
+    @if(Session::get('type') == 'add_new')
+        <script>
+            $( document ).ready(function() {
+                var store_id = {{ Session::get('store_id') }};
+                var product_id = {{ Session::get('product_id') }};
+                $('#exampleModalgridattr').modal('show');
+                $('.attr_body').html('<div class="col-md-12 col-xl-12 text-center loading"><i class="mdi mdi-loading fa-spin"></i></div>');
+                var link = '<?php echo url('/'); ?>';
+                $.ajax({
+                    type: "GET",
+                    url: link + "/admin_panel/product_attr/" + product_id + "/" + store_id,
+                    success: function (data) {
+                        $('.attr_body').html(data);
+                    }
+                });
+            });
+        </script>
+    @endif
     @if(request()->add_new == 'true')
         <script type="text/javascript">
             window.onload = () => {
@@ -257,5 +246,23 @@ $lang = app()->getLocale();
                 h
             });
         });
+    </script>
+
+    <script>
+
+        $(".add_attribute").on("click", function (e) {
+            var store_id = $(this).attr('store_id');
+            var product_id = $(this).attr('product_id');
+            $('.attr_body').html('<div class="col-md-12 col-xl-12 text-center loading"><i class="mdi mdi-loading fa-spin"></i></div>');
+            var link = '<?php echo url('/'); ?>';
+            $.ajax({
+                type: "GET",
+                url: link + "/admin_panel/product_attr/" + product_id + "/" + store_id,
+                success: function (data) {
+                    $('.attr_body').html(data);
+                }
+            });
+        });
+
     </script>
 @endsection

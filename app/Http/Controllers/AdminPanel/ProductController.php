@@ -2,20 +2,35 @@
 
 namespace App\Http\Controllers\AdminPanel;
 
+use App\Enums\ResponseStatusCode\AResponseStatusCode;
 use App\Http\Controllers\Controller;
+use App\Lib\Log\ValidationError;
 use App\Lib\Services\ImageUploader\UploadImage;
+use App\Models\BadgeProduct;
+use App\Models\BarcodeProduct;
 use App\Models\Brand;
 use App\Models\Category;
+use App\Models\CategorySize;
+use App\Models\Color;
 use App\Models\Material;
+use App\Models\OrderProduct;
+use App\Models\PackingUnitProduct;
+use App\Models\PackingUnitProductAttribute;
 use App\Models\Policy;
 use App\Models\Product;
 use App\Models\ProductImage;
+use App\Models\ProductRate;
 use App\Models\ProductStore;
+use App\Models\ProductStoreStock;
 use App\Models\ShippingMethod;
+use App\Models\Size;
+use App\Models\StockMovement;
 use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Validator;
 
 class ProductController extends Controller
 {
@@ -26,16 +41,17 @@ class ProductController extends Controller
      */
     public function index($store_id)
     {
+        $colors = Color::where('activation', 'true')->where('archive', 'false')->get();
         $store = Store::find($store_id);
         $categories = Category::whereNotNull('category_id')->get();
         $materials = Material::all();
         $policies = Policy::all();
         $brands = Brand::all();
         $shippings = ShippingMethod::all();
-        $product_store = ProductStore::where('store_id' , $store_id)->pluck('product_id');
-        $products = Product::whereIn('id' , $product_store)->orderBy('id','desc')->get();
-        return view('admin.products.index' , ['store' => $store,'products'=>$products,'categories'=>$categories,
-            'materials' =>$materials , 'policies'=>$policies ,'shippings'=>$shippings,'brands'=>$brands]);
+        $product_store = ProductStore::where('store_id', $store_id)->pluck('product_id');
+        $products = Product::whereIn('id', $product_store)->orderBy('id', 'desc')->get();
+        return view('admin.products.index', ['store' => $store, 'products' => $products, 'categories' => $categories,
+            'materials' => $materials, 'policies' => $policies, 'shippings' => $shippings, 'brands' => $brands, 'colors' => $colors]);
     }
 
     /**
@@ -51,12 +67,12 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, $store_id)
     {
-        try{
+        try {
             DB::beginTransaction();
             $store = Store::find($store_id);
             $product = new Product();
@@ -74,7 +90,6 @@ class ProductController extends Controller
             $product->shipping_method_id = $request->shipping_method_id;
             $product->youtube_link = $request->youtube_link;
             $product->save();
-
             $product_store = new ProductStore();
             $product_store->product_id = $product->id;
             $product_store->store_id = $store_id;
@@ -83,9 +98,9 @@ class ProductController extends Controller
             $product_store->price = $request->price;
             $product_store->discount = $request->discount;
             $product_store->discount_type = $request->discount_type;
-            if($request->discount_type == 1){
+            if ($request->discount_type == 1) {
                 $product_store->net_price = $request->price - $request->discount;
-            }else{
+            } else {
                 $discountt = ($request->discount / 100) * $request->price;
                 $totall = $request->price - $discountt;
                 $totall = number_format((float)$totall, 2, '.', '');
@@ -97,9 +112,9 @@ class ProductController extends Controller
             $product_store->consumer_price_discount = $request->consumer_price_discount;
             $product_store->consumer_price_discount_type = $request->consumer_price_discount_type;
             $product_store->consumer_old_price = $request->consumer_old_price;
-            if($request->consumer_price_discount_type == 1){
+            if ($request->consumer_price_discount_type == 1) {
                 $product_store->consumer_price = $request->consumer_old_price - $request->consumer_price_discount;
-            }else{
+            } else {
                 $discount = ($request->consumer_price_discount / 100) * $request->consumer_old_price;
                 $total = $request->consumer_old_price - $discount;
                 $total = number_format((float)$total, 2, '.', '');
@@ -109,13 +124,9 @@ class ProductController extends Controller
 
             DB::commit();
             $request->session()->flash('status', 'تم الاضافة بنجاح');
-            return redirect()->back();
-//            $image = new ProductImage();
-//            $image->product_id = $product->id;
-//            $image->color_id = $request->color_id;
-//            $image->image = UploadImage::uploadImageToStorage($request->image, 'products/' . $product->id);
-//            $image->save();
-        }catch (\Exception $e){
+            return redirect()->back()->with(array('type' => 'add_new', 'product_id' => $product['id'], 'store_id' => $store['id']));
+
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error('error in add product from admin panel ' . __LINE__ . $e);
             $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
@@ -127,25 +138,25 @@ class ProductController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function show($store_id , $id)
+    public function show($store_id, $id)
     {
         $product = Product::find($id);
-        $store = Store::where('id',$store_id)->first();
+        $store = Store::where('id', $store_id)->first();
 
-        $product_store = ProductStore::where('store_id' , $store['id'])->where('product_id' , $product['id'])->first();
-        return view('admin.products.show' , ['product'=>$product,'store'=>$store,'product_store'=>$product_store]);
+        $product_store = ProductStore::where('store_id', $store['id'])->where('product_id', $product['id'])->first();
+        return view('admin.products.show', ['product' => $product, 'store' => $store, 'product_store' => $product_store]);
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($product_id , $store_id)
+    public function edit($product_id, $store_id)
     {
         $categories = Category::whereNotNull('category_id')->get();
         $materials = Material::all();
@@ -154,13 +165,13 @@ class ProductController extends Controller
         $shippings = ShippingMethod::all();
         $product = \App\Models\Product::find($product_id);
         $store = \App\Models\Store::find($store_id);
-        $product_store = ProductStore::where('product_id' , $product_id)->where('store_id' , $store_id)->first();
+        $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
         $lang = app()->getLocale();
-        return view('admin.products.edit', ['product'=>$product,'product_store'=>$product_store,'store' => $store,'lang'=>$lang,'categories'=>$categories,
-            'materials' =>$materials , 'policies'=>$policies ,'shippings'=>$shippings,'brands'=>$brands]);
+        return view('admin.products.edit', ['product' => $product, 'product_store' => $product_store, 'store' => $store, 'lang' => $lang, 'categories' => $categories,
+            'materials' => $materials, 'policies' => $policies, 'shippings' => $shippings, 'brands' => $brands]);
     }
 
-    public function product_info($product_id , $store_id)
+    public function product_info($product_id, $store_id)
     {
         $categories = Category::whereNotNull('category_id')->get();
         $materials = Material::all();
@@ -169,22 +180,90 @@ class ProductController extends Controller
         $shippings = ShippingMethod::all();
         $product = \App\Models\Product::find($product_id);
         $store = \App\Models\Store::find($store_id);
-        $product_store = ProductStore::where('product_id' , $product_id)->where('store_id' , $store_id)->first();
+        $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
         $lang = app()->getLocale();
-        return view('admin.products.edit', ['product'=>$product,'product_store'=>$product_store,'store' => $store,'lang'=>$lang,'categories'=>$categories,
-            'materials' =>$materials , 'policies'=>$policies ,'shippings'=>$shippings,'brands'=>$brands]);
+        return view('admin.products.edit', ['product' => $product, 'product_store' => $product_store, 'store' => $store, 'lang' => $lang, 'categories' => $categories,
+            'materials' => $materials, 'policies' => $policies, 'shippings' => $shippings, 'brands' => $brands]);
+    }
+
+    public function product_attr($product_id, $store_id)
+    {
+        $categories = Category::whereNotNull('category_id')->get();
+        $materials = Material::all();
+        $policies = Policy::all();
+        $brands = Brand::all();
+        $shippings = ShippingMethod::all();
+        $product = \App\Models\Product::find($product_id);
+        $category = Category::find($product['category_id']);
+        $store = \App\Models\Store::find($store_id);
+        $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
+        $lang = app()->getLocale();
+        $not_colors = ProductStoreStock::where('product_store_id', $product_store['id'])->pluck('color_id');
+        $colors = Color::where('activation', 'true')->where('archive', 'false')->whereNotIn('id', $not_colors)->get();
+        return view('admin.products.add_attr', ['category' => $category, 'product' => $product, 'product_store' => $product_store, 'store' => $store, 'lang' => $lang, 'categories' => $categories,
+            'materials' => $materials, 'policies' => $policies, 'shippings' => $shippings, 'brands' => $brands, 'colors' => $colors]);
+    }
+
+    public function product_attr_save(Request $request)
+    {
+        try {
+            if (!isset($request['color_id'])) {
+                return redirect()->back()->with('error', 'يرجى اضافة لون');
+            }
+            $store_id = $request['store_id'];
+            $product_id = $request['product_id'];
+            DB::beginTransaction();
+            $store = Store::find($store_id);
+            $product = Product::find($product_id);
+            $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
+            foreach ($request['size_ids'] as $size_key => $size_id) {
+                $size_ids = CategorySize::where('category_id', $product['category_id'])->pluck('size_id');
+                $size = Size::whereIn('id', $size_ids)->where('size', $size_id)->first();
+                $product_stock = new ProductStoreStock();
+                $product_stock->product_store_id = $product_store['id'];
+                $product_stock->stock = $request['size_counts'][$size_key];
+                $product_stock->size_id = $size['id'];
+                $product_stock->color_id = $request['color_id'];
+                $product_stock->reserved_stock = 0;
+                $product_stock->available_stock = $request['size_counts'][$size_key];
+                $product_stock->sold = 0;
+                $product_stock->returned = 0;
+                $product_stock->approved = true;
+                $product_stock->save();
+            }
+            foreach ($request['image'] as $image_key => $image) {
+                $image = new ProductImage();
+                $image->product_id = $product->id;
+                $image->color_id = $request->color_id;
+                $image->image = UploadImage::uploadImageToStorage($request['image'][$image_key], 'products/' . $product->id);
+                $image->save();
+            }
+            DB::commit();
+            $request->session()->flash('status', 'تم الاضافة بنجاح');
+            if (isset($request['type']) && $request['type'] == 'add_new') {
+                return redirect()->back()->with(array('type' => 'add_new', 'product_id' => $product['id'], 'store_id' => $store['id']));
+            }
+            \Session::forget('type');
+            return redirect()->back();
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('error in add product color from admin panel ' . __LINE__ . $e);
+            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+            return redirect()->back();
+        }
     }
 
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, $product_id)
     {
-        try{
+        try {
             $store_id = $request['store_id'];
             DB::beginTransaction();
             $store = Store::find($store_id);
@@ -204,14 +283,14 @@ class ProductController extends Controller
             $product->youtube_link = $request->youtube_link;
             $product->save();
 
-            $product_store = ProductStore::where('product_id', $product_id)->where('store_id' , $store_id)->first();
+            $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
             $product_store->publish_app_at = $request->publish_app_at;
             $product_store->price = $request->price;
             $product_store->discount = $request->discount;
             $product_store->discount_type = $request->discount_type;
-            if($request->discount_type == 1){
+            if ($request->discount_type == 1) {
                 $product_store->net_price = $request->price - $request->discount;
-            }else{
+            } else {
                 $discountt = ($request->discount / 100) * $request->price;
                 $totall = $request->price - $discountt;
                 $totall = number_format((float)$totall, 2, '.', '');
@@ -223,9 +302,9 @@ class ProductController extends Controller
             $product_store->consumer_price_discount = $request->consumer_price_discount;
             $product_store->consumer_price_discount_type = $request->consumer_price_discount_type;
             $product_store->consumer_old_price = $request->consumer_old_price;
-            if($request->consumer_price_discount_type == 1){
+            if ($request->consumer_price_discount_type == 1) {
                 $product_store->consumer_price = $request->consumer_old_price - $request->consumer_price_discount;
-            }else{
+            } else {
                 $discount = ($request->consumer_price_discount / 100) * $request->consumer_old_price;
                 $total = $request->consumer_old_price - $discount;
                 $total = number_format((float)$total, 2, '.', '');
@@ -235,14 +314,14 @@ class ProductController extends Controller
 
             DB::commit();
             $request->session()->flash('status', 'تم التعديل بنجاح');
-            $url = url('admin_panel/products',$store_id);
+            $url = url('admin_panel/products', $store_id);
             return redirect()->to($url);
 //            $image = new ProductImage();
 //            $image->product_id = $product->id;
 //            $image->color_id = $request->color_id;
 //            $image->image = UploadImage::uploadImageToStorage($request->image, 'products/' . $product->id);
 //            $image->save();
-        }catch (\Exception $e){
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error('error in add product from admin panel ' . __LINE__ . $e);
             $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
@@ -254,11 +333,47 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param int $id
      * @return \Illuminate\Http\Response
      */
     public function destroy($id)
     {
-        //
+        try {
+            DB::beginTransaction();
+            PackingUnitProduct::query()->where('product_id',$id)->delete();
+            BadgeProduct::query()->where('product_id',$id)->delete();
+            OrderProduct::query()->where('product_id',$id)->delete();
+            $unit= PackingUnitProduct::query()->where('product_id',$id)->first();
+            if($unit) {
+                PackingUnitProductAttribute::query()->where('packing_unit_product_id', $unit->id)->delete();
+                $unit->delete();
+            }
+            BarcodeProduct::query()->where('product_id',$id)->delete();
+            ProductRate::query()->where('product_id',$id)->delete();
+            $images= ProductImage::query()->where('product_id',$id)->get();
+            foreach ($images as $image){
+                Storage::disk('s3')->delete($image->image);
+                $image->delete();
+            }
+            StockMovement::query()->where('product_id',$id)->delete();
+            $storeStock= ProductStore::query()->where('product_id',$id)->first();
+            if($storeStock){
+                ProductStoreStock::query()->where('product_store_id',$storeStock->id)->delete();
+                $storeStock->delete();
+            }
+            Product::query()->where('id',$id)->delete();
+
+            DB::commit();
+            return response()->json([
+                'type' => 'success',
+                'title' => ' حذف المنتج ',
+                'msg' => 'تم حذف المنتج  بنجاح',
+            ]);
+        }
+        catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('error in delete Product in dashboard' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
     }
 }

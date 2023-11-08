@@ -16,6 +16,8 @@ $lang = app()->getLocale();
     <link href="{{ asset('admin') }}/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css">
 @endsection
 @section('backend-main')
+
+
     <!-- Grids in modals -->
     <div class="modal fade product_new_modal" id="exampleModalgrid" data-bs-backdrop="static" tabindex="-1"
          aria-labelledby="exampleModalgridLabel" aria-modal="true">
@@ -29,7 +31,9 @@ $lang = app()->getLocale();
                 </div>
                 <div class="modal-body px-5">
                     <div class="card-body form-steps">
-                        <form id="wizard" method="post" action="{{ url('admin_panel/products/'. $store->id .'/create') }}" enctype="multipart/form-data">
+                        <form id="wizard" method="post"
+                              action="{{ url('admin_panel/products/'. $store->id .'/create') }}"
+                              enctype="multipart/form-data">
                             {{ csrf_field() }}
                             <div class="step-arrow-nav mb-4 d-none">
                                 <ul class="nav nav-pills custom-nav nav-justified" role="tablist">
@@ -63,25 +67,6 @@ $lang = app()->getLocale();
                                                 Step 1
                                             </p>
                                         </div>
-                                        <div class="col-md-12 text-center">
-                                            <div class="avatar-upload branch_manager">
-                                                <div class="avatar-edit">
-                                                    <input type='file' id="imageUpload" name="image" class="imageUpload" accept=".png, .jpg, .jpeg"/>
-                                                    <label for="imageUpload">
-                                                             <span>
-                                                    </span>
-                                                        <i class="bx bxs-plus-circle"></i>
-                                                    </label>
-                                                </div>
-                                                <div class="avatar-preview">
-                                                    <div class="imagePreview" id="imagePreview"
-                                                         style="background-image: url({{ asset('admin') }}/assets/images/users/48/empty.png);">
-                                                    </div>
-                                                </div>
-
-                                            </div>
-                                            <label class="form-label mt-2">الصورة الرئيسية للمنتج</label>
-                                        </div>
                                         <div class="col-md-6">
                                             <div class="row">
                                                 <div class="col-md-12 col-12">
@@ -94,7 +79,8 @@ $lang = app()->getLocale();
                                                 <div class="col-md-12 col-12">
                                                     <div>
                                                         <label for="desc" class="form-label">نبذه عن المنتج </label>
-                                                        <textarea rows="1" name="description"  class="form-control" id="desc"
+                                                        <textarea rows="1" name="description" class="form-control"
+                                                                  id="desc"
                                                                   placeholder=""></textarea>
                                                     </div>
                                                 </div><!--end col-->
@@ -135,13 +121,15 @@ $lang = app()->getLocale();
                                                         <label class="form-label">نوع الخصم للجملة</label>
                                                         <div class="inputs_cutom">
                                                             <div class="me-1">
-                                                                <input hidden="" name="discount_type" value="2" type="radio" id="myCheckbper2"/>
+                                                                <input hidden="" name="discount_type" value="2"
+                                                                       type="radio" id="myCheckbper2"/>
                                                                 <label class="custom-label" for="myCheckbper2">
                                                                     مئوي
                                                                 </label>
                                                             </div>
                                                             <div class="me-1">
-                                                                <input hidden="" name="discount_type" value="1" type="radio" id="myCheckbper22"/>
+                                                                <input hidden="" name="discount_type" value="1"
+                                                                       type="radio" id="myCheckbper22"/>
                                                                 <label class="custom-label" for="myCheckbper22">
                                                                     رقم صحيح
                                                                 </label>
@@ -154,7 +142,8 @@ $lang = app()->getLocale();
                                                         <label for="consumer_old_price" class="form-label">سعر
                                                             القطاعي</label>
                                                         <input type="number" class="form-control"
-                                                               id="consumer_old_price" name="consumer_old_price" placeholder="">
+                                                               id="consumer_old_price" name="consumer_old_price"
+                                                               placeholder="">
                                                     </div>
                                                 </div><!--end col-->
                                                 <div class="col-md-6 col-12">
@@ -170,13 +159,15 @@ $lang = app()->getLocale();
                                                         <label class="form-label">نوع الخصم للقطاعي</label>
                                                         <div class="inputs_cutom">
                                                             <div class="me-1">
-                                                                <input hidden="" name="consumer_price_discount_type" value="2" type="radio" id="myCheckbperr2"/>
+                                                                <input hidden="" name="consumer_price_discount_type"
+                                                                       value="2" type="radio" id="myCheckbperr2"/>
                                                                 <label class="custom-label" for="myCheckbperr2">
                                                                     مئوي
                                                                 </label>
                                                             </div>
                                                             <div class="me-1">
-                                                                <input hidden="" name="consumer_price_discount_type" value="1" type="radio" id="myCheckbperr22"/>
+                                                                <input hidden="" name="consumer_price_discount_type"
+                                                                       value="1" type="radio" id="myCheckbperr22"/>
                                                                 <label class="custom-label" for="myCheckbperr22">
                                                                     رقم صحيح
                                                                 </label>
@@ -196,7 +187,8 @@ $lang = app()->getLocale();
                                                             <option selected="" disabled="" value=""
                                                                     hidden></option>
                                                             @foreach($categories as $category)
-                                                                <option value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
+                                                                <option
+                                                                    value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -210,7 +202,8 @@ $lang = app()->getLocale();
                                                             <option selected="" disabled="" value=""
                                                                     hidden></option>
                                                             @foreach($brands as $brand)
-                                                                <option value="{{ $brand['id'] }}">{{ $brand['name_'.$lang] }}</option>
+                                                                <option
+                                                                    value="{{ $brand['id'] }}">{{ $brand['name_'.$lang] }}</option>
                                                             @endforeach
                                                         </select>
                                                     </div>
@@ -222,8 +215,11 @@ $lang = app()->getLocale();
                                                         <div class="inputs_cutom">
                                                             @foreach($materials as $key => $material)
                                                                 <div class="me-1">
-                                                                    <input hidden="" name="material_id" value="{{ $material['id'] }}" type="radio" id="myCheckbox{{ $key }}"/>
-                                                                    <label class="custom-label" for="myCheckbox{{ $key }}">
+                                                                    <input hidden="" name="material_id"
+                                                                           value="{{ $material['id'] }}" type="radio"
+                                                                           id="myCheckbox{{ $key }}"/>
+                                                                    <label class="custom-label"
+                                                                           for="myCheckbox{{ $key }}">
                                                                         {{ $material['name_'.$lang] }}
                                                                     </label>
                                                                 </div>
@@ -238,12 +234,15 @@ $lang = app()->getLocale();
                                                                class="form-label">طرق الشحن</label>
                                                         <div class="inputs_cutom">
                                                             @foreach($shippings as $ship_key => $shipping)
-                                                            <div class="me-1">
-                                                                <input hidden="" name="shipping_method_id" value="{{ $shipping['id'] }}" type="radio" id="myCheckbo{{ $ship_key }}"/>
-                                                                <label class="custom-label" for="myCheckbo{{ $ship_key }}">
-                                                                    {{ $shipping['name_'.$lang] }}
-                                                                </label>
-                                                            </div>
+                                                                <div class="me-1">
+                                                                    <input hidden="" name="shipping_method_id"
+                                                                           value="{{ $shipping['id'] }}" type="radio"
+                                                                           id="myCheckbo{{ $ship_key }}"/>
+                                                                    <label class="custom-label"
+                                                                           for="myCheckbo{{ $ship_key }}">
+                                                                        {{ $shipping['name_'.$lang] }}
+                                                                    </label>
+                                                                </div>
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -253,12 +252,15 @@ $lang = app()->getLocale();
                                                         <label class="form-label">سياسات</label>
                                                         <div class="inputs_cutom">
                                                             @foreach($policies as $policy_key => $policy)
-                                                            <div class="me-1">
-                                                                <input hidden="" name="policy_id" value="{{ $policy['id'] }}" type="radio" id="myCheckb{{ $policy_key }}"/>
-                                                                <label class="custom-label" for="myCheckb{{ $policy_key }}">
-                                                                    {{ $policy['name_'.$lang] }}
-                                                                </label>
-                                                            </div>
+                                                                <div class="me-1">
+                                                                    <input hidden="" name="policy_id"
+                                                                           value="{{ $policy['id'] }}" type="radio"
+                                                                           id="myCheckb{{ $policy_key }}"/>
+                                                                    <label class="custom-label"
+                                                                           for="myCheckb{{ $policy_key }}">
+                                                                        {{ $policy['name_'.$lang] }}
+                                                                    </label>
+                                                                </div>
                                                             @endforeach
                                                         </div>
                                                     </div>
@@ -269,13 +271,15 @@ $lang = app()->getLocale();
                                                         <label class="form-label">شحن مجاني</label>
                                                         <div class="inputs_cutom">
                                                             <div class="me-1">
-                                                                <input hidden="" name="free_shipping" value="true" type="radio" id="myCheckbsh1"/>
+                                                                <input hidden="" name="free_shipping" value="true"
+                                                                       type="radio" id="myCheckbsh1"/>
                                                                 <label class="custom-label" for="myCheckbsh1">
                                                                     نعم
                                                                 </label>
                                                             </div>
                                                             <div class="me-1">
-                                                                <input hidden="" name="free_shipping" value="false" type="radio" id="myCheckbsh2"/>
+                                                                <input hidden="" name="free_shipping" value="false"
+                                                                       type="radio" id="myCheckbsh2"/>
                                                                 <label class="custom-label" for="myCheckbsh2">
                                                                     لا
                                                                 </label>
@@ -316,7 +320,8 @@ $lang = app()->getLocale();
                                                             </div>
                                                             <div class="upload-options">
                                                                 <label>
-                                                                    <input type="file" name="barcode" class="image-upload"
+                                                                    <input type="file" name="barcode"
+                                                                           class="image-upload"
                                                                            accept="image/*"/>
                                                                 </label>
                                                             </div>
@@ -359,6 +364,23 @@ $lang = app()->getLocale();
                             <!-- end tab content -->
                         </form>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade product_new_modal" id="exampleModalgridattr" data-bs-backdrop="static" tabindex="-1"
+         aria-labelledby="exampleModalgridLabb" aria-modal="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="ri-close-line"></i>
+                </button>
+                <div class="modal-header d-block text-center">
+                    <h5 class="modal-title" id="exampleModalgridLabb">اضافة خصائص جديدة</h5>
+                </div>
+                <div class="modal-body attr_body px-5">
+
                 </div>
             </div>
         </div>
@@ -448,129 +470,146 @@ $lang = app()->getLocale();
                                                                             </thead>
                                                                             <tbody id="portfolio">
                                                                             @foreach($products as $key => $product)
-                                                                                <?php
-                                                                                    if($product->activation == true && $product->reviewed == true){
+                                                                                    <?php
+                                                                                    if ($product->activation == true && $product->reviewed == true) {
                                                                                         $kind = 'accepted';
                                                                                         $badge = 'تمت الموافقة';
                                                                                     }
-                                                                                    if($product->activation == true && $product->reviewed == false){
+                                                                                    if ($product->activation == true && $product->reviewed == false) {
                                                                                         $kind = 'pending';
                                                                                         $badge = 'تحت المراجعة';
                                                                                     }
-                                                                                    if($product->activation == false && $product->reviewed == false){
+                                                                                    if ($product->activation == false && $product->reviewed == false) {
                                                                                         $kind = 'rejected';
                                                                                         $badge = 'تم الرفض';
                                                                                     }
-                                                                                    $product_store = \App\Models\ProductStore::where('product_id' , $product->id)->where('store_id' , $store->id)->pluck('id');
-                                                                                    $price = \App\Models\ProductStore::where('product_id' , $product->id)->where('store_id' , $store->id)->first();
-                                                                                    $color_ids = \App\Models\ProductStoreStock::whereIn('product_store_id' , $product_store)->pluck('color_id');
-                                                                                    $colors = \App\Models\Color::whereIn('id',$color_ids)->get();
-                                                                                ?>
-                                                                            <tr class="tile scale-anm {{ $kind }} all">
-                                                                                <td class="d-none">
-                                                                                    {{ $key + 1 }}
-                                                                                </td>
-                                                                                <td>
-                                                                                    <div class="card border-0">
-                                                                                        <div class="card-body p-2">
-                                                                                            <div class="card_border">
+                                                                                    $product_store = \App\Models\ProductStore::where('product_id', $product->id)->where('store_id', $store->id)->pluck('id');
+                                                                                    $price = \App\Models\ProductStore::where('product_id', $product->id)->where('store_id', $store->id)->first();
+                                                                                    $color_ids = \App\Models\ProductStoreStock::whereIn('product_store_id', $product_store)->pluck('color_id');
+                                                                                    $colors = \App\Models\Color::whereIn('id', $color_ids)->get();
+                                                                                    ?>
+                                                                                <tr class="tile scale-anm {{ $kind }} all image_class{{ $product->id }}">
+                                                                                    <td class="d-none">
+                                                                                        {{ $key + 1 }}
+                                                                                    </td>
+                                                                                    <td>
+                                                                                        <div class="card border-0">
+                                                                                            <div class="card-body p-2">
                                                                                                 <div
-                                                                                                    class="btn-group position-absolute">
-                                                                                                    <button
-                                                                                                        type="button"
-                                                                                                        class="btn dropdown-toggle"
-                                                                                                        data-bs-toggle="dropdown"
-                                                                                                        aria-haspopup="true"
-                                                                                                        aria-expanded="false">
-                                                                                                        <i class="bx bx-dots-horizontal-rounded"></i>
-                                                                                                    </button>
-                                                                                                    <?php $p_store = \App\Models\ProductStore::where('product_id' , $product['id'])->where('store_id', $store['id'])->first(); ?>
+                                                                                                    class="card_border">
                                                                                                     <div
-                                                                                                        class="dropdown-menu">
-                                                                                                        <a class="dropdown-item text-primary fw-bold edit_user"
-                                                                                                           href="{{ url('admin_panel/products/'.$product['id'].'/'.$store['id'].'/edit') }}">تعديل</a>
-                                                                                                        @if($p_store)
-                                                                                                        <a class="dropdown-item text-success fw-bold"
-                                                                                                           href="{{ url('admin_panel/attributes/'.$p_store['id']) }}">الخصائص</a>
-                                                                                                        @endif
-                                                                                                        <a class="dropdown-item text-danger fw-bold sa-warning"
-                                                                                                           href="#">حذف</a>
+                                                                                                        class="btn-group position-absolute">
+                                                                                                        <button
+                                                                                                            type="button"
+                                                                                                            class="btn dropdown-toggle"
+                                                                                                            data-bs-toggle="dropdown"
+                                                                                                            aria-haspopup="true"
+                                                                                                            aria-expanded="false">
+                                                                                                            <i class="bx bx-dots-horizontal-rounded"></i>
+                                                                                                        </button>
+                                                                                                            <?php $p_store = \App\Models\ProductStore::where('product_id', $product['id'])->where('store_id', $store['id'])->first(); ?>
+                                                                                                        <div
+                                                                                                            class="dropdown-menu">
+                                                                                                            <a class="dropdown-item text-primary fw-bold edit_user"
+                                                                                                               href="{{ url('admin_panel/products/'.$product['id'].'/'.$store['id'].'/edit') }}">تعديل</a>
+                                                                                                            @if($p_store)
+                                                                                                                <a class="dropdown-item text-success fw-bold"
+                                                                                                                   href="{{ url('admin_panel/attributes/'.$p_store['id']) }}">الخصائص</a>
+                                                                                                            @endif
+                                                                                                            <a style="cursor: pointer" class="dropdown-item text-success fw-bold add_attribute"
+                                                                                                               product_id="{{ $product['id'] }}" data-bs-toggle="modal"
+                                                                                                               data-bs-target="#exampleModalgridattr"
+                                                                                                               store_id="{{ $store['id'] }}">اضافة
+                                                                                                                خصائص
+                                                                                                                للمنتج</a>
+                                                                                                            <a delete_url="products/"
+                                                                                                               object_id="{{ $product['id'] }}"
+                                                                                                               data-bs-toggle="tooltip"
+                                                                                                               data-bs-placement="top"
+                                                                                                               button_type="delete" class="dropdown-item text-danger fw-bold sa-warning"
+                                                                                                               href="#">حذف</a>
+                                                                                                        </div>
                                                                                                     </div>
-                                                                                                </div>
-                                                                                                <!-- /btn-group -->
-                                                                                                <div class="offer">
-                                                                                                    {{ $badge }}
-                                                                                                </div>
-                                                                                                <!-- /btn-group -->
+                                                                                                    <!-- /btn-group -->
+                                                                                                    <div class="offer">
+                                                                                                        {{ $badge }}
+                                                                                                    </div>
+                                                                                                    <!-- /btn-group -->
 
-                                                                                                <div class="created_at">
-                                                                                                    تم النشر :
-                                                                                                    {{ $product->created_at->format('d M Y') }}
-                                                                                                </div>
-                                                                                                <div
-                                                                                                    class="align-items-center image_info">
-                                                                                                    <img
-                                                                                                        class="map_image"
-                                                                                                        src="{{ $product['image_url'] }}"/>
-                                                                                                    <h6 style="max-width: 100%;overflow: hidden"> {{ $product->name }}</h6>
-                                                                                                    <p style="width: 100%">{{ $product->category['name_'.$lang] }}</p>
-                                                                                                    <ul class="color-list">
-                                                                                                        @foreach($colors as $color)
-                                                                                                            <li style="background: {{ $color['hex'] }};"></li>
-                                                                                                        @endforeach
-                                                                                                    </ul>
-                                                                                                </div>
-                                                                                                <ul class="delivery-info">
-                                                                                                    @if(isset($price['net_price']) || $price['net_price'] != 0)
-                                                                                                    <li>
-                                                                                                        <strong>{{ $price['net_price'] }}
-                                                                                                            جنية</strong>
-                                                                                                        <span
-                                                                                                            class="badge bg-danger-subtle"> {{ $price['discount_type'] == '2' ? $price['discount'] . ' % ' : $price['discount'] . ' جنية ' }}</span>
-                                                                                                        <br>
-                                                                                                        <span
-                                                                                                            class="old_price">
+                                                                                                    <div
+                                                                                                        class="created_at">
+                                                                                                        تم النشر :
+                                                                                                        {{ $product->created_at->format('d M Y') }}
+                                                                                                    </div>
+                                                                                                    <div
+                                                                                                        class="align-items-center image_info">
+                                                                                                        <img
+                                                                                                            class="map_image"
+                                                                                                            src="{{ $product['image_url'] }}"/>
+                                                                                                        <h6 style="max-width: 100%;overflow: hidden"> {{ $product->name }}</h6>
+                                                                                                        <p style="width: 100%">{{ $product->category['name_'.$lang] }}</p>
+                                                                                                        <ul class="color-list">
+                                                                                                            @foreach($colors as $color)
+                                                                                                                <li style="background: {{ $color['hex'] }};"></li>
+                                                                                                            @endforeach
+                                                                                                        </ul>
+                                                                                                    </div>
+                                                                                                    <ul class="delivery-info">
+                                                                                                        @if(isset($price['net_price']) || $price['net_price'] != 0)
+                                                                                                            <li>
+                                                                                                                <strong>{{ $price['net_price'] }}
+                                                                                                                    جنية</strong>
+                                                                                                                <span
+                                                                                                                    class="badge bg-danger-subtle"> {{ $price['discount_type'] == '2' ? $price['discount'] . ' % ' : $price['discount'] . ' جنية ' }}</span>
+                                                                                                                <br>
+                                                                                                                <span
+                                                                                                                    class="old_price">
                                                                                         {{ $price['price'] }} جنية
                                                                                     </span>
-                                                                                                    </li>
-                                                                                                    @else
+                                                                                                            </li>
+                                                                                                        @else
+                                                                                                            <li>
+                                                                                                                <strong>{{ $price['price'] }}
+                                                                                                                    جنية</strong>
+                                                                                                            </li>
+                                                                                                        @endif
                                                                                                         <li>
-                                                                                                            <strong>{{ $price['price'] }}
-                                                                                                                جنية</strong>
+                                                                                                            <i class="ph-chats-bold"></i>
+                                                                                                            محادثات : 24
+                                                                                                            الف
                                                                                                         </li>
-                                                                                                    @endif
-                                                                                                    <li>
-                                                                                                        <i class="ph-chats-bold"></i>
-                                                                                                        محادثات : 24 الف
-                                                                                                    </li>
-                                                                                                    <li>
-                                                                                                        <i class="ph-heart-fill"></i>
-                                                                                                        مفضلة : {{ count($product->favourites) }}
-                                                                                                    </li>
-                                                                                                    <li>
-                                                                                                        <i class="bi bi-bar-chart"></i>
-                                                                                                        مبيعات : {{ count($product->orderProducts) }}
-                                                                                                    </li>
-                                                                                                    <li>
-                                                                                                        <i class="ph-eye-thin"></i>
-                                                                                                        مراجعات : {{ count($product->SellerRate) }}
-                                                                                                    </li>
-                                                                                                    <li class='divider'></li>
-                                                                                                    <li>
-                                                                                                        <a class="product_link"
-                                                                                                           href="{{ url('admin_panel/products/'.$store['id'].'/'.$product['id'].'/show') }}">
-                                                                                                            تصفح المنتج
-                                                                                                            <i class="ri-arrow-left-line label-icon align-middle fs-lg"></i>
-                                                                                                        </a>
-                                                                                                    </li>
-                                                                                                </ul>
+                                                                                                        <li>
+                                                                                                            <i class="ph-heart-fill"></i>
+                                                                                                            مفضلة
+                                                                                                            : {{ count($product->favourites) }}
+                                                                                                        </li>
+                                                                                                        <li>
+                                                                                                            <i class="bi bi-bar-chart"></i>
+                                                                                                            مبيعات
+                                                                                                            : {{ count($product->orderProducts) }}
+                                                                                                        </li>
+                                                                                                        <li>
+                                                                                                            <i class="ph-eye-thin"></i>
+                                                                                                            مراجعات
+                                                                                                            : {{ count($product->SellerRate) }}
+                                                                                                        </li>
+                                                                                                        <li class='divider'></li>
+                                                                                                        <li>
+                                                                                                            <a class="product_link"
+                                                                                                               href="{{ url('admin_panel/products/'.$store['id'].'/'.$product['id'].'/show') }}">
+                                                                                                                تصفح
+                                                                                                                المنتج
+                                                                                                                <i class="ri-arrow-left-line label-icon align-middle fs-lg"></i>
+                                                                                                            </a>
+                                                                                                        </li>
+                                                                                                    </ul>
+
+                                                                                                </div>
 
                                                                                             </div>
-
                                                                                         </div>
-                                                                                    </div>
-                                                                                </td>
-                                                                            </tr>
+                                                                                    </td>
+                                                                                </tr>
                                                                             @endforeach
                                                                             </tbody>
                                                                         </table>
@@ -607,6 +646,41 @@ $lang = app()->getLocale();
 
 @endsection
 @section('backend-footer')
+    @if(Session::get('type') == 'add_new')
+        <script>
+            $( document ).ready(function() {
+                var store_id = {{ Session::get('store_id') }};
+                var product_id = {{ Session::get('product_id') }};
+                $('#exampleModalgridattr').modal('show');
+                $('.attr_body').html('<div class="col-md-12 col-xl-12 text-center loading"><i class="mdi mdi-loading fa-spin"></i></div>');
+                var link = '<?php echo url('/'); ?>';
+                $.ajax({
+                    type: "GET",
+                    url: link + "/admin_panel/product_attr/" + product_id + "/" + store_id,
+                    success: function (data) {
+                        $('.attr_body').html(data);
+                    }
+                });
+            });
+        </script>
+    @endif
+    <script>
+
+        $(".add_attribute").on("click", function (e) {
+            var store_id = $(this).attr('store_id');
+            var product_id = $(this).attr('product_id');
+            $('.attr_body').html('<div class="col-md-12 col-xl-12 text-center loading"><i class="mdi mdi-loading fa-spin"></i></div>');
+            var link = '<?php echo url('/'); ?>';
+            $.ajax({
+                type: "GET",
+                url: link + "/admin_panel/product_attr/" + product_id + "/" + store_id,
+                success: function (data) {
+                    $('.attr_body').html(data);
+                }
+            });
+        });
+
+    </script>
     <!-- select2 js -->
     <script src="{{ asset('admin') }}/assets/libs/select2/select2.min.js"></script>
     <!-- Sweet Alerts js -->
@@ -628,21 +702,4 @@ $lang = app()->getLocale();
     <!-- gmaps init -->
     <script src="{{ asset('admin') }}/assets/js/pages/gmaps.init.js"></script>
 
-{{--    <script>--}}
-{{--        $(".edit_user").on("click", function (e) {--}}
-{{--            var store_id = $(this).attr('store_id');--}}
-{{--            var product_id = $(this).attr('product_id');--}}
-{{--            $('#exampleModalgrideditform').html('<div class="col-md-12 col-xl-12 text-center loading"><i class="mdi mdi-loading fa-spin"></i></div>');--}}
-{{--            var link = '<?php echo url('/'); ?>';--}}
-{{--            $('#exampleModalgridedit').modal('show');--}}
-{{--            $.ajax({--}}
-{{--                type: "GET",--}}
-{{--                url: link + "/admin_panel/product_info/" + product_id + "/" + store_id,--}}
-{{--                success: function (data) {--}}
-{{--                    $('#exampleModalgrideditform').html(data);--}}
-{{--                }--}}
-{{--            });--}}
-{{--        });--}}
-
-{{--    </script>--}}
 @endsection
