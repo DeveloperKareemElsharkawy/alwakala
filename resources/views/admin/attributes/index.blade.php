@@ -183,22 +183,7 @@ $lang = app()->getLocale();
     <script src="{{ asset('admin') }}/assets/libs/select2/select2.min.js"></script>
     <!-- Sweet Alerts js -->
     <script src="{{ asset('admin') }}/assets/libs/sweetalert2/sweetalert2.min.js"></script>
-    <script>
-        $(".edit_user").on("click", function (e) {
-            var attribute = $(this).attr('attribute');
-            $('#exampleModalgrideditform').html('<div class="col-md-12 col-xl-12 text-center loading"><i class="mdi mdi-loading fa-spin"></i></div>');
-            var link = '<?php echo url('/'); ?>';
-            $('#exampleModalgridedit').modal('show');
-            $.ajax({
-                type: "GET",
-                url: link + "/admin_panel/attributes/" + attribute +"/show",
-                success: function (data) {
-                    $('#exampleModalgrideditform').html(data);
-                }
-            });
-        });
 
-    </script>
     @if(Session::get('type') == 'add_new')
         <script>
             $( document ).ready(function() {
@@ -260,6 +245,21 @@ $lang = app()->getLocale();
                 url: link + "/admin_panel/product_attr/" + product_id + "/" + store_id,
                 success: function (data) {
                     $('.attr_body').html(data);
+                }
+            });
+        });
+
+    </script>
+    <script>
+        $(".edit_user").on("click", function (e) {
+            var attribute = $(this).attr('attribute');
+            $('#exampleModalgrideditform').html('<div class="col-md-12 col-xl-12 text-center loading"><i class="mdi mdi-loading fa-spin"></i></div>');
+            var link = '<?php echo url('/'); ?>';
+            $.ajax({
+                type: "GET",
+                url: link + "/admin_panel/attributes/" + attribute +"/show",
+                success: function (data) {
+                    $('#exampleModalgrideditform').html(data);
                 }
             });
         });
