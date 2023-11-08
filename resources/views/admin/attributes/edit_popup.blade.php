@@ -7,9 +7,6 @@
     }
 </style>
 
-<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-    <i class="ri-close-line"></i>
-</button>
 <div class="modal-header d-block text-center">
     <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل خاصية للمنتج {{ $product['name'] }} </h5>
 </div>
