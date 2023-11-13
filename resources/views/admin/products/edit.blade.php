@@ -211,7 +211,7 @@ $lang = app()->getLocale();
                                                                                                 <div class="col-md-12 col-12">
                                                                                                     <div class="select-div">
                                                                                                         <label for="category_id" class="form-label">التصنيف</label>
-                                                                                                        <select name="category_id" class="form-select select-modal"
+                                                                                                        <select name="subsubcategory_id" class="form-select select-modal"
                                                                                                                 id="category_id" required="">
                                                                                                             <option selected="" disabled="" value=""
                                                                                                                     hidden></option>
@@ -239,7 +239,7 @@ $lang = app()->getLocale();
                                                                                                 <div class="col-md-12 col-12">
                                                                                                     <div class="select-div">
                                                                                                         <label for="subsubcategory_id" class="form-label">التصنيف الفرعي الثاني</label>
-                                                                                                        <select class="form-select select-modal" name="subsubcategory_id"
+                                                                                                        <select class="form-select select-modal" name="category_id"
                                                                                                                 id="subsubcategory_id">
 
                                                                                                             <option value="{{ $subsubcategory['id'] }}">{{ $subsubcategory['name_'.$lang] }}</option>
