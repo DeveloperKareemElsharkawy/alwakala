@@ -80,6 +80,7 @@ class DeliveryAddressController extends Controller
     {
         $address = \App\Models\Address::find($id);
         $address->is_default = true;
+        $address->save();
         request()->session()->flash('status', 'تم التعديل بنجاح');
         return redirect()->back();
     }

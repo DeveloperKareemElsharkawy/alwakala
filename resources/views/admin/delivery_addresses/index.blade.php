@@ -196,7 +196,7 @@
                                                                         <div class="dropdown-menu">
                                                                             <a address="{{ $address['id'] }}" class="dropdown-item btn edit_user text-primary fw-bold">تعديل</a>
                                                                             @if($address['is_default'] == false)
-                                                                            <a href="{{ url('admin_panel/primary_address/' . $address['id']) }}" class="dropdown-item btn edit_user text-success fw-bold">عنوان افتراضي</a>
+                                                                            <a href="{{ url('admin_panel/primary_address/' . $address['id']) }}" class="dropdown-item btn text-success fw-bold">عنوان افتراضي</a>
                                                                             @endif
                                                                             <a class="dropdown-item text-danger btn fw-bold sa-warning" delete_url="delete_delivery_address/"
                                                                                object_id="{{ $address['id'] }}" data-bs-toggle="tooltip"
