@@ -20,6 +20,11 @@ class Size extends Model
         return $this->belongsToMany(Category::class)->select('categories.id', 'categories.name_ar', 'categories.name_en');
     }
 
+    public function cats()
+    {
+        return $this->belongsToMany(Category::class)->select('categories.id', 'categories.name_ar', 'categories.name_en');
+    }
+
     public function product_store_stocks()
     {
         return $this->hasMany(ProductStoreStock::class);
