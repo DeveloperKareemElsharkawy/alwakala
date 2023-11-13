@@ -6,6 +6,7 @@ use App\Http\Controllers\AdminPanel\VendorController;
 use App\Http\Controllers\AdminPanel\OrderController;
 use App\Http\Controllers\AdminPanel\StoreAddressController;
 use App\Http\Controllers\AdminPanel\ShippingAddressController;
+use App\Http\Controllers\AdminPanel\DeliveryAddressController;
 use App\Http\Controllers\AdminPanel\ProductController;
 use App\Http\Controllers\AdminPanel\AdminController;
 use App\Http\Controllers\AdminPanel\AttributeController;
@@ -52,6 +53,15 @@ Route::group(array('prefix' => 'admin_panel'), function () {
     Route::patch('new_shipping_address/{address_id}', [ShippingAddressController::class , 'form']);
     Route::get('shipping_address_info/{address_id}', [ShippingAddressController::class , 'shipping_address_info']);
     Route::delete('delete_address/{address_id}', [ShippingAddressController::class , 'delete_address']);
+
+
+    //  delivery addresses
+    Route::get('delivery_addresses/{store_id}', [DeliveryAddressController::class , 'index']);
+    Route::get('primary_address/{address_id}', [DeliveryAddressController::class , 'primary_address']);
+    Route::post('new_delivery_address', [DeliveryAddressController::class , 'form']);
+    Route::patch('edit_delivery_address/{address_id}', [DeliveryAddressController::class , 'form']);
+    Route::get('delivery_address_info/{address_id}', [DeliveryAddressController::class , 'delivery_address_info']);
+    Route::get('delete_delivery_address/{address_id}', [DeliveryAddressController::class , 'delete_address']);
 
 //    products
     Route::get('products/{store_id}', [ProductController::class , 'index']);

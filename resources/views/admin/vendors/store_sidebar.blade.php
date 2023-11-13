@@ -21,7 +21,13 @@
     <li class="nav-item {{ Request::is('admin_panel/shipping_addresses/'.$store['id']) ? 'active' : ''}}">
         <a class="nav-link menu-link" href="{{ url('admin_panel/shipping_addresses', $store['id']) }}">
             <i class="ph-record-fill"></i> <span
-                data-key="t-dashboards">مدن التوصيل</span>
+                data-key="t-dashboards">مدن الشحن</span>
+        </a>
+    </li>
+    <li class="nav-item {{ Request::is('admin_panel/delivery_addresses/'.$store['id']) ? 'active' : ''}}">
+        <a class="nav-link menu-link" href="{{ url('admin_panel/delivery_addresses', $store['id']) }}">
+            <i class="ph-record-fill"></i> <span
+                data-key="t-dashboards">اماكن التوصيل</span>
         </a>
     </li>
     <li class="nav-item {{ Request::is('admin_panel/orders/'.$store['id']) || Request::is('admin_panel/order/*') ? 'active' : ''}}">

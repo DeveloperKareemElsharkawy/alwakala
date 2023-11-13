@@ -204,9 +204,15 @@
                                                                                     ?>
                                                                                     <select class="form-select p-2 select" id="category_id" name="category_id" required="">
                                                                                         <option selected="" disabled="" value=""></option>
+                                                                                        @if($categoryy)
                                                                                         @foreach($categories as $category)
                                                                                             <option {{ $category->id == $categoryy->category_id ? 'selected' : '' }} value="{{ $category->id }}">{{ $category['name_'.$lang] }}</option>
                                                                                         @endforeach
+                                                                                        @else
+                                                                                            @foreach($categories as $category)
+                                                                                                <option value="{{ $category->id }}">{{ $category['name_'.$lang] }}</option>
+                                                                                            @endforeach
+                                                                                        @endif
                                                                                     </select>
                                                                                 </div>
                                                                             </div>
