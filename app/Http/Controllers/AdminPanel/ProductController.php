@@ -298,7 +298,9 @@ class ProductController extends Controller
             }
             $product_store->free_shipping = $request->free_shipping;
             $product_store->barcode_text = $request->barcode_text;
-            $product_store->barcode = UploadImage::uploadImageToStorage($request->barcode, 'qr-code/stores/' . $product->id);
+            if(isset($request->barcode)){
+                $product_store->barcode = UploadImage::uploadImageToStorage($request->barcode, 'qr-code/stores/' . $product->id);
+            }
             $product_store->consumer_price_discount = $request->consumer_price_discount;
             $product_store->consumer_price_discount_type = $request->consumer_price_discount_type;
             $product_store->consumer_old_price = $request->consumer_old_price;
