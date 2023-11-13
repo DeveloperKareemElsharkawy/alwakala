@@ -55,7 +55,7 @@ class SizeController extends Controller
      */
     public function store(Request $request)
     {
-//        try {
+        try {
             DB::beginTransaction();
             $size = new Size();
             $size->activation = true;
@@ -72,12 +72,12 @@ class SizeController extends Controller
             DB::commit();
             $request->session()->flash('status', 'تم الاضافة بنجاح');
             return redirect(route('sizes.index'));
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            Log::error('error in add size from admin panel ' . __LINE__ . $e);
-//            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
-//            return redirect()->back();
-//        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('error in add size from admin panel ' . __LINE__ . $e);
+            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+            return redirect()->back();
+        }
     }
 
     /**
