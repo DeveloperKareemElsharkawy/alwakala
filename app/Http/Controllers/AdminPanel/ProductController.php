@@ -198,10 +198,14 @@ class ProductController extends Controller
         $store = \App\Models\Store::find($store_id);
         $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
         $lang = app()->getLocale();
+
+        $subcategory = Category::find($category['category_id']);
+        $maincategory = Category::find($subcategory['category_id']);
+
         $not_colors = ProductStoreStock::where('product_store_id', $product_store['id'])->pluck('color_id');
         $colors = Color::where('activation', 'true')->where('archive', 'false')->whereNotIn('id', $not_colors)->get();
         return view('admin.products.add_attr', ['category' => $category, 'product' => $product, 'product_store' => $product_store, 'store' => $store, 'lang' => $lang, 'categories' => $categories,
-            'materials' => $materials, 'policies' => $policies, 'shippings' => $shippings, 'brands' => $brands, 'colors' => $colors]);
+            'materials' => $materials, 'policies' => $policies, 'shippings' => $shippings, 'brands' => $brands, 'colors' => $colors,'maincategory' => $maincategory]);
     }
 
     public function product_attr_save(Request $request)

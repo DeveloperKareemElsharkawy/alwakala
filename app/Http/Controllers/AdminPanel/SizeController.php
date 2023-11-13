@@ -26,7 +26,7 @@ class SizeController extends Controller
             }else{
                 $sizes = Size::orderBy('id','desc')->where('archive' , false)->get();
             }
-            $categories = Category::orderBy('id' , 'desc')->whereNull('category_id')->get();
+            $categories = Category::whereNull('category_id')->orderBy('id' , 'desc')->get();
 
             return view('admin.settings.sizes.index' , ['sizes'=>$sizes,'categories' => $categories]);
         }catch (\Exception $e){
@@ -94,7 +94,7 @@ class SizeController extends Controller
     public function show($id)
     {
         $size = Size::find($id);
-        $categories = Category::orderBy('id' , 'desc')->whereNull('category_id')->get();
+        $categories = Category::whereNull('category_id')->orderBy('id' , 'desc')->get();
         return view('admin.settings.sizes.edit_popup', ['size' => $size,'categories' => $categories]);
     }
 

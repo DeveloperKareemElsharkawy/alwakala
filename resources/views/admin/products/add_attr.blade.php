@@ -55,7 +55,7 @@
                                     </label>
                                 </div>
                                 <div class="add_div size_div" id="second">
-                                    @foreach($category['sizes'] as $size_key => $size)
+                                    @foreach($maincategory['sizes'] as $size_key => $size)
                                         <div>
                                             <div class="gradient-box"><input
                                                     type="text" name="size_ids[{{ $size_key }}]" value="{{ $size['size'] }}" readonly required>
