@@ -178,7 +178,7 @@
                                                     </thead>
                                                     <tbody>
                                                     @foreach($addresses as $key => $address)
-                                                    <tr>
+                                                    <tr class="image_class{{ $address['id'] }}">
                                                         <td class="d-none">
                                                             {{ $key + 1 }}
                                                         </td>
