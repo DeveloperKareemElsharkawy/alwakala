@@ -55,6 +55,7 @@
                                     </label>
                                 </div>
                                 <div class="add_div size_div" id="second">
+                                    @if(isset($maincategory))
                                     @foreach($maincategory['sizes'] as $size_key => $size)
                                         <div>
                                             <div class="gradient-box"><input
@@ -63,6 +64,7 @@
                                             <input type="number" name="size_counts[{{ $size_key }}]" min="0" value="0" required>
                                         </div>
                                     @endforeach
+                                        @endif
                                 </div>
 
                             </div>
