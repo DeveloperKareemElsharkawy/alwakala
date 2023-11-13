@@ -15,7 +15,7 @@
                     <select class="form-select select-modal" name="category_ids[]" id="validationDefault02" multiple>
                         @foreach($categories as $cat_key => $category)
                                 <?php
-                                $found = \App\Models\CategorySize::where('brand_id' , $size['id'])->where('category_id' ,$category['id'])->first();
+                                $found = \App\Models\CategorySize::where('size_id' , $size['id'])->where('category_id' ,$category['id'])->first();
                                 ?>
                             <option {{ $found ? 'selected' : '' }} value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
                         @endforeach
