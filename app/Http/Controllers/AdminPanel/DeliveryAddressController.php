@@ -79,6 +79,7 @@ class DeliveryAddressController extends Controller
     public function primary_address($id)
     {
         $address = \App\Models\Address::find($id);
+        \DB::table('addresses')->where('user_id', $address['user_id'])->update(['is_default' => false]);
         $address->is_default = true;
         $address->save();
         request()->session()->flash('status', 'تم التعديل بنجاح');
