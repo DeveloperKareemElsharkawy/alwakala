@@ -200,7 +200,7 @@
                                                                             @endif
                                                                             <a class="dropdown-item text-danger btn fw-bold sa-warning" delete_url="delete_delivery_address/"
                                                                                object_id="{{ $address['id'] }}" data-bs-toggle="tooltip"
-                                                                               data-bs-placement="top" button_type="delete">حذف</a>
+                                                                               data-bs-placement="top" button_type="archive">حذف</a>
                                                                         </div>
                                                                     </div><!-- /btn-group -->
                                                                     <div class="align-items-center">
