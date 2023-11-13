@@ -56,6 +56,11 @@ class SizeController extends Controller
     public function store(Request $request)
     {
         try {
+            $found = Size::where('size',$request->size)->first();
+            if($found){
+                $request->session()->flash('error', 'حجم مسجل مسبقا');
+                return redirect()->back();
+            }
             DB::beginTransaction();
             $size = new Size();
             $size->activation = true;
