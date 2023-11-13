@@ -46,7 +46,9 @@ class AttributeController extends Controller
         $attribute = ProductStoreStock::find($attribute_id);
         $product_store = ProductStore::find($attribute['product_store_id']);
         $product = Product::find($product_store['product_id']);
-        $category = Category::find($product['category_id']);
+        $subsubCategory = Category::find($product['category_id']);
+        $subcategory = Category::find($subsubCategory['category_id']);
+        $category = Category::find($subcategory['category_id']);
         $store = Store::find($product_store['store_id']);
         $product_store = ProductStore::where('product_id', $product_store['product_id'])->where('store_id', $store['id'])->first();
         $lang = app()->getLocale();
