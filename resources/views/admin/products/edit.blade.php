@@ -201,6 +201,11 @@ $lang = app()->getLocale();
                                                                                                 </div><!--end col-->
                                                                                             </div>
                                                                                         </div>
+                                                                                        <?php
+                                                                                        $subsubcategory = \App\Models\Category::find($product['category_id']);
+                                                                                        $subcategory = \App\Models\Category::find($subsubcategory['category_id']);
+                                                                                        $categoryy = \App\Models\Category::find($subcategory['category_id']);
+                                                                                        ?>
                                                                                         <div class="col-md-6">
                                                                                             <div class="row">
                                                                                                 <div class="col-md-12 col-12">
@@ -208,10 +213,40 @@ $lang = app()->getLocale();
                                                                                                         <label for="category_id" class="form-label">التصنيف</label>
                                                                                                         <select name="category_id" class="form-select select-modal"
                                                                                                                 id="category_id" required="">
+                                                                                                            <option selected="" disabled="" value=""
+                                                                                                                    hidden></option>
                                                                                                             @foreach($categories as $category)
-                                                                                                                <option {{ $product['category_id'] == $category['id'] ? 'selected' : '' }} value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
+                                                                                                                <option {{ $categoryy->id == $category['id'] }}
+                                                                                                                    value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
                                                                                                             @endforeach
                                                                                                         </select>
+                                                                                                    </div>
+                                                                                                </div><!--end col-->
+
+                                                                                                <div class="col-md-12 col-12">
+                                                                                                    <div class="select-div">
+                                                                                                        <label for="subcategory_id" class="form-label">التصنيف الفرعي </label>
+                                                                                                        <select class="form-select select-modal" name="subcategory_id"
+                                                                                                                id="subcategory_id">
+                                                                                                            <option value="{{ $subcategory['id'] }}">{{ $subcategory['name_'.$lang] }}</option>
+                                                                                                        </select>
+                                                                                                        @error('subcategory_id')
+                                                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                                                        @enderror
+                                                                                                    </div>
+                                                                                                </div><!--end col-->
+
+                                                                                                <div class="col-md-12 col-12">
+                                                                                                    <div class="select-div">
+                                                                                                        <label for="subsubcategory_id" class="form-label">التصنيف الفرعي الثاني</label>
+                                                                                                        <select class="form-select select-modal" name="subsubcategory_id"
+                                                                                                                id="subsubcategory_id">
+
+                                                                                                            <option value="{{ $subsubcategory['id'] }}">{{ $subsubcategory['name_'.$lang] }}</option>
+                                                                                                        </select>
+                                                                                                        @error('subsubcategory_id')
+                                                                                                        <span class="text-danger">{{ $message }}</span>
+                                                                                                        @enderror
                                                                                                     </div>
                                                                                                 </div><!--end col-->
 
@@ -420,4 +455,30 @@ $lang = app()->getLocale();
     <script src="{{ asset('admin') }}/assets/libs/gmaps/gmaps.min.js"></script>
     <!-- gmaps init -->
     <script src="{{ asset('admin') }}/assets/js/pages/gmaps.init.js"></script>
+
+    <script>
+        var link = '<?php echo url('/'); ?>';
+        $('#category_id').on('change', function () {
+            var category_id = $(this).val();
+            $.get(link + '/ajax_subcatgeories?category_id=' + category_id, function (data) {
+                $('#subcategory_id').empty();
+                $('#subcategory_id').append('<option value="" disabled selected>قم بإختيار  </option>');
+                $.each(data, function (index, subcatObj) {
+                    $('#subcategory_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                });
+            });
+        });
+    </script>
+    <script>
+        $('#subcategory_id').on('change', function () {
+            var subcategory_id = $(this).val();
+            $.get(link + '/ajax_subcatgeories?category_id=' + subcategory_id, function (data) {
+                $('#subsubcategory_id').empty();
+                $('#subsubcategory_id').append('<option value="" disabled selected>قم بإختيار  </option>');
+                $.each(data, function (index, subcatObj) {
+                    $('#subsubcategory_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                });
+            });
+        });
+    </script>
 @endsection

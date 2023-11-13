@@ -158,7 +158,7 @@ class ProductController extends Controller
      */
     public function edit($product_id, $store_id)
     {
-        $categories = Category::whereNotNull('category_id')->get();
+        $categories = Category::whereNull('category_id')->get();
         $materials = Material::all();
         $policies = Policy::all();
         $brands = Brand::all();
