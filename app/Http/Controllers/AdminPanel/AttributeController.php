@@ -152,7 +152,11 @@ class AttributeController extends Controller
             $store = Store::find($store_id);
             $product = Product::find($product_id);
             $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
-            $size_ids = CategorySize::where('category_id', $product['category_id'])->pluck('size_id');
+            if(!isset(Category::find($product->category_id)->parent->parent->id)){
+                $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+                return redirect()->back();
+            }
+            $size_ids = CategorySize::where('category_id', Category::find($product->category_id)->parent->parent->id)->pluck('size_id');
             foreach ($request['size_ids'] as $size_key => $size_id) {
                 $size = Size::whereIn('id', $size_ids)->where('size', $size_id)->first();
                 $product_stock = ProductStoreStock::where('size_id', $size['id'])->where('color_id', $request['color_id'])->where('product_store_id', $product_store['id'])->orderBy('id', 'desc')->first();

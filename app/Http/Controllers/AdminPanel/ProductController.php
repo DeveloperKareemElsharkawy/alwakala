@@ -222,47 +222,51 @@ class ProductController extends Controller
     public function product_attr_save(Request $request)
     {
 //        try {
-            if (!isset($request['color_id'])) {
-                return redirect()->back()->with('error', 'يرجى اضافة لون');
+        if (!isset($request['color_id'])) {
+            return redirect()->back()->with('error', 'يرجى اضافة لون');
+        }
+        if (count($request['size_ids']) == 0) {
+            return redirect()->back()->with('error', 'يرجى اضافة احجام');
+        }
+        $store_id = $request['store_id'];
+        $product_id = $request['product_id'];
+        DB::beginTransaction();
+        $store = Store::find($store_id);
+        $product = Product::find($product_id);
+        $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
+        foreach ($request['size_ids'] as $size_key => $size_id) {
+            if(!isset(Category::find($product->category_id)->parent->parent->id)){
+                $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+                return redirect()->back();
             }
-            if (count($request['size_ids']) == 0) {
-                return redirect()->back()->with('error', 'يرجى اضافة احجام');
-            }
-            $store_id = $request['store_id'];
-            $product_id = $request['product_id'];
-            DB::beginTransaction();
-            $store = Store::find($store_id);
-            $product = Product::find($product_id);
-            $product_store = ProductStore::where('product_id', $product_id)->where('store_id', $store_id)->first();
-            foreach ($request['size_ids'] as $size_key => $size_id) {
-                $size_ids = CategorySize::where('category_id', $product['category_id'])->pluck('size_id');
-                $size = Size::whereIn('id', $size_ids)->where('size', $size_id)->first();
-                $product_stock = new ProductStoreStock();
-                $product_stock->product_store_id = $product_store['id'];
-                $product_stock->stock = $request['size_counts'][$size_key];
-                $product_stock->size_id = $size['id'];
-                $product_stock->color_id = $request['color_id'];
-                $product_stock->reserved_stock = 0;
-                $product_stock->available_stock = $request['size_counts'][$size_key];
-                $product_stock->sold = 0;
-                $product_stock->returned = 0;
-                $product_stock->approved = true;
-                $product_stock->save();
-            }
-            foreach ($request['image'] as $image_key => $image) {
-                $image = new ProductImage();
-                $image->product_id = $product->id;
-                $image->color_id = $request->color_id;
-                $image->image = UploadImage::uploadImageToStorage($request['image'][$image_key], 'products/' . $product->id);
-                $image->save();
-            }
-            DB::commit();
-            $request->session()->flash('status', 'تم الاضافة بنجاح');
-            if (isset($request['type']) && $request['type'] == 'add_new') {
-                return redirect()->back()->with(array('type' => 'add_new', 'product_id' => $product['id'], 'store_id' => $store['id']));
-            }
-            \Session::forget('type');
-            return redirect()->back();
+            $size_ids = CategorySize::where('category_id', Category::find($product->category_id)->parent->parent->id)->pluck('size_id');
+            $size = Size::whereIn('id', $size_ids)->where('size', $size_id)->first();
+            $product_stock = new ProductStoreStock();
+            $product_stock->product_store_id = $product_store['id'];
+            $product_stock->stock = $request['size_counts'][$size_key];
+            $product_stock->size_id = $size['id'];
+            $product_stock->color_id = $request['color_id'];
+            $product_stock->reserved_stock = 0;
+            $product_stock->available_stock = $request['size_counts'][$size_key];
+            $product_stock->sold = 0;
+            $product_stock->returned = 0;
+            $product_stock->approved = true;
+            $product_stock->save();
+        }
+        foreach ($request['image'] as $image_key => $image) {
+            $image = new ProductImage();
+            $image->product_id = $product->id;
+            $image->color_id = $request->color_id;
+            $image->image = UploadImage::uploadImageToStorage($request['image'][$image_key], 'products/' . $product->id);
+            $image->save();
+        }
+        DB::commit();
+        $request->session()->flash('status', 'تم الاضافة بنجاح');
+        if (isset($request['type']) && $request['type'] == 'add_new') {
+            return redirect()->back()->with(array('type' => 'add_new', 'product_id' => $product['id'], 'store_id' => $store['id']));
+        }
+        \Session::forget('type');
+        return redirect()->back();
 
 //        } catch (\Exception $e) {
 //            DB::rollBack();
