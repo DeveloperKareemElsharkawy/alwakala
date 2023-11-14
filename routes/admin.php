@@ -65,6 +65,7 @@ Route::group(array('prefix' => 'admin_panel'), function () {
 
 //    products
     Route::get('products/{store_id}', [ProductController::class , 'index']);
+    Route::get('products/{store_id}/create', [ProductController::class , 'create']);
     Route::get('products/{store_id}/{product_id}/show', [ProductController::class , 'show']);
     Route::get('product_attr/{product_id}/{store_id}', [ProductController::class , 'product_attr']);
     Route::post('product_attr_save', [ProductController::class , 'product_attr_save']);

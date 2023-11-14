@@ -69,137 +69,129 @@ $lang = app()->getLocale();
                                                             <div class="card store-places inventory_card">
                                                                 <div class="product_new_modal">
                                                                     <div class="card-body form-steps">
-                                                                        <form class="my_form" method="post" action="{{ url('admin_panel/products/'. $product->id .'/edit') }}" enctype="multipart/form-data">
+                                                                        <form method="post" class="my_form"
+                                                                              action="{{ url('admin_panel/products/'. $store->id .'/create') }}"
+                                                                              enctype="multipart/form-data">
                                                                             {{ csrf_field() }}
-                                                                            {{ method_field('PATCH') }}
-                                                                            <div class="row g-3">
-                                                                                <div class="col-md-12">
-                                                                                    <p class="mb-0 text-center">
-                                                                                    </p>
-                                                                                </div>
-                                                                                <div class="col-md-6">
-                                                                                    <div class="row">
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div>
-                                                                                                <label for="name1" class="form-label">الاسم للمنتج</label>
-                                                                                                <input type="text" name="name" value="{{ $product['name'] }}" class="form-control" id="name1"
-                                                                                                       placeholder="">
-
-                                                                                                <input hidden="" name="store_id" value="{{ $store['id'] }}">
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div>
-                                                                                                <label for="desc" class="form-label">نبذه عن المنتج </label>
-                                                                                                <textarea rows="1" name="description"  class="form-control" id="desc"
-                                                                                                          placeholder="">{{ $product['description'] }}</textarea>
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div>
-                                                                                                <label for="date" class="form-label">تاريخ
-                                                                                                    النشر</label>
-                                                                                                <input type="date" name="publish_app_at" class="form-control"
-                                                                                                       id="date" value="{{ $product_store['publish_app_at'] }}" placeholder="">
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div>
-                                                                                                <label for="youtube" class="form-label">رابط ال
-                                                                                                    youtube</label>
-                                                                                                <input type="url" class="form-control"
-                                                                                                       id="youtube" value="{{ $product['youtube_link'] }}" name="youtube_link" placeholder="">
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-6 col-12">
-                                                                                            <div>
-                                                                                                <label for="wholesale_price" class="form-label">سعر
-                                                                                                    الجملة</label>
-                                                                                                <input type="number" class="form-control"
-                                                                                                       id="wholesale_price" value="{{ $product_store['price'] }}" name="price" placeholder="">
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-6 col-12">
-                                                                                            <div>
-                                                                                                <label for="discount" class="form-label">قيمة الخصم
-                                                                                                    الجملة</label>
-                                                                                                <input type="number" value="{{ $product_store['discount'] }}" class="form-control"
-                                                                                                       id="discount" name="discount" placeholder="">
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div class="select-div custom-check">
-                                                                                                <label class="form-label">نوع الخصم للجملة</label>
-                                                                                                <div class="inputs_cutom">
-                                                                                                    <div class="me-1">
-                                                                                                        <input hidden="" {{ $product_store['discount_type'] == 2 ? 'checked' : '' }} name="discount_type" value="2" type="radio" id="myCheckbper2"/>
-                                                                                                        <label class="custom-label" for="myCheckbper2">
-                                                                                                            مئوي
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <input hidden="" {{ $product_store['discount_type'] == 1 ? 'checked' : '' }} name="discount_type" value="1" type="radio" id="myCheckbper22"/>
-                                                                                                        <label class="custom-label" for="myCheckbper22">
-                                                                                                            رقم صحيح
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-6 col-12">
-                                                                                            <div>
-                                                                                                <label for="consumer_old_price" class="form-label">سعر
-                                                                                                    القطاعي</label>
-                                                                                                <input type="number" class="form-control"
-                                                                                                       id="consumer_old_price" value="{{ $product_store['consumer_old_price'] }}" name="consumer_old_price" placeholder="">
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-6 col-12">
-                                                                                            <div>
-                                                                                                <label for="discount" class="form-label">قيمة الخصم
-                                                                                                    القطاعي</label>
-                                                                                                <input type="number" class="form-control"
-                                                                                                       id="consumer_price_discount" value="{{ $product_store['consumer_price_discount'] }}" name="discount" placeholder="">
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div class="select-div custom-check">
-                                                                                                <label class="form-label">نوع الخصم للقطاعي</label>
-                                                                                                <div class="inputs_cutom">
-                                                                                                    <div class="me-1">
-                                                                                                        <input {{ $product_store['consumer_price_discount_type'] == 2 ? 'checked' : '' }} hidden="" name="consumer_price_discount_type" value="2" type="radio" id="myCheckbperr2"/>
-                                                                                                        <label class="custom-label" for="myCheckbperr2">
-                                                                                                            مئوي
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <input {{ $product_store['consumer_price_discount_type'] == 1 ? 'checked' : '' }} hidden="" name="consumer_price_discount_type" value="1" type="radio" id="myCheckbperr22"/>
-                                                                                                        <label class="custom-label" for="myCheckbperr22">
-                                                                                                            رقم صحيح
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div><!--end col-->
+                                                                            <div class="row">
+                                                                                <div class="col-md-12 col-12">
+                                                                                    <div>
+                                                                                        <label for="name1" class="form-label">الاسم للمنتج</label>
+                                                                                        <input type="text" name="name" class="form-control" id="name1"
+                                                                                               placeholder="">
                                                                                     </div>
-                                                                                </div>
-                                                                                <?php
-                                                                                $subsubcategory = \App\Models\Category::find($product['category_id']);
-                                                                                $subcategory = \App\Models\Category::find($subsubcategory['category_id']);
-                                                                                $categoryy = \App\Models\Category::find($subcategory['category_id']);
-                                                                                ?>
-                                                                                <div class="col-md-6">
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-12 col-12">
+                                                                                    <div>
+                                                                                        <label for="desc" class="form-label">نبذه عن المنتج </label>
+                                                                                        <textarea rows="1" name="description" class="form-control"
+                                                                                                  id="desc"
+                                                                                                  placeholder=""></textarea>
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-12 col-12">
+                                                                                    <div>
+                                                                                        <label for="date" class="form-label">تاريخ
+                                                                                            النشر</label>
+                                                                                        <input type="date" name="publish_app_at" class="form-control"
+                                                                                               id="date" placeholder="">
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-12 col-12">
+                                                                                    <div>
+                                                                                        <label for="youtube" class="form-label">رابط ال
+                                                                                            youtube</label>
+                                                                                        <input type="url" class="form-control"
+                                                                                               id="youtube" name="youtube_link" placeholder="">
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-6 col-12">
+                                                                                    <div>
+                                                                                        <label for="wholesale_price" class="form-label">سعر
+                                                                                            الجملة</label>
+                                                                                        <input type="number" class="form-control"
+                                                                                               id="wholesale_price" name="price" placeholder="" required>
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-6 col-12">
+                                                                                    <div>
+                                                                                        <label for="discount" class="form-label">قيمة الخصم
+                                                                                            الجملة</label>
+                                                                                        <input type="number" class="form-control"
+                                                                                               id="discount" name="discount" placeholder="">
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-12 col-12">
+                                                                                    <div class="select-div custom-check">
+                                                                                        <label class="form-label">نوع الخصم للجملة</label>
+                                                                                        <div class="inputs_cutom">
+                                                                                            <div class="me-1">
+                                                                                                <input hidden="" name="discount_type" value="2"
+                                                                                                       type="radio" id="myCheckbper2"/>
+                                                                                                <label class="custom-label" for="myCheckbper2">
+                                                                                                    مئوي
+                                                                                                </label>
+                                                                                            </div>
+                                                                                            <div class="me-1">
+                                                                                                <input hidden="" name="discount_type" value="1"
+                                                                                                       type="radio" id="myCheckbper22"/>
+                                                                                                <label class="custom-label" for="myCheckbper22">
+                                                                                                    رقم صحيح
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-6 col-12">
+                                                                                    <div>
+                                                                                        <label for="consumer_old_price" class="form-label">سعر
+                                                                                            القطاعي</label>
+                                                                                        <input type="number" class="form-control"
+                                                                                               id="consumer_old_price" name="consumer_old_price"
+                                                                                               placeholder="" required>
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-6 col-12">
+                                                                                    <div>
+                                                                                        <label for="discount" class="form-label">قيمة الخصم
+                                                                                            القطاعي</label>
+                                                                                        <input type="number" class="form-control"
+                                                                                               id="discount" name="discount" placeholder="">
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-12 col-12">
+                                                                                    <div class="select-div custom-check">
+                                                                                        <label class="form-label">نوع الخصم للقطاعي</label>
+                                                                                        <div class="inputs_cutom">
+                                                                                            <div class="me-1">
+                                                                                                <input hidden="" name="consumer_price_discount_type"
+                                                                                                       value="2" type="radio" id="myCheckbperr2"/>
+                                                                                                <label class="custom-label" for="myCheckbperr2">
+                                                                                                    مئوي
+                                                                                                </label>
+                                                                                            </div>
+                                                                                            <div class="me-1">
+                                                                                                <input hidden="" name="consumer_price_discount_type"
+                                                                                                       value="1" type="radio" id="myCheckbperr22"/>
+                                                                                                <label class="custom-label" for="myCheckbperr22">
+                                                                                                    رقم صحيح
+                                                                                                </label>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div><!--end col-->
+                                                                                <div class="col-md-12">
                                                                                     <div class="row">
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div class="select-div">
                                                                                                 <label for="category_id" class="form-label">التصنيف</label>
-                                                                                                <select name="subsubcategory_id" class="form-select select-modal"
+                                                                                                <select name="category_id" class="form-select select-modal"
                                                                                                         id="category_id" required="">
                                                                                                     <option selected="" disabled="" value=""
                                                                                                             hidden></option>
                                                                                                     @foreach($categories as $category)
-                                                                                                        <option {{ $categoryy->id == $category['id'] }}
-                                                                                                                value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
+                                                                                                        <option
+                                                                                                            value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
                                                                                                     @endforeach
                                                                                                 </select>
                                                                                             </div>
@@ -210,7 +202,8 @@ $lang = app()->getLocale();
                                                                                                 <label for="subcategory_id" class="form-label">التصنيف الفرعي </label>
                                                                                                 <select class="form-select select-modal" name="subcategory_id"
                                                                                                         id="subcategory_id">
-                                                                                                    <option value="{{ $subcategory['id'] }}">{{ $subcategory['name_'.$lang] }}</option>
+                                                                                                    <option
+                                                                                                        value="" disabled selected>اختر التصنيف الرئيسي اولا</option>
                                                                                                 </select>
                                                                                                 @error('subcategory_id')
                                                                                                 <span class="text-danger">{{ $message }}</span>
@@ -221,10 +214,10 @@ $lang = app()->getLocale();
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div class="select-div">
                                                                                                 <label for="subsubcategory_id" class="form-label">التصنيف الفرعي الثاني</label>
-                                                                                                <select class="form-select select-modal" name="category_id"
+                                                                                                <select class="form-select select-modal" name="subsubcategory_id"
                                                                                                         id="subsubcategory_id">
-
-                                                                                                    <option value="{{ $subsubcategory['id'] }}">{{ $subsubcategory['name_'.$lang] }}</option>
+                                                                                                    <option
+                                                                                                        value="" disabled selected>اختر التصنيف الفرعي اولا</option>
                                                                                                 </select>
                                                                                                 @error('subsubcategory_id')
                                                                                                 <span class="text-danger">{{ $message }}</span>
@@ -237,25 +230,30 @@ $lang = app()->getLocale();
                                                                                                 <label for="brand_id" class="form-label">الماركة</label>
                                                                                                 <select name="brand_id" class="form-select select-modal"
                                                                                                         id="brand_id" required="">
-                                                                                                    @if(!isset($product['brand_id']))
-                                                                                                        <option selected="" disabled="" value=""
-                                                                                                                hidden></option>
-                                                                                                    @endif
+                                                                                                    <option selected="" disabled="" value=""
+                                                                                                            hidden></option>
                                                                                                     @foreach($brands as $brand)
-                                                                                                        <option {{ $product['brand_id'] == $brand['id'] ? 'selected' : '' }} value="{{ $brand['id'] }}">{{ $brand['name_'.$lang] }}</option>
+                                                                                                        <option
+                                                                                                            value="{{ $brand['id'] }}">{{ $brand['name_'.$lang] }}</option>
                                                                                                     @endforeach
                                                                                                 </select>
+                                                                                                @error('brand_id')
+                                                                                                <span class="text-danger">{{ $message }}</span>
+                                                                                                @enderror
                                                                                             </div>
                                                                                         </div><!--end col-->
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div class="select-div custom-check">
-                                                                                                <label for="subsubcategory_id"
+                                                                                                <label for="material_id"
                                                                                                        class="form-label">الخامات</label>
                                                                                                 <div class="inputs_cutom">
                                                                                                     @foreach($materials as $key => $material)
                                                                                                         <div class="me-1">
-                                                                                                            <input hidden="" {{ $product['material_id'] == $material['id'] ? 'checked' : '' }} name="material_id" value="{{ $material['id'] }}" type="radio" id="myCheckbox{{ $key }}"/>
-                                                                                                            <label class="custom-label" for="myCheckbox{{ $key }}">
+                                                                                                            <input hidden="" name="material_id"
+                                                                                                                   value="{{ $material['id'] }}" type="radio"
+                                                                                                                   id="myCheckbox{{ $key }}"/>
+                                                                                                            <label class="custom-label"
+                                                                                                                   for="myCheckbox{{ $key }}">
                                                                                                                 {{ $material['name_'.$lang] }}
                                                                                                             </label>
                                                                                                         </div>
@@ -271,8 +269,11 @@ $lang = app()->getLocale();
                                                                                                 <div class="inputs_cutom">
                                                                                                     @foreach($shippings as $ship_key => $shipping)
                                                                                                         <div class="me-1">
-                                                                                                            <input hidden="" {{ $product['shipping_method_id'] == $shipping['id'] ? 'checked' : '' }} name="shipping_method_id" value="{{ $shipping['id'] }}" type="radio" id="myCheckbo{{ $ship_key }}"/>
-                                                                                                            <label class="custom-label" for="myCheckbo{{ $ship_key }}">
+                                                                                                            <input hidden="" name="shipping_method_id"
+                                                                                                                   value="{{ $shipping['id'] }}" type="radio"
+                                                                                                                   id="myCheckbo{{ $ship_key }}"/>
+                                                                                                            <label class="custom-label"
+                                                                                                                   for="myCheckbo{{ $ship_key }}">
                                                                                                                 {{ $shipping['name_'.$lang] }}
                                                                                                             </label>
                                                                                                         </div>
@@ -286,8 +287,11 @@ $lang = app()->getLocale();
                                                                                                 <div class="inputs_cutom">
                                                                                                     @foreach($policies as $policy_key => $policy)
                                                                                                         <div class="me-1">
-                                                                                                            <input hidden="" {{ $product['policy_id'] == $policy['id'] ? 'checked' : '' }} name="policy_id" value="{{ $policy['id'] }}" type="radio" id="myCheckb{{ $policy_key }}"/>
-                                                                                                            <label class="custom-label" for="myCheckb{{ $policy_key }}">
+                                                                                                            <input hidden="" name="policy_id"
+                                                                                                                   value="{{ $policy['id'] }}" type="radio"
+                                                                                                                   id="myCheckb{{ $policy_key }}"/>
+                                                                                                            <label class="custom-label"
+                                                                                                                   for="myCheckb{{ $policy_key }}">
                                                                                                                 {{ $policy['name_'.$lang] }}
                                                                                                             </label>
                                                                                                         </div>
@@ -301,13 +305,15 @@ $lang = app()->getLocale();
                                                                                                 <label class="form-label">شحن مجاني</label>
                                                                                                 <div class="inputs_cutom">
                                                                                                     <div class="me-1">
-                                                                                                        <input hidden="" {{ $product_store['free_shipping'] == true ? 'checked' : '' }} name="free_shipping" value="true" type="radio" id="myCheckbsh1"/>
+                                                                                                        <input hidden="" name="free_shipping" value="true"
+                                                                                                               type="radio" id="myCheckbsh1"/>
                                                                                                         <label class="custom-label" for="myCheckbsh1">
                                                                                                             نعم
                                                                                                         </label>
                                                                                                     </div>
                                                                                                     <div class="me-1">
-                                                                                                        <input hidden="" {{ $product_store['free_shipping'] == false ? 'checked' : '' }} name="free_shipping" value="false" type="radio" id="myCheckbsh2"/>
+                                                                                                        <input hidden="" name="free_shipping" value="false"
+                                                                                                               type="radio" id="myCheckbsh2"/>
                                                                                                         <label class="custom-label" for="myCheckbsh2">
                                                                                                             لا
                                                                                                         </label>
@@ -317,7 +323,7 @@ $lang = app()->getLocale();
                                                                                         </div><!--end col-->
                                                                                     </div>
                                                                                 </div>
-                                                                            </div><!--end row-->
+                                                                            </div>
                                                                             <div class="wrapper">
                                                                                 <div class="row">
                                                                                     <div class="col-md-12">
@@ -329,11 +335,12 @@ $lang = app()->getLocale();
                                                                                                     </div>
                                                                                                     <div class="upload-options">
                                                                                                         <label>
-                                                                                                            <input type="file" name="barcode" class="image-upload"
+                                                                                                            <input type="file" name="barcode"
+                                                                                                                   class="image-upload"
                                                                                                                    accept="image/*"/>
                                                                                                         </label>
                                                                                                     </div>
-                                                                                                    <div @if(isset($product_store['barcode_url'])) style="background-image:url({{ $product_store['barcode_url'] }})" @endif class="js--image-preview mt-3 border border-1"></div>
+                                                                                                    <div class="js--image-preview mt-3"></div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div>
@@ -342,7 +349,7 @@ $lang = app()->getLocale();
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div>
                                                                                                 <label for="barcode" class="form-label">BARCODE</label>
-                                                                                                <input type="text" name="barcode_text" value="{{ $product_store['barcode_text'] }}" class="form-control" id="barcode"
+                                                                                                <input type="text" class="form-control" id="barcode" name="barcode_text"
                                                                                                        placeholder="">
                                                                                             </div>
                                                                                         </div><!--end col-->
@@ -356,9 +363,9 @@ $lang = app()->getLocale();
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
+                                                                            <!-- end tab content -->
                                                                         </form>
                                                                     </div>
-
                                                                 </div><!-- end card-body -->
                                                             </div><!-- end card -->
                                                         </div><!--end col-->
@@ -439,38 +446,38 @@ $lang = app()->getLocale();
     <script src="{{ asset('admin') }}/assets/js/additional-methods.min.js"></script>
     <script src="{{ asset('admin') }}/assets/js/jquery.validate.min.js"></script>
     @if(isset($product_store['barcode_url']))
-    <script>
-        $(document).ready(function() {
-            $(".my_form").validate({
-                rules: {
-                    name: "required",
-                    description: "required",
-                    publish_app_at: "required",
-                    price: "required",
-                    consumer_old_price: "required",
-                    brand_id: "required",
-                    material_id: "required",
-                    shipping_method_id: "required",
-                    policy_id: "required",
-                    free_shipping: "required",
-                    barcode_text: "required",
-                },
-                messages: {
-                    name: "مطلوب",
-                    description: "مطلوب",
-                    publish_app_at: "مطلوب",
-                    price: "مطلوب",
-                    consumer_old_price: "مطلوب",
-                    brand_id: "مطلوب",
-                    material_id: "مطلوب",
-                    shipping_method_id: "مطلوب",
-                    policy_id: "مطلوب",
-                    free_shipping: "مطلوب",
-                    barcode_text: "مطلوب",
-                }
+        <script>
+            $(document).ready(function() {
+                $(".my_form").validate({
+                    rules: {
+                        name: "required",
+                        description: "required",
+                        publish_app_at: "required",
+                        price: "required",
+                        consumer_old_price: "required",
+                        brand_id: "required",
+                        material_id: "required",
+                        shipping_method_id: "required",
+                        policy_id: "required",
+                        free_shipping: "required",
+                        barcode_text: "required",
+                    },
+                    messages: {
+                        name: "مطلوب",
+                        description: "مطلوب",
+                        publish_app_at: "مطلوب",
+                        price: "مطلوب",
+                        consumer_old_price: "مطلوب",
+                        brand_id: "مطلوب",
+                        material_id: "مطلوب",
+                        shipping_method_id: "مطلوب",
+                        policy_id: "مطلوب",
+                        free_shipping: "مطلوب",
+                        barcode_text: "مطلوب",
+                    }
+                });
             });
-        });
-    </script>
+        </script>
     @else
         <script>
             $(document).ready(function() {

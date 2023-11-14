@@ -59,9 +59,19 @@ class ProductController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($store_id)
     {
-        //
+        $colors = Color::where('activation', 'true')->where('archive', 'false')->get();
+        $store = Store::find($store_id);
+        $categories = Category::whereNull('category_id')->get();
+        $materials = Material::all();
+        $policies = Policy::all();
+        $brands = Brand::all();
+        $shippings = ShippingMethod::all();
+        $product_store = ProductStore::where('store_id', $store_id)->pluck('product_id');
+        $products = Product::whereIn('id', $product_store)->orderBy('id', 'desc')->get();
+        return view('admin.products.create', ['store' => $store, 'products' => $products, 'categories' => $categories,
+            'materials' => $materials, 'policies' => $policies, 'shippings' => $shippings, 'brands' => $brands, 'colors' => $colors]);
     }
 
     /**
@@ -72,7 +82,7 @@ class ProductController extends Controller
      */
     public function store(Request $request, $store_id)
     {
-        try {
+//        try {
             DB::beginTransaction();
             $store = Store::find($store_id);
             $product = new Product();
@@ -124,15 +134,16 @@ class ProductController extends Controller
 
             DB::commit();
             $request->session()->flash('status', 'تم الاضافة بنجاح');
-            return redirect()->back()->with(array('type' => 'add_new', 'product_id' => $product['id'], 'store_id' => $store['id']));
+            $url = url('admin_panel/products', $store_id);
+            return redirect()->to($url)->with(array('type' => 'add_new', 'product_id' => $product['id'], 'store_id' => $store['id']));
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('error in add product from admin panel ' . __LINE__ . $e);
-            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
-
-            return redirect()->back();
-        }
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//            Log::error('error in add product from admin panel ' . __LINE__ . $e);
+//            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+//
+//            return redirect()->back();
+//        }
     }
 
     /**

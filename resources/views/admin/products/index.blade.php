@@ -470,8 +470,7 @@ $lang = app()->getLocale();
                                                                 <div class="card-body p-0">
                                                                     <div
                                                                         class="add-btns ms-2 mb-2 mt-md-1 mt-3 justify-content-end">
-                                                                        <a href="#" data-bs-toggle="modal"
-                                                                           data-bs-target="#exampleModalgrid"
+                                                                        <a href="{{ url('admin_panel/products/'.$store['id'].'/create') }}"
                                                                            class="btn btn-warning role-add">
                                                                             <i class=" bx bx-plus"></i>
                                                                             اضافة منتج جديد
