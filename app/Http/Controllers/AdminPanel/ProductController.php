@@ -82,7 +82,7 @@ class ProductController extends Controller
      */
     public function store(Request $request, $store_id)
     {
-//        try {
+        try {
             DB::beginTransaction();
             $store = Store::find($store_id);
             $product = new Product();
@@ -137,13 +137,13 @@ class ProductController extends Controller
             $url = url('admin_panel/products', $store_id);
             return redirect()->to($url)->with(array('type' => 'add_new', 'product_id' => $product['id'], 'store_id' => $store['id']));
 
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            Log::error('error in add product from admin panel ' . __LINE__ . $e);
-//            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
-//
-//            return redirect()->back();
-//        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('error in add product from admin panel ' . __LINE__ . $e);
+            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+
+            return redirect()->back();
+        }
     }
 
     /**
@@ -221,9 +221,12 @@ class ProductController extends Controller
 
     public function product_attr_save(Request $request)
     {
-        try {
+//        try {
             if (!isset($request['color_id'])) {
                 return redirect()->back()->with('error', 'يرجى اضافة لون');
+            }
+            if (count($request['size_ids']) == 0) {
+                return redirect()->back()->with('error', 'يرجى اضافة احجام');
             }
             $store_id = $request['store_id'];
             $product_id = $request['product_id'];
@@ -261,12 +264,12 @@ class ProductController extends Controller
             \Session::forget('type');
             return redirect()->back();
 
-        } catch (\Exception $e) {
-            DB::rollBack();
-            Log::error('error in add product color from admin panel ' . __LINE__ . $e);
-            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
-            return redirect()->back();
-        }
+//        } catch (\Exception $e) {
+//            DB::rollBack();
+//            Log::error('error in add product color from admin panel ' . __LINE__ . $e);
+//            $request->session()->flash('error', 'خطأ يرجى التأكد من المشكلة');
+//            return redirect()->back();
+//        }
     }
 
     /**
