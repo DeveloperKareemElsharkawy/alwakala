@@ -30,6 +30,13 @@
                 data-key="t-dashboards">اماكن التوصيل</span>
         </a>
     </li>
+
+    <li class="nav-item {{ Request::is('admin_panel/purchases/'.$store['id']) ? 'active' : ''}}">
+        <a class="nav-link menu-link" href="{{ url('admin_panel/purchases', $store['id']) }}">
+            <i class="ph-record-fill"></i> <span
+                data-key="t-dashboards">المبيعات</span>
+        </a>
+    </li>
     <li class="nav-item {{ Request::is('admin_panel/orders/'.$store['id']) || Request::is('admin_panel/order/*') ? 'active' : ''}}">
         <a href="#purchase" class="nav-link menu-link {{ Request::is('admin_panel/orders/'.$store['id']) || Request::is('admin_panel/order/*') ? '' : 'collapsed'}}"
            data-bs-toggle="collapse"

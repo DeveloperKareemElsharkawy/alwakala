@@ -14,6 +14,7 @@ use App\Http\Controllers\AdminPanel\BrandController;
 use App\Http\Controllers\AdminPanel\ColorController;
 use App\Http\Controllers\AdminPanel\SizeController;
 use App\Http\Controllers\AdminPanel\MaterialController;
+use App\Http\Controllers\AdminPanel\PurchaseController;
 use App\Http\Controllers\AdminPanel\CategoryController;
 
 \App::setLocale('ar');
@@ -47,6 +48,11 @@ Route::group(array('prefix' => 'admin_panel'), function () {
     Route::get('order/{order_id}', [OrderController::class , 'show']);
     Route::post('delete_product_order/{order_product_id}', [OrderController::class , 'delete_product_order']);
     Route::post('delete_store_order/{order_product_id}', [OrderController::class , 'delete_store_order']);
+
+//    purchases
+    Route::get('purchases/{store_id}', [PurchaseController::class , 'index']);
+    Route::get('purchase/{order_id}/{store_id}', [PurchaseController::class , 'show']);
+    Route::post('purchase_status/{order_id}/{store_id}', [PurchaseController::class , 'update']);
     //    shipping addresses
     Route::get('shipping_addresses/{store_id}', [ShippingAddressController::class , 'index']);
     Route::post('new_shipping_address', [ShippingAddressController::class , 'form']);
