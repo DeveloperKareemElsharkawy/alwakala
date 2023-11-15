@@ -9,6 +9,9 @@
     if(Request::is('admin_panel/settings/sizes')){
         $active = 'sizes';
     }
+    if(Request::is('admin_panel/settings/countries')){
+        $active = 'countries';
+    }
     if(Request::is('admin_panel/settings/categories')){
         $active = 'categories';
     }
@@ -196,6 +199,31 @@
                             <a href="{{ url('admin_panel/settings/sizes?type=archived') }}" class="nav-link {{ $active == 'sizes' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-sizes">
                                 <i class="bx bx-circle"></i>
                                 المقاسات المؤرشفة
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <a href="#countries" class="nav-link menu-link {{ $active == 'countries' ? '' : 'collapsed' }}"
+                   data-bs-toggle="collapse"
+                   role="button" aria-expanded="false" aria-controls="countries">
+                    <i class="ph-record-fill"></i> <span data-key="t-layouts">الدول</span>
+                    <i class="ri-arrow-left-s-fill fs-5"></i>
+                </a>
+                <div class="collapse menu-dropdown {{ $active == 'countries' ? 'show' : '' }}" id="countries">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/countries') }}" class="nav-link {{ $active == 'countries' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-countries">
+                                <i class="bx bx-circle"></i>
+                                الدول
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/countries?type=archived') }}" class="nav-link {{ $active == 'countries' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-countries">
+                                <i class="bx bx-circle"></i>
+                                الدول المؤرشفة
                             </a>
                         </li>
                     </ul>

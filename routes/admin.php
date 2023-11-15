@@ -13,6 +13,7 @@ use App\Http\Controllers\AdminPanel\AttributeController;
 use App\Http\Controllers\AdminPanel\BrandController;
 use App\Http\Controllers\AdminPanel\ColorController;
 use App\Http\Controllers\AdminPanel\SizeController;
+use App\Http\Controllers\AdminPanel\CountryController;
 use App\Http\Controllers\AdminPanel\MaterialController;
 use App\Http\Controllers\AdminPanel\PurchaseController;
 use App\Http\Controllers\AdminPanel\CategoryController;
@@ -99,6 +100,10 @@ Route::group(array('prefix' => 'admin_panel/settings'), function () {
     //    materials
     Route::resource('materials', MaterialController::class)->except(['create']);
     Route::get('materials/archive/{id}', [MaterialController::class , 'archive']);
+
+    //    countreis
+    Route::resource('countries', CountryController::class)->except(['create']);
+    Route::get('countries/archive/{id}', [CountryController::class , 'archive']);
 
     //    categories
     Route::resource('categories', CategoryController::class)->except(['create']);
