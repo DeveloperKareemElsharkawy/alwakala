@@ -1,5 +1,5 @@
 @extends('admin.layout.master')
-@section('pageTitle', 'الدول')
+@section('pageTitle', 'المناطق')
 @section('backend-head')
     <!-- datatable css -->
     <link href="{{ asset('admin') }}/assets/libs/datatable/datatables.min.css" rel="stylesheet" type="text/css">
@@ -30,7 +30,7 @@
                     <h5 class="modal-title" id="exampleModalgridLab">اضافة دولة جديد</h5>
                 </div>
                 <div class="modal-body px-5">
-                    <form class="my_form px-5" method="post" action="{{ url('admin_panel/settings/countries') }}">
+                    <form class="my_form px-5" method="post" action="{{ url('admin_panel/settings/regions') }}">
                         {{ csrf_field() }}
                         <div class="row g-3">
                             <div class="col-md-12 col-12">
@@ -48,6 +48,21 @@
                                     <label for="name_en" class="form-label">الاسم بالانجليزية</label>
                                     <input type="text" name="name_en" class="form-control" id="name_en" placeholder="">
                                     @error('name_en')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-12 col-12">
+                                <div class="select-div">
+                                    <label for="country_id" class="form-label">الدولة </label>
+                                    <select class="form-select select-modal" name="country_id"
+                                            id="country_id">
+                                        @foreach($countries as $country_key => $country)
+                                            <option
+                                                value="{{ $country['id'] }}">{{ $country['name_'.$lang] }}</option>
+                                        @endforeach
+                                    </select>
+                                    @error('country_id')
                                     <span class="text-danger">{{ $message }}</span>
                                     @enderror
                                 </div>
@@ -88,12 +103,12 @@
                                 <div class="col-md-9">
                                     <ul class="nav nav-tabs nav-justified mb-1 settings_tabs" role="tablist">
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="{{ url('admin_panel/settings/countries') }}">
+                                            <a class="nav-link " href="{{ url('admin_panel/settings/countries') }}">
                                                 الدولة
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="{{ url('admin_panel/settings/regions') }}">
+                                            <a class="nav-link active" href="{{ url('admin_panel/settings/regions') }}">
                                                 المحافظة
                                             </a>
                                         </li>
@@ -238,10 +253,12 @@
                 rules: {
                     name_ar: "required",
                     name_en: "required",
+                    country_id: "required",
                 },
                 messages: {
                     name_ar: "اسم الدولة بالعربية مطلوب",
                     name_en: "اسم الدولة بالانجليزية مطلوب",
+                    country_id: "الدولة مطلوبة",
                 }
             });
         });

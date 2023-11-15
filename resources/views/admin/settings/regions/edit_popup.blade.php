@@ -2,10 +2,10 @@
     <i class="ri-close-line"></i>
 </button>
 <div class="modal-header d-block text-center">
-    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل الدولة {{ $material['name_'.$lang] }} </h5>
+    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل الاقليم {{ $material['name_'.$lang] }} </h5>
 </div>
 <div class="modal-body px-5">
-    <form class="my_form px-5" method="post" action="{{route('countries.update' , $material->id)}}" autocomplete="off">
+    <form class="my_form px-5" method="post" action="{{route('regions.update' , $material->id)}}" autocomplete="off">
         {{ csrf_field() }}
         {{ method_field('PATCH') }}
         <div class="row g-3">
@@ -28,7 +28,21 @@
                     @enderror
                 </div>
             </div><!--end col-->
-
+            <div class="col-md-12 col-12">
+                <div class="select-div">
+                    <label for="country_id" class="form-label">الدولة </label>
+                    <select class="form-select select-modal" name="country_id"
+                            id="country_id">
+                        @foreach($countries as $country_key => $country)
+                            <option {{ $country['id'] == $material['country_id'] ? 'selected' : '' }}
+                                value="{{ $country['id'] }}">{{ $country['name_'.$lang] }}</option>
+                        @endforeach
+                    </select>
+                    @error('country_id')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div><!--end col-->
                        <div class="col-lg-12">
                 <div class="hstack gap-2 mt-5 justify-content-center">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">اغلاق</button>
@@ -48,10 +62,12 @@
             rules: {
                 name_ar: "required",
                 name_en: "required",
+                country_id: "required",
             },
             messages: {
                 name_ar: "اسم الدولة بالعربية مطلوب",
                 name_en: "اسم الدولة بالانجليزية مطلوب",
+                country_id: "الدولة مطلوبة",
             }
         });
     });

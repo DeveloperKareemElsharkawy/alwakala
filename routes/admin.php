@@ -17,6 +17,9 @@ use App\Http\Controllers\AdminPanel\CountryController;
 use App\Http\Controllers\AdminPanel\MaterialController;
 use App\Http\Controllers\AdminPanel\PurchaseController;
 use App\Http\Controllers\AdminPanel\CategoryController;
+use App\Http\Controllers\AdminPanel\RegionController;
+use App\Http\Controllers\AdminPanel\StateController;
+use App\Http\Controllers\AdminPanel\CityController;
 
 \App::setLocale('ar');
 view()->share('lang', \App::getLocale());
@@ -104,6 +107,17 @@ Route::group(array('prefix' => 'admin_panel/settings'), function () {
     //    countreis
     Route::resource('countries', CountryController::class)->except(['create']);
     Route::get('countries/archive/{id}', [CountryController::class , 'archive']);
+    //    regions
+    Route::resource('regions', RegionController::class)->except(['create']);
+    Route::get('regions/archive/{id}', [RegionController::class , 'archive']);
+
+    //    states
+    Route::resource('states', StateController::class)->except(['create']);
+    Route::get('states/archive/{id}', [StateController::class , 'archive']);
+
+    //    states
+    Route::resource('cities', CityController::class)->except(['create']);
+    Route::get('cities/archive/{id}', [CityController::class , 'archive']);
 
     //    categories
     Route::resource('categories', CategoryController::class)->except(['create']);
@@ -120,3 +134,5 @@ Route::group(array('prefix' => 'admin_panel/settings'), function () {
 });
 Route::get('ajax_subcatgeories', [CategoryController::class , 'ajax_subcatgeories']);
 Route::get('city_ajax', [AdminController::class , 'city_ajax']);
+Route::get('state_ajax', [AdminController::class , 'state_ajax']);
+Route::get('ajax_regions', [AdminController::class , 'region_ajax']);

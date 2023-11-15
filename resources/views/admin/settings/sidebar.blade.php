@@ -230,6 +230,54 @@
                 </div>
             </li>
             <li class="nav-item">
+                <a href="#regions" class="nav-link menu-link {{ $active == 'regions' ? '' : 'collapsed' }}"
+                   data-bs-toggle="collapse"
+                   role="button" aria-expanded="false" aria-controls="regions">
+                    <i class="ph-record-fill"></i> <span data-key="t-layouts">الاقاليم</span>
+                    <i class="ri-arrow-left-s-fill fs-5"></i>
+                </a>
+                <div class="collapse menu-dropdown {{ $active == 'regions' ? 'show' : '' }}" id="regions">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/regions') }}" class="nav-link {{ $active == 'regions' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-regions">
+                                <i class="bx bx-circle"></i>
+                                الاقاليم
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/regions?type=archived') }}" class="nav-link {{ $active == 'regions' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-regions">
+                                <i class="bx bx-circle"></i>
+                                الاقاليم المؤرشفة
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#states" class="nav-link menu-link {{ $active == 'states' ? '' : 'collapsed' }}"
+                   data-bs-toggle="collapse"
+                   role="button" aria-expanded="false" aria-controls="regions">
+                    <i class="ph-record-fill"></i> <span data-key="t-layouts">الولايات</span>
+                    <i class="ri-arrow-left-s-fill fs-5"></i>
+                </a>
+                <div class="collapse menu-dropdown {{ $active == 'regions' ? 'show' : '' }}" id="states">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/states') }}" class="nav-link {{ $active == 'states' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-states">
+                                <i class="bx bx-circle"></i>
+                                الولايات
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/states?type=archived') }}" class="nav-link {{ $active == 'states' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-states">
+                                <i class="bx bx-circle"></i>
+                                الولايات المؤرشفة
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
                 <a href="#categories" class="nav-link menu-link {{ $active == 'sizes' ? '' : 'collapsed' }}"
                    data-bs-toggle="collapse"
                    role="button" aria-expanded="false" aria-controls="purchase">
