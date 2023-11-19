@@ -74,7 +74,7 @@ class OrdersService
                 $orderProduct['total_price'] = $storeProduct['pivot']['total_price'];
                 $orderProduct['basic_unit_count'] = $storeProduct['pivot']['basic_unit_count'];
                 $orderProduct['store_id'] = $storeProduct['pivot']['store_id'];
-                $orderProduct['quantity'] = $storeProduct['quantity'];
+                $orderProduct['quantity'] = 1;
                 $productStocks [] = $orderProduct;
 //                unset($orderProduct['store_id']);
 //                $result = $this->productRepository->checkQuantities($orderProduct, $store['id']);
