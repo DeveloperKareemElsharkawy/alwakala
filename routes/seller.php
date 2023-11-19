@@ -279,8 +279,8 @@ Route::group(['prefix' => 'seller-app', 'namespace' => 'Seller'], function () {
         Route::post('/check-cart-available-quantities', 'ShoppingCartController@checkCartAvailableQuantities')->middleware('seller_can_access:sCheckCartAvailableQuantities');
     });
 
-    Route::group(['prefix' => 'orders', 'middleware' => ['seller_auth', 'user_activation']], function () {
-        Route::post('/add-order', 'OrdersController@addOrderV2')->middleware('seller_can_access:sAddOrder');
+    Route::group(['prefix' => 'orders'], function () {
+        Route::post('/add-order', 'OrdersController@addOrderV2');
         Route::post('/{id}/submit-contact-info', 'OrdersController@submitContactInfo')->middleware('seller_can_access:sAddOrder');
 
         Route::get('/purchase-orders', 'OrdersController@PurchaseOrders')->middleware('seller_can_access:sPurchaseOrders');
