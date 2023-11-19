@@ -97,7 +97,7 @@ class OrdersService
         $this->orderRepository->insertOrderProducts($orderProducts);
         $this->productRepository->adoptQuantities($productStocks);
         $this->shoppingCartRepository->deleteOldShoppingCarts($userId);
-        $parentOrder->calculateParentOrderPrice();
+//        $parentOrder->calculateParentOrderPrice();
         return ['status' => true];
     }
 

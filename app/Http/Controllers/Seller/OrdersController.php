@@ -129,6 +129,7 @@ class OrdersController extends BaseController
     public function addOrder(Request $request)
     {
         try {
+           return $request->user_id = auth()->user('api');
             $currentShoppingCarts = $this->shoppingCartRepo->getCurrentShoppingCarts($request->user_id);
             if (count($currentShoppingCarts) == 0) {
                 return response()->json([
@@ -173,7 +174,7 @@ class OrdersController extends BaseController
      */
     public function addOrderV2(MakeOrderRequest $request, CreateOrderService $createOrderService)
     {
-//        try {
+        try {
             $currentShoppingCarts = $this->cartRepository->getCartByUserId($request);
 
             if (!$currentShoppingCarts || count($currentShoppingCarts->items) == 0)
@@ -191,12 +192,12 @@ class OrdersController extends BaseController
 
             return $this->success(['message' => trans('messages.order.add'), 'data' => []]);
 
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            return ServerError::handle($e);
-//            Log::error('error in addOrder of seller Order' . __LINE__ . $e);
-//            return $this->connectionError($e);
-//        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return ServerError::handle($e);
+            Log::error('error in addOrder of seller Order' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
     }
 
     /**
