@@ -8,7 +8,7 @@ class OrderProduct extends Model
 {
     protected $table = 'order_products';
     protected $fillable = [
-        'packing_unit_id',
+//        'packing_unit_id',
         'order_id',
         'product_id',
         'purchased_item_count',

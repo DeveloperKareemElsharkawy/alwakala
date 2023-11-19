@@ -76,11 +76,11 @@ class OrdersService
                 $orderProduct['store_id'] = $storeProduct['pivot']['store_id'];
                 $productStocks [] = $orderProduct;
                 unset($orderProduct['store_id']);
-                $result = $this->productRepository->checkQuantities($orderProduct, $store);
-                if ($result <= 0) {
-                    $message = trans('messages.order.no_quantities_available');
-                    return ['status' => false, 'message' => $message];
-                }
+//                $result = $this->productRepository->checkQuantities($orderProduct, $store['id']);
+//                if ($result <= 0) {
+//                    $message = trans('messages.order.no_quantities_available');
+//                    return ['status' => false, 'message' => $message];
+//                }
                 $orderProducts [] = $orderProduct;
                 $orderTotalPrice += $storeProduct['pivot']['total_price'];
                 $purchasedItemsCount += $orderProduct['purchased_item_count'] * $orderProduct['basic_unit_count'];
