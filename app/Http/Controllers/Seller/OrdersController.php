@@ -128,8 +128,8 @@ class OrdersController extends BaseController
      */
     public function addOrder(Request $request)
     {
-//        try {
-           return $request->user_id = auth('api')->user()->id;
+        try {
+            $request->user_id = auth('api')->user()->id;
             $currentShoppingCarts = $this->shoppingCartRepo->getCurrentShoppingCarts($request->user_id);
             if (count($currentShoppingCarts) == 0) {
                 return response()->json([
@@ -159,12 +159,13 @@ class OrdersController extends BaseController
                 'message' => trans('messages.order.add'),
                 'data' => [],
             ], AResponseStatusCode::SUCCESS);
-//        } catch (\Exception $e) {
-//            DB::rollBack();
-//            return ServerError::handle($e);
-//            Log::error('error in addOrder of seller Order' . __LINE__ . $e);
-//            return $this->connectionError($e);
-//        }
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('error in addOrder of seller Order' . __LINE__ . $e);
+            return ServerError::handle($e);
+            Log::error('error in addOrder of seller Order' . __LINE__ . $e);
+            return $this->connectionError($e);
+        }
     }
 
     /**
