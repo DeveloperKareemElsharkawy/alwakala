@@ -164,7 +164,7 @@ class ProductRepository extends Controller
                     ->where('color_id', $product_store['color_id'])
                     ->first();
 
-                $productStoreStock->adoptStock($product_store['product_id'], $product_store['store_id'], $packingUnitProduct->id);
+//                $productStoreStock->adoptStock($product_store['product_id'], $product_store['store_id'], $packingUnitProduct->id);
             }
         }
     }
