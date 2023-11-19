@@ -145,11 +145,18 @@ class ProductRepository extends Controller
             $productAttrs = PackingUnitProductAttribute::query()
                 ->where('packing_unit_product_id', $packingUnitProduct->id)
                 ->get();
+            if(isset($product_store['pivot'])){
+                $productStore = ProductStore::query()
+                    ->where('store_id', $product_store['pivot']['store_id'])
+                    ->where('product_id', $product_store['pivot']['product_id'])
+                    ->first();
+            }else{
+                $productStore = ProductStore::query()
+                    ->where('store_id', $product_store['store_id'])
+                    ->where('product_id', $product_store['product_id'])
+                    ->first();
+            }
 
-            $productStore = ProductStore::query()
-                ->where('store_id', $product_store['pivot']['store_id'])
-                ->where('product_id', $product_store['pivot']['product_id'])
-                ->first();
             foreach ($productAttrs as $productAttr) {
                 $productStoreStock = ProductStoreStock::query()
                     ->where('product_store_id', $productStore->id)
