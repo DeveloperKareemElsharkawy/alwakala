@@ -20,6 +20,11 @@ class ParentOrder extends Model
         return $this->hasMany(Order::class);
     }
 
+    public function parent_orders()
+    {
+        return $this->hasMany(Order::class);
+    }
+
     public function calculateParentOrderPrice()
     {
         $orderPrice = 0;

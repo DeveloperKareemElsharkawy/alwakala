@@ -57,7 +57,7 @@ class OrdersService
             $order->total_price = 0;
             $order->order_price = 0;
             $order->store_id = $ShoppingCart->store_id;
-            $order->address_id = $ShoppingCart->address_id;
+            $order->order_address_id = $ShoppingCart->address_id;
             $order->number = 'S-' . $ShoppingCart->store_id . '-' . $ShoppingCart->user_id . '-' . time();
             $order->parent_order_id = $parentOrder->id;
             $order->save();
@@ -85,11 +85,11 @@ class OrdersService
                 $orderTotalPrice += $storeProduct['pivot']['total_price'];
                 $purchasedItemsCount += $orderProduct['purchased_item_count'] * $orderProduct['basic_unit_count'];
             }
-            $offer = OffersHelper::checkOffer($ShoppingCart->store_id, $purchasedItemsCount, $orderTotalPrice);
-            if ($offer) {
-                $order->discount = $offer['discount'];
-                $order->offer_id = $offer['id'];
-            }
+//            $offer = OffersHelper::checkOffer($ShoppingCart->store_id, $purchasedItemsCount, $orderTotalPrice);
+//            if ($offer) {
+//                $order->discount = $offer['discount'];
+//                $order->offer_id = $offer['id'];
+//            }
             $order->total_price = $orderTotalPrice;
             $order->calculateTotalPrice();
             event(new PlaceOrder([$store->user_id], $order->id));
@@ -97,7 +97,7 @@ class OrdersService
         $this->orderRepository->insertOrderProducts($orderProducts);
         $this->productRepository->adoptQuantities($productStocks);
         $this->shoppingCartRepository->deleteOldShoppingCarts($userId);
-//        $parentOrder->calculateParentOrderPrice();
+        $parentOrder->calculateParentOrderPrice();
         return ['status' => true];
     }
 
