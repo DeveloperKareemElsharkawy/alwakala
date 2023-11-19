@@ -129,7 +129,7 @@ class OrdersController extends BaseController
     public function addOrder(Request $request)
     {
         try {
-           return $request->user_id = auth()->user('api');
+            $request->user_id = auth('api')->user()->id;
             $currentShoppingCarts = $this->shoppingCartRepo->getCurrentShoppingCarts($request->user_id);
             if (count($currentShoppingCarts) == 0) {
                 return response()->json([
