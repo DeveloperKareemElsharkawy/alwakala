@@ -53,6 +53,16 @@ class Order extends Model
         return $this->hasMany(OrderProduct::class);
     }
 
+    public function parent_orders()
+    {
+        return $this->belongsTo(ParentOrder::class);
+    }
+
+    public function parent_order()
+    {
+        return $this->belongsTo(ParentOrder::class);
+    }
+
     public function stores()
     {
         $stores = $this->hasMany(OrderProduct::class)
