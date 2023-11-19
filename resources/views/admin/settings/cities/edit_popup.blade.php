@@ -2,7 +2,7 @@
     <i class="ri-close-line"></i>
 </button>
 <div class="modal-header d-block text-center">
-    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل المدينة {{ $material['name_'.$lang] }} </h5>
+    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل الحي {{ $material['name_'.$lang] }} </h5>
 </div>
 <div class="modal-body px-5">
     <form class="my_form px-5" method="post" action="{{route('cities.update' , $material->id)}}" autocomplete="off">
@@ -61,7 +61,7 @@
             </div><!--end col-->
             <div class="col-md-12 col-12">
                 <div class="select-div">
-                    <label for="state_id" class="form-label">الولاية </label>
+                    <label for="state_id" class="form-label">المدينة </label>
                     <select class="form-select select-modal" name="state_id"
                             id="state_id">
                         @foreach($states as $state_key => $country)

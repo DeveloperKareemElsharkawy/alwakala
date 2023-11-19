@@ -233,7 +233,7 @@
                 <a href="#regions" class="nav-link menu-link {{ $active == 'regions' ? '' : 'collapsed' }}"
                    data-bs-toggle="collapse"
                    role="button" aria-expanded="false" aria-controls="regions">
-                    <i class="ph-record-fill"></i> <span data-key="t-layouts">الاقاليم</span>
+                    <i class="ph-record-fill"></i> <span data-key="t-layouts">المحافظات</span>
                     <i class="ri-arrow-left-s-fill fs-5"></i>
                 </a>
                 <div class="collapse menu-dropdown {{ $active == 'regions' ? 'show' : '' }}" id="regions">
@@ -241,13 +241,13 @@
                         <li class="nav-item">
                             <a href="{{ url('admin_panel/settings/regions') }}" class="nav-link {{ $active == 'regions' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-regions">
                                 <i class="bx bx-circle"></i>
-                                الاقاليم
+                                المحافظات
                             </a>
                         </li>
                         <li class="nav-item">
                             <a href="{{ url('admin_panel/settings/regions?type=archived') }}" class="nav-link {{ $active == 'regions' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-regions">
                                 <i class="bx bx-circle"></i>
-                                الاقاليم المؤرشفة
+                                المحافظات المؤرشفة
                             </a>
                         </li>
                     </ul>
@@ -257,21 +257,45 @@
                 <a href="#states" class="nav-link menu-link {{ $active == 'states' ? '' : 'collapsed' }}"
                    data-bs-toggle="collapse"
                    role="button" aria-expanded="false" aria-controls="regions">
-                    <i class="ph-record-fill"></i> <span data-key="t-layouts">الولايات</span>
+                    <i class="ph-record-fill"></i> <span data-key="t-layouts">المدن</span>
                     <i class="ri-arrow-left-s-fill fs-5"></i>
                 </a>
-                <div class="collapse menu-dropdown {{ $active == 'regions' ? 'show' : '' }}" id="states">
+                <div class="collapse menu-dropdown {{ $active == 'cities' ? 'show' : '' }}" id="states">
                     <ul class="nav nav-sm flex-column">
                         <li class="nav-item">
-                            <a href="{{ url('admin_panel/settings/states') }}" class="nav-link {{ $active == 'states' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-states">
+                            <a href="{{ url('admin_panel/settings/cities') }}" class="nav-link {{ $active == 'cities' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-states">
                                 <i class="bx bx-circle"></i>
-                                الولايات
+                                المدن
                             </a>
                         </li>
                         <li class="nav-item">
-                            <a href="{{ url('admin_panel/settings/states?type=archived') }}" class="nav-link {{ $active == 'states' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-states">
+                            <a href="{{ url('admin_panel/settings/cities?type=archived') }}" class="nav-link {{ $active == 'cities' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-states">
                                 <i class="bx bx-circle"></i>
-                                الولايات المؤرشفة
+                                المدن المؤرشفة
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <a href="#districts" class="nav-link menu-link {{ $active == 'states' ? '' : 'collapsed' }}"
+                   data-bs-toggle="collapse"
+                   role="button" aria-expanded="false" aria-controls="districts">
+                    <i class="ph-record-fill"></i> <span data-key="t-layouts">الاحياء</span>
+                    <i class="ri-arrow-left-s-fill fs-5"></i>
+                </a>
+                <div class="collapse menu-dropdown {{ $active == 'districts' ? 'show' : '' }}" id="districts">
+                    <ul class="nav nav-sm flex-column">
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/districts') }}" class="nav-link {{ $active == 'districts' && request()->type != 'archived' ? 'active' : '' }}" data-key="t-districts">
+                                <i class="bx bx-circle"></i>
+                                الاحياء
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{{ url('admin_panel/settings/districts?type=archived') }}" class="nav-link {{ $active == 'districts' && request()->type == 'archived' ? 'active' : '' }}" data-key="t-districts">
+                                <i class="bx bx-circle"></i>
+                                الاحياء المؤرشفة
                             </a>
                         </li>
                     </ul>

@@ -112,12 +112,12 @@ Route::group(array('prefix' => 'admin_panel/settings'), function () {
     Route::get('regions/archive/{id}', [RegionController::class , 'archive']);
 
     //    states
-    Route::resource('states', StateController::class)->except(['create']);
-    Route::get('states/archive/{id}', [StateController::class , 'archive']);
+    Route::resource('cities', StateController::class)->except(['create']);
+    Route::get('cities/archive/{id}', [StateController::class , 'archive']);
 
     //    states
-    Route::resource('cities', CityController::class)->except(['create']);
-    Route::get('cities/archive/{id}', [CityController::class , 'archive']);
+    Route::resource('districts', CityController::class)->except(['create']);
+    Route::get('districts/archive/{id}', [CityController::class , 'archive']);
 
     //    categories
     Route::resource('categories', CategoryController::class)->except(['create']);

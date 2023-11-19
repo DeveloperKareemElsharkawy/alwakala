@@ -21,7 +21,7 @@
     <li class="nav-item {{ Request::is('admin_panel/shipping_addresses/'.$store['id']) ? 'active' : ''}}">
         <a class="nav-link menu-link" href="{{ url('admin_panel/shipping_addresses', $store['id']) }}">
             <i class="ph-record-fill"></i> <span
-                data-key="t-dashboards">مدن الشحن</span>
+                data-key="t-dashboards">عناوين الشحن</span>
         </a>
     </li>
     <li class="nav-item {{ Request::is('admin_panel/delivery_addresses/'.$store['id']) ? 'active' : ''}}">

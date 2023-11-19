@@ -98,13 +98,13 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('admin_panel/settings/states') }}">
-                                                الولاية
+                                            <a class="nav-link" href="{{ url('admin_panel/settings/cities') }}">
+                                                المدينة
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('admin_panel/settings/cities') }}">
-                                                المدينة
+                                            <a class="nav-link" href="{{ url('admin_panel/settings/districts') }}">
+                                                الحي
                                             </a>
                                         </li>
                                     </ul>

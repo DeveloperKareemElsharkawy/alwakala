@@ -8,7 +8,9 @@ use App\Http\Requests\ShippingAddresses\AddShipmentAddressRequest;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\CityStore;
+use App\Models\Country;
 use App\Models\OrderAddress;
+use App\Models\Region;
 use App\Models\State;
 use App\Models\Store;
 use Illuminate\Http\Request;
@@ -18,15 +20,17 @@ class ShippingAddressController extends Controller
 {
     public function index($store_id)
     {
-        try{
+//        try{
             $store = Store::find($store_id);
             $cities = City::all();
             $states = State::all();
+            $countries = Country::all();
             $addresses = CityStore::where('store_id' , $store_id)->orderBy('id','desc')->get();
-            return view('admin.shipping_addresses.index' , ['store' => $store , 'addresses' => $addresses,'cities'=>$cities,'states'=>$states]);
-        }catch (\Exception $e){
-            return redirect()->route('adminHome');
-        }
+            return view('admin.shipping_addresses.index' , ['store' => $store , 'addresses' => $addresses,
+                'cities'=>$cities,'states'=>$states , 'countries' => $countries]);
+//        }catch (\Exception $e){
+//            return redirect()->route('adminHome');
+//        }
     }
 
     public function form(AddShipmentAddressRequest $request , $address_id = null)
@@ -67,7 +71,9 @@ class ShippingAddressController extends Controller
         $states = State::all();
         $old_state = State::find($address['city']['state_id']);
         $lang = app()->getLocale();
-        return view('admin.shipping_addresses.edit_popup', ['old_state'=>$old_state,'lang'=>$lang,'address' => $address,'states' => $states]);
+        $countries = Country::all();
+        $regions = Region::all();
+        return view('admin.shipping_addresses.edit_popup', ['regions'=>$regions,'countries'=>$countries,'old_state'=>$old_state,'lang'=>$lang,'address' => $address,'states' => $states]);
     }
 
     public function delete_address($id)

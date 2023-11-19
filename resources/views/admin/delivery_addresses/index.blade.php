@@ -53,19 +53,42 @@
                             </div><!--end col-->
                             <div class="col-md-12 col-12">
                                 <div class="select-div">
-                                    <label for="state_id" class="form-label">المحافظة</label>
-                                    <select class="form-select select-modal" name="state_id" id="state_id" required="">
-                                        @foreach($states as $state)
-                                            <option value="{{ $state['id'] }}">{{ $state['name_'.$lang] }}</option>
+                                    <label for="country_id" class="form-label">الدولة </label>
+                                    <select class="form-select select-modal" name="country_id"
+                                            id="country_id">
+                                        <option
+                                            value="" selected disabled hidden="">اختر الدولة </option>
+                                        @foreach($countries as $country_key => $country)
+                                            <option
+                                                value="{{ $country['id'] }}">{{ $country['name_'.$lang] }}</option>
                                         @endforeach
+                                    </select>
+                                    @error('country_id')
+                                    <span class="text-danger">{{ $message }}</span>
+                                    @enderror
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-12 col-12">
+                                <div class="select-div">
+                                    <label for="region_id" class="form-label">المحافظة</label>
+                                    <select class="form-select select-modal" id="region_id" required="">
+                                        <option selected="" disabled="" value="" hidden>اختر الدولة اولا</option>
                                     </select>
                                 </div>
                             </div><!--end col-->
                             <div class="col-md-12 col-12">
                                 <div class="select-div">
-                                    <label for="city_id" class="form-label">المدينة</label>
+                                    <label for="state_id" class="form-label">المدينة</label>
+                                    <select class="form-select select-modal" name="state_id" id="state_id" required="">
+                                        <option selected="" disabled="" value="" hidden>اختر المحافظة اولا</option>
+                                    </select>
+                                </div>
+                            </div><!--end col-->
+                            <div class="col-md-12 col-12">
+                                <div class="select-div">
+                                    <label for="city_id" class="form-label">الحي</label>
                                     <select class="form-select select-modal" name="city_id" id="city_id" required="">
-                                        <option value="" selected disabled>اختر المحافظة</option>
+                                        <option selected="" disabled="" value="" hidden>اختر المدينة اولا</option>
                                     </select>
                                 </div>
                             </div><!--end col-->
@@ -276,6 +299,9 @@
 
 @endsection
 @section('backend-footer')
+    <script>
+        var link = '<?php echo url('/'); ?>';
+    </script>
     <!-- select2 js -->
     <script src="{{ asset('admin') }}/assets/libs/select2/select2.min.js"></script>
     <!-- Sweet Alerts js -->
@@ -310,21 +336,6 @@
     <script src="{{ asset('admin') }}/assets/libs/gmaps/gmaps.min.js"></script>
     <!-- gmaps init -->
     <script src="{{ asset('admin') }}/assets/js/pages/gmaps.init.js"></script>
-
-    <script>
-        $('#state_id').on('change', function (e) {
-            console.log(e);
-            var state_id = e.target.value;
-            var server = '<?php echo \Request::root(); ?>';
-            $.get(server + '/city_ajax?state_id=' + state_id, function (data) {
-                $('#city_id').empty();
-                $('#city_id').append('<option value="" selected hidden disabled>Select City</option>');
-                $.each(data, function (index, subcatObj) {
-                    $('#city_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
-                });h
-            });
-        });
-    </script>
     <script src="{{ asset('admin') }}/assets/js/jquery.validate.min.js"></script>
     <script>
         $(document).ready(function() {
@@ -344,6 +355,44 @@
                     address: "الحقل مطلوب",
                     main_street: "الحقل مطلوب",
                 }
+            });
+        });
+    </script>
+    <script>
+        $('#state_id').on('change', function (e) {
+            console.log(e);
+            var state_id = e.target.value;
+            var server = '<?php echo \Request::root(); ?>';
+            $.get(server + '/city_ajax?state_id=' + state_id, function (data) {
+                $('#city_id').empty();
+                $('#city_id').append('<option value="" selected hidden disabled>اختر الحي</option>');
+                $.each(data, function (index, subcatObj) {
+                    $('#city_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                });h
+            });
+        });
+    </script>
+    <script>
+        $('#country_id').on('change', function() {
+            var country_id = $(this).val();
+            $.get(link + '/ajax_regions?country_id=' + country_id, function (data) {
+                $('#region_id').empty();
+                $('#region_id').append('<option value="" selected="" hidden disabled>اختر المحافظة</option>');
+                $.each(data, function (index, subcatObj) {
+                    $('#region_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                });
+            });
+        });
+    </script>
+    <script>
+        $('#region_id').on('change', function() {
+            var region_id = $(this).val();
+            $.get(link + '/state_ajax?region_id=' + region_id, function (data) {
+                $('#state_id').empty();
+                $('#state_id').append('<option value="" selected="" hidden disabled>اختر المدينة</option>');
+                $.each(data, function (index, subcatObj) {
+                    $('#state_id').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+                });
             });
         });
     </script>

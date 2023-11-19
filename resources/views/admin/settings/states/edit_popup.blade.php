@@ -2,7 +2,7 @@
     <i class="ri-close-line"></i>
 </button>
 <div class="modal-header d-block text-center">
-    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل الولاية {{ $material['name_'.$lang] }} </h5>
+    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل المدينة {{ $material['name_'.$lang] }} </h5>
 </div>
 <div class="modal-body px-5">
     <form class="my_form px-5" method="post" action="{{route('states.update' , $material->id)}}" autocomplete="off">
@@ -46,7 +46,7 @@
 
             <div class="col-md-12 col-12">
                 <div class="select-div">
-                    <label for="region_id" class="form-label">الدولة </label>
+                    <label for="region_id" class="form-label">المحافظة </label>
                     <select class="form-select select-modal" name="region_id"
                             id="region_id">
                         @foreach($regions as $region_key => $country)
@@ -79,11 +79,13 @@
                 name_ar: "required",
                 name_en: "required",
                 country_id: "required",
+                region_id: "required",
             },
             messages: {
-                name_ar: "اسم الدولة بالعربية مطلوب",
-                name_en: "اسم الدولة بالانجليزية مطلوب",
+                name_ar: "اسم المحافظة بالعربية مطلوب",
+                name_en: "اسم المحافظة بالانجليزية مطلوب",
                 country_id: "الدولة مطلوبة",
+                region_id: "المحافظة مطلوبة",
             }
         });
     });

@@ -2,7 +2,7 @@
     <i class="ri-close-line"></i>
 </button>
 <div class="modal-header d-block text-center">
-    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل الاقليم {{ $material['name_'.$lang] }} </h5>
+    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل المحافظة {{ $material['name_'.$lang] }} </h5>
 </div>
 <div class="modal-body px-5">
     <form class="my_form px-5" method="post" action="{{route('regions.update' , $material->id)}}" autocomplete="off">
@@ -65,8 +65,8 @@
                 country_id: "required",
             },
             messages: {
-                name_ar: "اسم الدولة بالعربية مطلوب",
-                name_en: "اسم الدولة بالانجليزية مطلوب",
+                name_ar: "اسم بالعربية مطلوب",
+                name_en: "اسم بالانجليزية مطلوب",
                 country_id: "الدولة مطلوبة",
             }
         });

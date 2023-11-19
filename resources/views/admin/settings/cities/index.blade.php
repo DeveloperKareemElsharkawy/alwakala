@@ -1,5 +1,5 @@
 @extends('admin.layout.master')
-@section('pageTitle', 'المدن')
+@section('pageTitle', 'الاحياء')
 @section('backend-head')
     <!-- datatable css -->
     <link href="{{ asset('admin') }}/assets/libs/datatable/datatables.min.css" rel="stylesheet" type="text/css">
@@ -30,7 +30,7 @@
                         <h5 class="modal-title" id="exampleModalgridLab">اضافة ولاية جديد</h5>
                     </div>
                     <div class="modal-body px-5">
-                        <form class="my_form px-5" method="post" action="{{ url('admin_panel/settings/cities') }}">
+                        <form class="my_form px-5" method="post" action="{{ url('admin_panel/settings/districts') }}">
                             {{ csrf_field() }}
                             <div class="row g-3">
                                 <div class="col-md-12 col-12">
@@ -86,7 +86,7 @@
 
                                 <div class="col-md-12 col-12">
                                     <div class="select-div">
-                                        <label for="state_id" class="form-label">الولاية </label>
+                                        <label for="state_id" class="form-label">المدينة </label>
                                         <select class="form-select select-modal" name="state_id"
                                                 id="state_id">
                                             <option
@@ -143,13 +143,13 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link " href="{{ url('admin_panel/settings/states') }}">
-                                                الولاية
+                                            <a class="nav-link " href="{{ url('admin_panel/settings/districts') }}">
+                                                المدينة
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="{{ url('admin_panel/settings/cities') }}">
-                                                المدينة
+                                            <a class="nav-link active" href="{{ url('admin_panel/settings/districts') }}">
+                                                الحي
                                             </a>
                                         </li>
                                     </ul>
@@ -166,7 +166,7 @@
                                                                            data-bs-target="#exampleModalgrid"
                                                                            class="btn btn-warning role-add">
                                                                             <i class=" bx bx-plus"></i>
-                                                                            اضافة مدينة جديدة
+                                                                            اضافة حي جديد
                                                                         </a>
                                                                     </div>
                                                                 </div>
@@ -178,8 +178,8 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th>#</th>
+                                                                    <th>الحي</th>
                                                                     <th>المدينة</th>
-                                                                    <th>الولاية</th>
                                                                     <th>المحافظة</th>
                                                                     <th>الدولة</th>
                                                                     <th> فعال</th>
@@ -187,7 +187,7 @@
                                                                 </tr>
                                                                 </thead>
                                                                 <tbody>
-                                                                @foreach($cities as $key => $color)
+                                                                @foreach($districts as $key => $color)
                                                                     <tr class="image_class{{ $color['id'] }}">
                                                                         <td>{{ $key + 1 }}</td>
                                                                         <td>{{ $color['name_'.$lang] }}</td>
@@ -210,20 +210,20 @@
                                                                                 </li>
                                                                                 <li>
                                                                                     @if(request()->type == 'archived')
-                                                                                        <a title="delete" delete_url="settings/cities/"
+                                                                                        <a title="delete" delete_url="settings/districts/"
                                                                                            object_id="{{ $color['id'] }}" data-bs-toggle="tooltip"
                                                                                            data-bs-placement="top" button_type="delete"
                                                                                            class="archive-btn sa-warning" href="#">
                                                                                             <i class="ph-trash"></i>
                                                                                         </a>
-                                                                                        <a title="restore" delete_url="settings/cities/archive/"
+                                                                                        <a title="restore" delete_url="settings/districts/archive/"
                                                                                            object_id="{{ $color['id'] }}" data-bs-toggle="tooltip"
                                                                                            data-bs-placement="top" button_type="restore"
                                                                                            class="archive-btn sa-warning" href="#">
                                                                                             <i class="ri-restart-line"></i>
                                                                                         </a>
                                                                                     @else
-                                                                                        <a title="archive" delete_url="settings/cities/archive/"
+                                                                                        <a title="archive" delete_url="settings/districts/archive/"
                                                                                            object_id="{{ $color['id'] }}" data-bs-toggle="tooltip"
                                                                                            data-bs-placement="top" button_type="archive"
                                                                                            class="archive-btn sa-warning" href="#">
@@ -298,7 +298,7 @@
                     name_en: "اسم الدولة بالانجليزية مطلوب",
                     country_id: "الدولة مطلوبة",
                     region_id: "المحافظة مطلوبة",
-                    state_id: "الولاية مطلوبة",
+                    state_id: "المدينة مطلوبة",
                 }
             });
         });
@@ -314,7 +314,7 @@
             $('#exampleModalgridedit').modal('show');
             $.ajax({
                 type: "GET",
-                url: link + "/admin_panel/settings/cities/" + model_id,
+                url: link + "/admin_panel/settings/districts/" + model_id,
                 success: function (data) {
                     $('#exampleModalgrideditform').html(data);
                 }
@@ -328,7 +328,7 @@
             var model_type = $(this).attr('model_type');
             $.ajax({
                 type: "GET",
-                url: link + "/admin_panel/settings/cities/" + modell_id +"/edit?model_type=" + model_type,
+                url: link + "/admin_panel/settings/districts/" + modell_id +"/edit?model_type=" + model_type,
                 success: function (data) {
                     Swal.fire({
                         title: data.title,

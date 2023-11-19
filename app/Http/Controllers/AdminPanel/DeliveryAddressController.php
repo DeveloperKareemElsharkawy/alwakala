@@ -8,7 +8,9 @@ use App\Http\Requests\SellerApp\AddAddressRequest;
 use App\Models\Address;
 use App\Models\City;
 use App\Models\CityStore;
+use App\Models\Country;
 use App\Models\OrderAddress;
+use App\Models\Region;
 use App\Models\State;
 use App\Models\Store;
 use Illuminate\Http\Request;
@@ -22,8 +24,9 @@ class DeliveryAddressController extends Controller
             $store = Store::find($store_id);
             $cities = City::all();
             $states = State::all();
+            $countries = Country::all();
             $addresses = Address::where('user_id', $store['user_id'])->where('archive', false)->orderBy('id', 'desc')->get();
-            return view('admin.delivery_addresses.index', ['store' => $store, 'addresses' => $addresses, 'cities' => $cities, 'states' => $states]);
+            return view('admin.delivery_addresses.index', ['countries'=>$countries,'store' => $store, 'addresses' => $addresses, 'cities' => $cities, 'states' => $states]);
         } catch (\Exception $e) {
             return redirect()->route('adminHome');
         }
@@ -73,7 +76,9 @@ class DeliveryAddressController extends Controller
         $states = State::all();
         $old_state = State::find($address['city']['state_id']);
         $lang = app()->getLocale();
-        return view('admin.delivery_addresses.edit_popup', ['old_state' => $old_state, 'lang' => $lang, 'address' => $address, 'states' => $states]);
+        $countries = Country::all();
+        $regions = Region::all();
+        return view('admin.delivery_addresses.edit_popup', ['regions' => $regions,'countries' => $countries,'old_state' => $old_state, 'lang' => $lang, 'address' => $address, 'states' => $states]);
     }
 
     public function primary_address($id)

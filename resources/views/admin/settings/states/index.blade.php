@@ -1,5 +1,5 @@
 @extends('admin.layout.master')
-@section('pageTitle', 'الولايات')
+@section('pageTitle', 'المدينة')
 @section('backend-head')
     <!-- datatable css -->
     <link href="{{ asset('admin') }}/assets/libs/datatable/datatables.min.css" rel="stylesheet" type="text/css">
@@ -27,7 +27,7 @@
                         <i class="ri-close-line"></i>
                     </button>
                     <div class="modal-header d-block text-center">
-                        <h5 class="modal-title" id="exampleModalgridLab">اضافة ولاية جديد</h5>
+                        <h5 class="modal-title" id="exampleModalgridLab">اضافة مدينة جديدة</h5>
                     </div>
                     <div class="modal-body px-5">
                         <form class="my_form px-5" method="post" action="{{ url('admin_panel/settings/states') }}">
@@ -129,13 +129,13 @@
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link active" href="{{ url('admin_panel/settings/states') }}">
-                                                الولاية
+                                            <a class="nav-link active" href="{{ url('admin_panel/settings/cities') }}">
+                                                المدينة
                                             </a>
                                         </li>
                                         <li class="nav-item">
-                                            <a class="nav-link" href="{{ url('admin_panel/settings/cities') }}">
-                                                المدينة
+                                            <a class="nav-link" href="{{ url('admin_panel/settings/districts') }}">
+                                                الحي
                                             </a>
                                         </li>
                                     </ul>
@@ -164,7 +164,7 @@
                                                                 <thead>
                                                                 <tr>
                                                                     <th>#</th>
-                                                                    <th>الولاية</th>
+                                                                    <th>المدينة</th>
                                                                     <th>المحافظة</th>
                                                                     <th>الدولة</th>
                                                                     <th> فعال</th>

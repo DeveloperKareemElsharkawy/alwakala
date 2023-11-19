@@ -62,11 +62,11 @@ class ShoppingCartsService
                 array_push($shoppingCartProducts, $shoppingCartProduct);
                 $totalCartPrice += ($itemPrice * $product['purchased_item_count'] * $productPackingUnit->basic_unit_count);
             }
-            $offer = OffersHelper::checkOffer($storeId, $totalPurchasedItemsCount, $totalCartPrice);
-            if ($offer) {
-                $shoppingCart->discount = $offer['discount'];
-                $shoppingCart->offer_id = $offer['id'];
-            }
+//            $offer = OffersHelper::checkOffer($storeId, $totalPurchasedItemsCount, $totalCartPrice);
+//            if ($offer) {
+//                $shoppingCart->discount = $offer['discount'];
+//                $shoppingCart->offer_id = $offer['id'];
+//            }
             $shoppingCart->total_price = $totalCartPrice;
             $shoppingCart->calculateTotalPrice();
             $shoppingCartIds[] = $shoppingCart->id;

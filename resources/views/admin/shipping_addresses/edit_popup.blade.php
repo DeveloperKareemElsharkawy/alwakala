@@ -11,7 +11,32 @@
         <div class="row g-3">
             <div class="col-md-12 col-12">
                 <div class="select-div">
-                    <label for="state_id_edit" class="form-label">المحافظة</label>
+                    <label for="country_id_edit" class="form-label">الدولة </label>
+                    <select class="form-select select-modal" name="country_id_edit"
+                            id="country_id_edit">
+                        @foreach($countries as $country_key => $country)
+                            <option {{ $address['city']['state']['region']['country_id'] == $country['id'] ? 'selected' : '' }}
+                                value="{{ $country['id'] }}">{{ $country['name_'.$lang] }}</option>
+                        @endforeach
+                    </select>
+                    @error('country_id')
+                    <span class="text-danger">{{ $message }}</span>
+                    @enderror
+                </div>
+            </div><!--end col-->
+            <div class="col-md-12 col-12">
+                <div class="select-div">
+                    <label for="region_id_edit" class="form-label">المحافظة</label>
+                    <select class="form-select select-modal" id="region_id_edit" required="">
+                        @foreach($regions as $state)
+                            <option {{ $address['city']['state']['region_id'] == $state['id'] ? 'selected' : '' }} value="{{ $state['id'] }}">{{ $state['name_'.$lang] }}</option>
+                        @endforeach
+                    </select>
+                </div>
+            </div><!--end col-->
+            <div class="col-md-12 col-12">
+                <div class="select-div">
+                    <label for="state_id_edit" class="form-label">المدينة</label>
                     <select class="form-select select-modal" id="state_id_edit" required="">
                         @foreach($states as $state)
                             <option {{ $address['city']['state_id'] == $state['id'] ? 'selected' : '' }} value="{{ $state['id'] }}">{{ $state['name_'.$lang] }}</option>
@@ -21,7 +46,7 @@
             </div><!--end col-->
             <div class="col-md-12 col-12">
                 <div class="select-div">
-                    <label for="city_id_edit" class="form-label">المدينة</label>
+                    <label for="city_id_edit" class="form-label">الحي</label>
                     <select class="form-select select-modal" name="city_id" id="city_id_edit" required="">
                         @foreach($old_state->cities as $city)
                             <option {{ $address['city']['id'] == $city['id'] ? 'selected' : '' }} value="{{ $city['id'] }}">{{ $city['name_'.$lang] }}</option>
@@ -59,6 +84,28 @@
             $.each(data, function (index, subcatObj) {
                 $('#city_id_edit').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
             });h
+        });
+    });
+</script>
+<script>
+    $('#state_id_edit').on('change', function() {
+        var country_id = $(this).val();
+        $.get(link + '/ajax_regions?country_id=' + country_id, function (data) {
+            $('#region_id_edit').empty();
+            $.each(data, function (index, subcatObj) {
+                $('#region_id_edit').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+            });
+        });
+    });
+</script>
+<script>
+    $('#region_id_edit').on('change', function() {
+        var region_id = $(this).val();
+        $.get(link + '/state_ajax?region_id=' + region_id, function (data) {
+            $('#state_id_edit').empty();
+            $.each(data, function (index, subcatObj) {
+                $('#state_id_edit').append('<option value="' + subcatObj.id + '">' + subcatObj.name + '</option>');
+            });
         });
     });
 </script>

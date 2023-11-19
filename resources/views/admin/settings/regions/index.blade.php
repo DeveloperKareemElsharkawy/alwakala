@@ -1,5 +1,5 @@
 @extends('admin.layout.master')
-@section('pageTitle', 'المناطق')
+@section('pageTitle', 'المحافظة')
 @section('backend-head')
     <!-- datatable css -->
     <link href="{{ asset('admin') }}/assets/libs/datatable/datatables.min.css" rel="stylesheet" type="text/css">
@@ -27,7 +27,7 @@
                     <i class="ri-close-line"></i>
                 </button>
                 <div class="modal-header d-block text-center">
-                    <h5 class="modal-title" id="exampleModalgridLab">اضافة دولة جديد</h5>
+                    <h5 class="modal-title" id="exampleModalgridLab">اضافة محافظة جديد</h5>
                 </div>
                 <div class="modal-body px-5">
                     <form class="my_form px-5" method="post" action="{{ url('admin_panel/settings/regions') }}">
@@ -114,12 +114,12 @@
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ url('admin_panel/settings/states') }}">
-                                                الولاية
+                                                المدينة
                                             </a>
                                         </li>
                                         <li class="nav-item">
                                             <a class="nav-link" href="{{ url('admin_panel/settings/cities') }}">
-                                                المدينة
+                                                الحي
                                             </a>
                                         </li>
                                     </ul>
