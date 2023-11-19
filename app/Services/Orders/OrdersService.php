@@ -75,7 +75,7 @@ class OrdersService
                 $orderProduct['basic_unit_count'] = $storeProduct['pivot']['basic_unit_count'];
                 $orderProduct['store_id'] = $storeProduct['pivot']['store_id'];
                 $productStocks [] = $orderProduct;
-                unset($orderProduct['store_id']);
+//                unset($orderProduct['store_id']);
 //                $result = $this->productRepository->checkQuantities($orderProduct, $store['id']);
 //                if ($result <= 0) {
 //                    $message = trans('messages.order.no_quantities_available');
