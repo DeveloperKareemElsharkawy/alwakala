@@ -45,7 +45,7 @@ class OrdersService
         $parentOrder->order_price = 0;
         $parentOrder->save();
         foreach ($currentShoppingCarts as $ShoppingCart) {
-            $store = $this->storeRepository->getStore($ShoppingCart->store_id);
+          return  $store = $this->storeRepository->getStore($ShoppingCart->store_id);
             $storesUsersIds[] = $store->user_id;
             $order = new Order();
             $order->user_id = $ShoppingCart->user_id;
