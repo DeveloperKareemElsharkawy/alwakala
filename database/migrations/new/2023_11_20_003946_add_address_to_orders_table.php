@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class AddParentIdToOrdersTable extends Migration
+class AddAddressToOrdersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -14,10 +14,7 @@ class AddParentIdToOrdersTable extends Migration
     public function up()
     {
         Schema::table('orders', function (Blueprint $table) {
-            $table->integer('parent_order_id')->nullable();
-            $table->integer('store_id')->nullable();
-            $table->integer('order_price')->nullable();
-            $table->integer('shopping_cart_id')->nullable();
+            $table->text('address')->nullable();
         });
     }
 
