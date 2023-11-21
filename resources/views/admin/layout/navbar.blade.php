@@ -232,6 +232,20 @@
 {{--                </li>--}}
 
                 <li class="nav-item">
+                    <a href="#carts" class="nav-link menu-link collapsed {{ Request::is('admin_panel/carts') || Request::is('admin_panel/carts/*') ? 'active' : '' }}" data-bs-toggle="collapse"
+                       role="button" aria-expanded="false" aria-controls="subscription">
+                        <i class="ri-settings-5-fill"></i> <span data-key="t-ecommerce">الطلبات غير المكتملة</span>
+                    </a>
+                    <div class="collapse  menu-dropdown {{ Request::is('admin_panel/settings') || Request::is('admin_panel/carts/*') ? 'show' : '' }}" id="carts">
+                        <ul class="nav nav-sm flex-column">
+                            <li class="nav-item">
+                                <a href="{{ url('admin_panel/carts') }}" class="nav-link" data-key="t-carts">جميع الطلبات الغير مكتملة </a>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+
+                <li class="nav-item">
                     <a href="#settings" class="nav-link menu-link collapsed {{ Request::is('admin_panel/settings') || Request::is('admin_panel/settings/*') ? 'active' : '' }}" data-bs-toggle="collapse"
                        role="button" aria-expanded="false" aria-controls="subscription">
                         <i class="ri-settings-5-fill"></i> <span data-key="t-ecommerce">الاعدادات</span>

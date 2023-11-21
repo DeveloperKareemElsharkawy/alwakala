@@ -20,6 +20,7 @@ use App\Http\Controllers\AdminPanel\CategoryController;
 use App\Http\Controllers\AdminPanel\RegionController;
 use App\Http\Controllers\AdminPanel\StateController;
 use App\Http\Controllers\AdminPanel\CityController;
+use App\Http\Controllers\AdminPanel\CartController;
 
 \App::setLocale('ar');
 view()->share('lang', \App::getLocale());
@@ -89,6 +90,11 @@ Route::group(array('prefix' => 'admin_panel'), function () {
     Route::get('attributes/{attribute_id}/show', [AttributeController::class , 'attribute_info']);
     Route::patch('attributess/{attribute_id}/edit', [AttributeController::class , 'update']);
     Route::delete('attributes/{attribute_id}', [AttributeController::class , 'destroy']);
+
+    Route::get('carts', [CartController::class , 'index']);
+    Route::get('carts/{cart_id}', [CartController::class , 'show']);
+    Route::get('carts_alert/{cart_id}', [CartController::class , 'edit']);
+
 });
 Route::group(array('prefix' => 'admin_panel/settings'), function () {
     //    brands

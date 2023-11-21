@@ -33,6 +33,11 @@ class Cart extends Model
         return $this->belongsTo(Store::class, 'store_id');
     }
 
+    public function payment_method()
+    {
+        return $this->belongsTo(PaymentMethod::class, 'payment_method_id');
+    }
+
     /**
      * @return HasMany
      */
