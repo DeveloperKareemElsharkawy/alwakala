@@ -196,10 +196,10 @@
 
                                                                                                 @foreach($product_orders as $product_order)
                                                                                                         <?php
-                                                                                                        $total = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store']['id'])->sum('total_price');
-                                                                                                        $count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store']['id'])->sum('quantity');
+                                                                                                        $total = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store_id'])->sum('total_price');
+                                                                                                        $count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store'])->sum('quantity');
                                                                                                         $user = $order['user'];
-                                                                                                        $user_store = \App\Models\Store::where('user_id' , $order['user']['id'])->first();
+                                                                                                        $user_store = \App\Models\Store::where('id' , $product_order['store'])->first();
                                                                                                         ?>
                                                                                                     <div
                                                                                                         class="store-purchase">
@@ -210,14 +210,14 @@
                                                                                                                 <div
                                                                                                                     class="border rounded-circle flex-shrink-0 position-relative">
                                                                                                                     <img
-                                                                                                                        src="{{ isset($user_store) ? $user_store['image_url'] : $order['user']['image_url'] }}"
+                                                                                                                        src="{{ isset($user_store) ? $user_store['image_url'] : '' }}"
                                                                                                                         alt=""
                                                                                                                         class="avatar-sm rounded-circle">
                                                                                                                 </div>
                                                                                                                 <div
                                                                                                                     class="flex-grow-1 ms-2 text-start store-info">
                                                                                                                     <h5 class="d-flex align-items-center">
-                                                                                                                        {{ isset($user_store) ? $user_store['name'] : $order['user']['name'] }}
+                                                                                                                        {{ $product_order['store']['name'] ?: '' }}
                                                                                                                         <i class="ri-checkbox-circle-fill px-2"></i>
                                                                                                                     </h5>
                                                                                                                 </div>
