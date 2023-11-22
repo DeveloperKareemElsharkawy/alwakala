@@ -25,7 +25,7 @@ class PurchaseController extends Controller
     public function index($store_id)
     {
         $store_type = request()->store_type ? request()->store_type : 2;
-        $store = Store::whereNull('parent_id')->where('id', $store_id)->first();
+        $store = Store::where('id', $store_id)->first();
         $order_ids = OrderProduct::where('store_id',$store_id)->pluck('order_id');
         $orders = Order::whereHas('items', function ($q) use ($store_type , $store) {
             $q->whereHas('store', function ($qq) use ($store_type , $store) {
