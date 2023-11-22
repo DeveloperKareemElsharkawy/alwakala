@@ -180,7 +180,7 @@
                                                                                                 } elseif ($product_orders_status['status_id'] == 6) {
                                                                                                     $color = 'bg-success';
                                                                                                 }
-                                                                                                $product_orders = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id' , $store['id'])->get()->unique('store_id');
+                                                                                                $product_orders = \App\Models\OrderProduct::where('order_id', $order['id'])->get()->unique('store_id');
 
                                                                                                 $status = \App\Models\OrderStatus::find($product_orders_status['status_id']);
                                                                                                 ?>

@@ -27,9 +27,7 @@ class OrderController extends Controller
         $store_type = request()->store_type ? request()->store_type : 2;
         $store = Store::where('id', $store_id)->first();
         $orders = Order::where('user_id', $store['user']['id'])->whereHas('items', function ($q) use ($store_type) {
-            $q->whereHas('store', function ($qq) use ($store_type) {
-                $qq->where('store_type_id', $store_type);
-            });
+            $q->whereHas('store');
         })->latest()->get();
         $order_types = OrderStatus::get();
         return view('admin.orders.index', compact('orders', 'store', 'order_types', 'store_type'));
