@@ -168,7 +168,9 @@
                                                     قيمة الطلب : {{ $order['total_price'] }} LE
                                                     @if($product_orders_status->status_id != 6 && $product_orders_status->status_id != 5 && $product_orders_status->status_id != 4)
                                                         <?php
-                                                            $iddd = \App\Models\OrderProduct::where('order_id', $order['id'])->where('order.user_id' , $store['user_id'])->first();
+                                                            $iddd = \App\Models\OrderProduct::where('order_id', $order['id'])->whereHas('order', function ($query) use($store) {
+                                                                 $query->where('user_id', $store['user_id']);
+                                                            })->first();
                                                             ?>
                                                         <form method="post" action="{{ url('admin_panel/purchase_status/'.$order['id'] .'/'.$iddd['store_id']) }}">
                                                             {{ csrf_field() }}
