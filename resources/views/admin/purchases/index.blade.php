@@ -123,7 +123,7 @@
                                                                 <tbody id="portfolio">
                                                                 @foreach($orders as $order_key => $order)
                                                                         <?php
-                                                                        $product_orders_status = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id' , $store['id'])->first();
+                                                                        $product_orders_status = \App\Models\OrderProduct::where('order_id', $order['id'])->first();
 
                                                                         $status = \App\Models\OrderStatus::find($product_orders_status['status_id']);
                                                                         ?>
@@ -165,7 +165,7 @@
                                                                                         <div class="purchase_statue">
 
                                                                                                 <?php
-                                                                                                $product_orders_status = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id' , $store['id'])->first();
+                                                                                                $product_orders_status = \App\Models\OrderProduct::where('order_id', $order['id'])->first();
 
                                                                                                 if ($product_orders_status['status_id'] == 1) {
                                                                                                     $color = 'bg-warning';
@@ -196,8 +196,8 @@
 
                                                                                                 @foreach($product_orders as $product_order)
                                                                                                         <?php
-                                                                                                        $total = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $store['id'])->sum('total_price');
-                                                                                                        $count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $store['id'])->sum('quantity');
+                                                                                                        $total = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store']['id'])->sum('total_price');
+                                                                                                        $count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store']['id'])->sum('quantity');
                                                                                                         $user = $order['user'];
                                                                                                         $user_store = \App\Models\Store::where('user_id' , $order['user']['id'])->first();
                                                                                                         ?>
@@ -243,8 +243,8 @@
                                                                                             </div>
                                                                                             <div class="col-md-4">
                                                                                                     <?php
-                                                                                                    $all_total = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $store['id'])->get()->sum('total_price');
-                                                                                                    $all_count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $store['id'])->get()->sum('quantity');
+                                                                                                    $all_total = \App\Models\OrderProduct::where('order_id', $order['id'])->get()->sum('total_price');
+                                                                                                    $all_count = \App\Models\OrderProduct::where('order_id', $order['id'])->get()->sum('quantity');
                                                                                                     ?>
                                                                                                 <div
                                                                                                     class="total-price-items">
