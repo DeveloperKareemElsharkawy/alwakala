@@ -58,7 +58,7 @@
                                                 <div class="card-header d-flex justify-content-between">
                                                     <h6 class="card-title mb-0">معلومات الطلب</h6>
                                                     <?php
-                                                    $product_orders_status = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id' , $store['id'])->first();
+                                                    $product_orders_status = \App\Models\OrderProduct::where('order_id', $order['id'])->first();
 
                                                     if ($product_orders_status['status_id'] == 1) {
                                                         $color = 'bg-warning';
@@ -200,9 +200,12 @@
                                                     <?php
                                                     $product_orders = \App\Models\OrderProduct::where('order_id', $order['id'])->get()->unique('store_id');
                                                     $user = $order['user'];
-                                                    $user_store = \App\Models\Store::where('user_id' , $order['user']['id'])->first();
+
                                                     ?>
                                                     @foreach($product_orders as $key => $product_order)
+                                                            <?php
+                                                            $user_store = \App\Models\Store::where('id' , $product_order['store_id'])->first();
+                                                            ?>
                                                         <div class="card store_card">
                                                             <div
                                                                 class="card-header d-md-flex justify-content-between align-items-center">
@@ -218,14 +221,14 @@
                                                                             <div
                                                                                 class="border rounded-circle flex-shrink-0 position-relative">
                                                                                 <img
-                                                                                    src="{{ isset($user_store) ? $user_store['image_url'] : $order['user']['image_url'] }}"
+                                                                                    src="{{ isset($user_store) ? $user_store['image_url'] : '' }}"
                                                                                     alt=""
                                                                                     class="avatar-sm rounded-circle">
                                                                             </div>
                                                                             <div
                                                                                 class="flex-grow-1 ms-2 text-start store-info">
                                                                                 <h5 class="d-flex align-items-center mb-0">
-                                                                                    {{ isset($user_store) ? $user_store['name'] : $order['user']['name'] }}
+                                                                                    {{ isset($user_store) ? $user_store['name'] : '' }}
                                                                                     <i class="ri-checkbox-circle-fill px-2"></i>
                                                                                 </h5>
                                                                             </div>
@@ -245,12 +248,12 @@
                                                                  id="collapseExample{{ $key }}">
                                                                 <ul class="store-products">
                                                                         <?php
-                                                                        $products = \App\Models\OrderProduct::where('store_id', $store['id'])->where('order_id', $order->id)->get();
-                                                                        $products_price = \App\Models\OrderProduct::where('store_id', $store['id'])->where('order_id', $order->id)->sum('total_price');
+                                                                        $products = \App\Models\OrderProduct::where('store_id', $product_order['store_id'])->where('order_id', $order->id)->get();
+                                                                        $products_price = \App\Models\OrderProduct::where('store_id', $product_order['store_id'])->where('order_id', $order->id)->sum('total_price');
                                                                         ?>
                                                                     @foreach($products as $product)
                                                                             <?php
-                                                                            $products_info = \App\Models\OrderProduct::where('product_id', $product['productt']['id'])->where('store_id', $store['id'])->where('order_id', $order->id)->first();
+                                                                            $products_info = \App\Models\OrderProduct::where('product_id', $product['productt']['id'])->where('store_id', $product_order['store_id'])->where('order_id', $order->id)->first();
                                                                             ?>
                                                                         <li>
                                                                             <div class="product-input pe-1">
