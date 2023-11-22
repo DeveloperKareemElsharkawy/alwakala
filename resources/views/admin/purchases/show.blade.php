@@ -167,7 +167,10 @@
                                                 <div class="card-footer text-dark text-end">
                                                     قيمة الطلب : {{ $order['total_price'] }} LE
                                                     @if($product_orders_status->status_id != 6 && $product_orders_status->status_id != 5 && $product_orders_status->status_id != 4)
-                                                        <form method="post" action="{{ url('admin_panel/purchase_status/'.$order['id'] .'/'.$store['id']) }}">
+                                                        <?php
+                                                            $iddd = \App\Models\OrderProduct::where('order_id', $order['id'])->where('user_id' , $store['user_id'])->first();
+                                                            ?>
+                                                        <form method="post" action="{{ url('admin_panel/purchase_status/'.$order['id'] .'/'.$iddd['store_id']) }}">
                                                             {{ csrf_field() }}
                                                             <div style="text-align: start" class="col-md-12 col-12">
                                                                 <div class="select-div">
