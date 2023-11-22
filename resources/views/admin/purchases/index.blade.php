@@ -197,7 +197,7 @@
                                                                                                 @foreach($product_orders as $product_order)
                                                                                                         <?php
                                                                                                         $total = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store_id'])->sum('total_price');
-                                                                                                        $count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store'])->sum('quantity');
+                                                                                                        $count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store_id'])->sum('quantity');
                                                                                                         $user = $order['user'];
                                                                                                         $user_store = \App\Models\Store::where('id' , $product_order['store'])->first();
                                                                                                         ?>
