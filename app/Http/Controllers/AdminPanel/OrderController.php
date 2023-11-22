@@ -31,7 +31,7 @@ class OrderController extends Controller
                 $qq->where('store_type_id', $store_type);
             });
         })->latest()->get();
-        $order_types = OrderStatus::where('id', '!=', 7)->get();
+        $order_types = OrderStatus::get();
         return view('admin.orders.index', compact('orders', 'store', 'order_types', 'store_type'));
     }
 
