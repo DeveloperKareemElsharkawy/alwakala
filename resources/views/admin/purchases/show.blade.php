@@ -168,8 +168,9 @@
                                                     قيمة الطلب : {{ $order['total_price'] }} LE
                                                     @if($product_orders_status->status_id != 6 && $product_orders_status->status_id != 5 && $product_orders_status->status_id != 4)
                                                         <?php
-                                                            $iddd = \App\Models\OrderProduct::where('order_id', $order['id'])->whereHas('order', function ($query) use($store) {
-                                                                 $query->where('user_id', $store['user_id']);
+                                                            $user_store = \App\Models\Store::where('user_id' , $order['user']['id'])->first();
+                                                            $iddd = \App\Models\OrderProduct::where('order_id', $order['id'])->whereHas('order', function ($query) use($user_store) {
+                                                                 $query->where('user_id', $user_store['user_id']);
                                                             })->first();
                                                             ?>
                                                         <form method="post" action="{{ url('admin_panel/purchase_status/'.$order['id'] .'/'.$iddd['store_id']) }}">
@@ -209,7 +210,7 @@
                                                     ?>
                                                     @foreach($product_orders as $key => $product_order)
                                                             <?php
-                                                            $user_store = \App\Models\Store::where('id' , $product_order['store_id'])->first();
+                                                            $user_store = \App\Models\Store::where('user_id' , $order['user']['id'])->first();
                                                             ?>
                                                         <div class="card store_card">
                                                             <div

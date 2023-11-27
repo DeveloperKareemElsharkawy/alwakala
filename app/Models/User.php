@@ -98,7 +98,7 @@ class User extends Authenticatable
 
     public function store()
     {
-        return $this->belongsTo(Store::class);
+        return $this->belongsTo(Store::class , 'owner_id');
     }
 
     public function device_token()

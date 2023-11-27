@@ -126,8 +126,10 @@
                                                                         $product_orders_status = \App\Models\OrderProduct::where('order_id', $order['id'])->first();
 
                                                                         $status = \App\Models\OrderStatus::find($product_orders_status['status_id']);
+                                                                        $user_store = \App\Models\Store::where('user_id' , $order['user']['id'])->first();
                                                                         ?>
                                                                     @if(count($order->items) > 0)
+                                                                        @if($user_store)
                                                                         <tr class="tile scale-anm {{ $status['status_en'] }} all">
                                                                             <td class="d-none">
                                                                                 {{ $order_key + 1 }}
@@ -199,7 +201,7 @@
                                                                                                         $total = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store_id'])->sum('total_price');
                                                                                                         $count = \App\Models\OrderProduct::where('order_id', $order['id'])->where('store_id', $product_order['store_id'])->sum('quantity');
                                                                                                         $user = $order['user'];
-                                                                                                        $user_store = \App\Models\Store::where('id' , $product_order['store_id'])->first();
+                                                                                                        $user_store = \App\Models\Store::where('user_id' , $order['user']['id'])->first();
                                                                                                         ?>
                                                                                                     <div
                                                                                                         class="store-purchase">
@@ -217,7 +219,7 @@
                                                                                                                 <div
                                                                                                                     class="flex-grow-1 ms-2 text-start store-info">
                                                                                                                     <h5 class="d-flex align-items-center">
-                                                                                                                        {{ $product_order['store']['name'] ?: '' }}
+                                                                                                                        {{ $user_store['name'] ?: '' }}
                                                                                                                         <i class="ri-checkbox-circle-fill px-2"></i>
                                                                                                                     </h5>
                                                                                                                 </div>
@@ -269,6 +271,7 @@
                                                                                 </div>
                                                                             </td>
                                                                         </tr>
+                                                                         @endif
                                                                     @endif
                                                                 @endforeach
                                                                 </tbody>

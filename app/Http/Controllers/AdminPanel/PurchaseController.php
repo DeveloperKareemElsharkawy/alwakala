@@ -27,7 +27,7 @@ class PurchaseController extends Controller
         $store_type = request()->store_type ? request()->store_type : 2;
         $store = Store::where('id', $store_id)->first();
         $order_ids = OrderProduct::where('store_id',$store_id)->pluck('order_id');
-        $orders = Order::whereHas('items')->where('user_id',$store['user_id'])->latest()->get();
+        $orders = Order::whereHas('items')->whereIn('id',$order_ids)->latest()->get();
         $order_types = OrderStatus::where('id', '!=', 7)->get();
         return view('admin.purchases.index', compact('orders', 'store', 'order_types', 'store_type'));
     }
