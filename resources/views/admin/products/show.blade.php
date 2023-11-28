@@ -14,6 +14,11 @@ $lang = app()->getLocale();
     <link href="{{ asset('admin') }}/assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
     <!-- select2 css -->
     <link href="{{ asset('admin') }}/assets/libs/select2/select2.min.css" rel="stylesheet" type="text/css">
+    <style>
+        input:focus-visible {
+            outline: -webkit-focus-ring-color auto 0px !important;
+        }
+    </style>
 @endsection
 @section('backend-main')
 
@@ -69,7 +74,8 @@ $lang = app()->getLocale();
                                                                     <label for="name" class="form-label">اسم
                                                                         المنتج</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="name" placeholder="" value="{{ $product['name'] }}" readonly>
+                                                                           id="name" placeholder=""
+                                                                           value="{{ $product['name'] }}" readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-12 col-12">
@@ -77,7 +83,8 @@ $lang = app()->getLocale();
                                                                     <label for="desc" class="form-label">نبذة عن
                                                                         المنتج</label>
                                                                     <textarea rows="1" class="form-control"
-                                                                              id="desc" placeholder="" readonly>{{ $product['description'] }}</textarea>
+                                                                              id="desc" placeholder=""
+                                                                              readonly>{{ $product['description'] }}</textarea>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-12 col-12">
@@ -85,7 +92,8 @@ $lang = app()->getLocale();
                                                                     <label for="date" class="form-label">تاريخ
                                                                         النشر</label>
                                                                     <input type="date" class="form-control"
-                                                                           id="date" placeholder="" readonly value="{{ $product['created_at']->format('Y-m-d') }}">
+                                                                           id="date" placeholder="" readonly
+                                                                           value="{{ $product['created_at']->format('Y-m-d') }}">
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-12 col-12">
@@ -93,7 +101,9 @@ $lang = app()->getLocale();
                                                                     <label for="youtube" class="form-label">رابط ال
                                                                         youtube</label>
                                                                     <input type="url" class="form-control"
-                                                                           id="youtube" placeholder="" value="{{ $product['youtube_link'] }}" readonly>
+                                                                           id="youtube" placeholder=""
+                                                                           value="{{ $product['youtube_link'] }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -101,7 +111,9 @@ $lang = app()->getLocale();
                                                                     <label for="wholesale_price" class="form-label">سعر
                                                                         الجملة</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="wholesale_price" value="{{ $product_store['price'] }} جنية" readonly>
+                                                                           id="wholesale_price"
+                                                                           value="{{ isset($product['price']) ? $product['price'] . 'جنية' : 'غير محدد' }} "
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -109,15 +121,23 @@ $lang = app()->getLocale();
                                                                     <label for="consumer_price" class="form-label">سعر
                                                                         القطاعي</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="consumer_price" value="{{ $product_store['consumer_price'] }} جنية" readonly>
+                                                                           id="consumer_price"
+                                                                           value="{{ isset($product['consumer_price']) ? $product['consumer_price'] . 'جنية' : 'غير محدد' }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-12 col-12">
                                                                 <div>
                                                                     <label for="discount" class="form-label">قيمة
-                                                                         الخصم للقطاعي</label>
+                                                                        الخصم للقطاعي</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="discount" value="{{ $product_store['consumer_price_discount'] }} {{ $product_store['consumer_price_discount_type'] == '2' ? ' % ' : ' جنية ' }}" readonly>
+                                                                           id="discount"
+                                                                           @if(isset($product['consumer_price_discount']))
+                                                                                value="{{ $product['consumer_price_discount'] }} {{ $product['consumer_price_discount_type'] == '2' ? ' % ' : ' جنية ' }}"
+                                                                           @else
+                                                                               value="غير محدد"
+                                                                           @endif
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -125,7 +145,13 @@ $lang = app()->getLocale();
                                                                     <label for="wholesale_discount"
                                                                            class="form-label">قيمة الخصم للجملة</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="discount" value="{{ $product_store['discount'] }} {{ $product_store['discount_type'] == '2' ? ' % ' : ' جنية ' }}" readonly>
+                                                                           id="discount"
+                                                                           @if(isset($product['discount']))
+                                                                               value="{{ $product['discount'] }} {{ $product['discount_type'] == '2' ? ' % ' : ' جنية ' }}"
+                                                                           @else
+                                                                               value="غير محدد"
+                                                                           @endif
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -134,7 +160,9 @@ $lang = app()->getLocale();
                                                                            class="form-label">سعر الجملة بعد
                                                                         الخصم</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="consumer_discount" value="{{ $product_store['net_price'] }} جنية" readonly>
+                                                                           id="consumer_discount"
+                                                                           value=" {{ isset($product['net_price']) ? $product['net_price'] . 'جنية' : 'غير محدد' }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -143,37 +171,45 @@ $lang = app()->getLocale();
                                                                            class="form-label">سعر القطاعي بعد
                                                                         الخصم</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="consumer_discount" value="{{ $product_store['consumer_price'] }} جنية" readonly>
+                                                                           id="consumer_discount"
+                                                                           value="{{ isset($product['consumer_price']) ? $product['consumer_price'] . 'جنية' : 'غير محدد' }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             @if(isset($product->category->parent))
-                                                            <div class="col-md-12 col-12">
+                                                                <div class="col-md-12 col-12">
 
-                                                                <div class="select-div">
-                                                                    <label for="category_id" class="form-label">التصنيف
-                                                                        الرئيسي</label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="consumer_discount" value="{{ $product->category->parent->parent['name_' . $lang] }}" readonly>
-                                                                </div>
-                                                            </div><!--end col-->
+                                                                    <div class="select-div">
+                                                                        <label for="category_id" class="form-label">التصنيف
+                                                                            الرئيسي</label>
+                                                                        <input type="text" class="form-control"
+                                                                               id="consumer_discount"
+                                                                               value="{{ $product->category->parent->parent['name_' . $lang] }}"
+                                                                               readonly>
+                                                                    </div>
+                                                                </div><!--end col-->
                                                             @endif
                                                             @if(isset($product->category->parent))
-                                                            <div class="col-md-12 col-12">
-                                                                <div class="select-div">
-                                                                    <label for="subcategory_id" class="form-label">التصنيف
-                                                                        الفرعي</label>
-                                                                    <input type="text" class="form-control"
-                                                                           id="consumer_discount" value="{{ $product->category['name_' . $lang] }}" readonly>
-                                                                </div>
-                                                            </div><!--end col-->
+                                                                <div class="col-md-12 col-12">
+                                                                    <div class="select-div">
+                                                                        <label for="subcategory_id" class="form-label">التصنيف
+                                                                            الفرعي</label>
+                                                                        <input type="text" class="form-control"
+                                                                               id="consumer_discount"
+                                                                               value="{{ $product->category['name_' . $lang] }}"
+                                                                               readonly>
+                                                                    </div>
+                                                                </div><!--end col-->
                                                             @endif
 
                                                             <div class="col-md-12 col-12">
                                                                 <div class="select-div">
                                                                     <label for="subcategory_id" class="form-label">التصنيف
-                                                                         الفرعي الثاني</label>
+                                                                        الفرعي الثاني</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="consumer_discount" value="{{ $product->category['name_' . $lang] }}" readonly>
+                                                                           id="consumer_discount"
+                                                                           value="{{ $product->category['name_' . $lang] }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-12 col-12">
@@ -181,7 +217,9 @@ $lang = app()->getLocale();
                                                                     <label for="brand"
                                                                            class="form-label">البراند</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="brand" placeholder="" value="{{ $product->brand['name_' . $lang] }}" readonly>
+                                                                           id="brand" placeholder=""
+                                                                           value="{{ $product->brand['name_' . $lang] }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                         </div>
@@ -189,29 +227,36 @@ $lang = app()->getLocale();
                                                     <div class="col-md-6 col-12">
                                                         <div class="row mt-3">
                                                             @foreach($product->images as $image)
-                                                                <div class="col-md-6 col-12 px-md-1 d-md-flex justify-content-end">
-                                                                    <img style="width: 100%;height: 200px;object-fit: contain" src="{{ config('filesystems.aws_base_url') . $image->image }}" alt=""/>
-                                                                </div><!--end col-->
+                                                                @if(isset($image['color']))
+                                                                    <div
+                                                                        class="col-md-6 col-12 px-md-1 d-md-flex justify-content-end">
+                                                                        <img
+                                                                            style="width: 100%;height: 200px;object-fit: contain"
+                                                                            src="{{ config('filesystems.aws_base_url') . $image->image }}"
+                                                                            alt=""/>
+                                                                    </div><!--end col-->
+                                                                @endif
                                                             @endforeach
                                                             <div class="col-md-12 col-12">
                                                                 <br>
                                                             </div>
                                                             <div class="col-md-6 col-12">
                                                                 <?php
-                                                                    $stock = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->sum('stock');
-                                                                    $returned = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->sum('returned');
-                                                                    $now_stock = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->sum('available_stock');
-                                                                $color_ids = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->pluck('color_id');
-                                                                $colors = \App\Models\Color::whereIn('id',$color_ids)->get();
+                                                                $stock = \App\Models\ProductStoreStock::where('product_store_id', $product_store->id)->sum('stock');
+                                                                $returned = \App\Models\ProductStoreStock::where('product_store_id', $product_store->id)->sum('returned');
+                                                                $now_stock = \App\Models\ProductStoreStock::where('product_store_id', $product_store->id)->sum('available_stock');
+                                                                $color_ids = \App\Models\ProductStoreStock::where('product_store_id', $product_store->id)->pluck('color_id');
+                                                                $colors = \App\Models\Color::whereIn('id', $color_ids)->get();
 
-                                                                $size_ids = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->pluck('size_id');
-                                                                $sizes = \App\Models\Size::whereIn('id',$size_ids)->get();
+                                                                $size_ids = \App\Models\ProductStoreStock::where('product_store_id', $product_store->id)->pluck('size_id');
+                                                                $sizes = \App\Models\Size::whereIn('id', $size_ids)->get();
                                                                 ?>
                                                                 <div>
                                                                     <label for="total_count" class="form-label">العدد
                                                                         الكلي </label>
                                                                     <input type="number" class="form-control"
-                                                                           id="total_count" value="{{ $stock }}" readonly>
+                                                                           id="total_count" value="{{ $stock }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -219,7 +264,8 @@ $lang = app()->getLocale();
                                                                     <label for="returned" class="form-label">العدد
                                                                         المعاد</label>
                                                                     <input type="number" class="form-control"
-                                                                           id="returned" value="{{ $returned }}" readonly>
+                                                                           id="returned" value="{{ $returned }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -227,7 +273,8 @@ $lang = app()->getLocale();
                                                                     <label for="sold" class="form-label">تم
                                                                         بيعه</label>
                                                                     <input type="number" class="form-control"
-                                                                           id="sold" value="{{ $stock - $now_stock }}" readonly>
+                                                                           id="sold" value="{{ $stock - $now_stock }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-6 col-12">
@@ -235,7 +282,8 @@ $lang = app()->getLocale();
                                                                     <label for="remaining" class="form-label">المنتجات
                                                                         المتبقية</label>
                                                                     <input type="number" class="form-control"
-                                                                           id="remaining" value="{{ $now_stock }}" readonly>
+                                                                           id="remaining" value="{{ $now_stock }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
                                                             <div class="col-md-12 col-12">
@@ -243,57 +291,66 @@ $lang = app()->getLocale();
                                                                     <label for="material"
                                                                            class="form-label">الخامة</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="material" value="{{ $product->material['name_'.$lang] }}" readonly>
+                                                                           id="material"
+                                                                           value="{{ $product->material['name_'.$lang] }}"
+                                                                           readonly>
                                                                 </div>
                                                             </div><!--end col-->
-                                                                @foreach($colors as $color)
-                                                            <div class="col-md-12 col-12">
-                                                                <div class="property-options">
-                                                                    <div class="add_div" id="first">
+                                                            @foreach($colors as $color)
+                                                                <div class="col-md-12 col-12">
+                                                                    <div class="property-options">
+                                                                        <div class="add_div" id="first">
 
-                                                                        <div>
-                                                                            اللون
-                                                                            <input class="colorSelector"
-                                                                                   type="color" value="{{ $color['hex'] }}" readonly>
-
+                                                                            <div>
+                                                                                اللون
+                                                                                <div
+                                                                                    style="width:20px;height:20px;background:{{ $color['hex'] }}"
+                                                                                    class="rounded-circle"></div>
+                                                                            </div>
                                                                         </div>
+                                                                    </div><!--end col-->
+                                                                </div>
+                                                                <div class="col-md-12 col-12">
+                                                                    <div class="property-options">
+                                                                        <div class="property-label">
+                                                                            <label for="material"
+                                                                                   class="form-label">
+                                                                                الكمية
+                                                                                <small class="text-dark shadow-none">(لكل
+                                                                                    مقاس)</small>
+                                                                            </label>
+                                                                        </div>
+                                                                        <div class="add_div size_div" id="second">
+                                                                            @foreach($sizes as $size)
+                                                                                    <?php
+                                                                                    $stockkk = \App\Models\ProductStoreStock::where('product_store_id', $product_store->id)->where('color_id', $color['id'])->where('size_id', $size['id'])->first();
+                                                                                    ?>
+                                                                                <div>
+                                                                                    <div class="gradient-box"><input
+                                                                                            type="text"
+                                                                                            style="font-size: 10px"
+                                                                                            value="{{ $size['size'] }}"
+                                                                                            readonly>
+                                                                                    </div>
+                                                                                    <div class="result"></div>
+                                                                                    <input type="text"
+                                                                                           style="font-size: 10px"
+                                                                                           value="{{ $stockkk['available_stock'] }}"
+                                                                                           readonly disabled>
+                                                                                </div>
+                                                                            @endforeach
+                                                                        </div>
+
                                                                     </div>
                                                                 </div><!--end col-->
-                                                            </div>
-                                                            <div class="col-md-12 col-12">
-                                                                <div class="property-options">
-                                                                    <div class="property-label">
-                                                                        <label for="material"
-                                                                               class="form-label">
-                                                                            الكمية
-                                                                            <small class="text-dark shadow-none">(لكل مقاس)</small>
-                                                                        </label>
-                                                                    </div>
-                                                                    <div class="add_div size_div" id="second">
-                                                                        @foreach($sizes as $size)
-                                                                                <?php
-                                                                                $stockkk = \App\Models\ProductStoreStock::where('product_store_id' , $product_store->id)->where('color_id' , $color['id'])->where('size_id' , $size['id'])->first();
-                                                                                ?>
-                                                                        <div>
-                                                                            <div class="gradient-box"><input
-                                                                                    type="text" style="font-size: 10px" value="{{ $size['size'] }}" readonly>
-                                                                            </div>
-                                                                            <div class="result"></div>
-                                                                            <input type="text" style="font-size: 10px" value="{{ $stockkk['available_stock'] }}" readonly disabled>
-                                                                        </div>
-                                                                        @endforeach
-                                                                    </div>
-
-                                                                </div>
-                                                            </div><!--end col-->
-                                                                    <hr>
-                                                                @endforeach
+                                                                <hr>
+                                                            @endforeach
                                                         </div><!--end col-->
                                                     </div><!--end row-->
                                                 </div>
                                                 <input type="submit"
                                                        style="position: absolute; display: none; width: 1px; height: 1px;"
-                                                       tabindex="-1" />
+                                                       tabindex="-1"/>
                                             </form>
                                         </div><!-- end card-body -->
                                     </div><!-- end card -->

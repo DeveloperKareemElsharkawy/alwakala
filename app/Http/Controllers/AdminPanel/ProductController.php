@@ -97,7 +97,7 @@ class ProductController extends Controller
             $product->consumer_price = $request->consumer_price;
             $product->material_id = $request->material_id;
             $product->policy_id = $request->policy_id;
-            $product->shipping_method_id = $request->shipping_method_id;
+            $product->shipping_method_id = 1;
             $product->youtube_link = $request->youtube_link;
             $product->save();
             $product_store = new ProductStore();
@@ -116,7 +116,7 @@ class ProductController extends Controller
                 $totall = number_format((float)$totall, 2, '.', '');
                 $product_store->net_price = $totall;
             }
-            $product_store->free_shipping = $request->free_shipping;
+            $product_store->free_shipping = 1;
             $product_store->barcode_text = $request->barcode_text;
             $product_store->barcode = UploadImage::uploadImageToStorage($request->barcode, 'qr-code/stores/' . $product->id);
             $product_store->consumer_price_discount = $request->consumer_price_discount;
@@ -301,7 +301,7 @@ class ProductController extends Controller
             $product->consumer_price = $request->consumer_price;
             $product->material_id = $request->material_id;
             $product->policy_id = $request->policy_id;
-            $product->shipping_method_id = $request->shipping_method_id;
+            $product->shipping_method_id = 1;
             $product->youtube_link = $request->youtube_link;
             $product->save();
 
@@ -318,7 +318,7 @@ class ProductController extends Controller
                 $totall = number_format((float)$totall, 2, '.', '');
                 $product_store->net_price = $totall;
             }
-            $product_store->free_shipping = $request->free_shipping;
+            $product_store->free_shipping = 1;
             $product_store->barcode_text = $request->barcode_text;
             if(isset($request->barcode)){
                 $product_store->barcode = UploadImage::uploadImageToStorage($request->barcode, 'qr-code/stores/' . $product->id);

@@ -135,7 +135,7 @@
                                                                     <div class="main_info">
                                                                         <p>طريقة الدفع</p>
                                                                         <p>
-                                                                            {{ isset($order['payment_method']) ? $order['payment_method']['nema_'.$lang] : '-----' }}
+                                                                            {{ isset($order['payment_method']) ? $order['payment_method']['name_'.$lang] : '-----' }}
                                                                         </p>
                                                                     </div>
                                                                 </li>

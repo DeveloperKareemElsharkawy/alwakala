@@ -100,7 +100,7 @@ $lang = app()->getLocale();
                                                                                                 <label for="date" class="form-label">تاريخ
                                                                                                     النشر</label>
                                                                                                 <input type="date" name="publish_app_at" class="form-control"
-                                                                                                       id="date" value="{{ $product_store['publish_app_at'] }}" placeholder="">
+                                                                                                       id="date" value="{{ $product_store['publish_app_at'] }}" placeholder="" min="<?php echo date('Y-m-d');?>">
                                                                                             </div>
                                                                                         </div><!--end col-->
                                                                                         <div class="col-md-12 col-12">
@@ -190,6 +190,22 @@ $lang = app()->getLocale();
                                                                                 ?>
                                                                                 <div class="col-md-6">
                                                                                     <div class="row">
+{{--                                                                                        @if($store['is_main_branch'] == true)--}}
+{{--                                                                                            <div class="col-md-12 col-12">--}}
+{{--                                                                                                <div class="select-div">--}}
+{{--                                                                                                    <label for="branch_id" class="form-label">الفرع الخاص بالمنتج</label>--}}
+{{--                                                                                                    <select name="branch_id" class="form-select select-modal"--}}
+{{--                                                                                                            id="branch_id">--}}
+{{--                                                                                                        <option {{ $product['owner_id'] == $store['user_id'] ? 'selected' : '' }} value="{{ $store['user_id'] }}">المتجر الرئيسي ({{ $store['name'] }})</option>--}}
+{{--                                                                                                        @foreach($store['branches'] as $branch)--}}
+{{--                                                                                                            <option {{ $product['owner_id'] == $branch['user_id'] ? 'selected' : '' }}--}}
+{{--                                                                                                                value="{{ $branch['user_id'] }}">{{ $branch['name'] }}</option>--}}
+{{--                                                                                                        @endforeach--}}
+{{--                                                                                                    </select>--}}
+{{--                                                                                                </div>--}}
+{{--                                                                                            </div><!--end col-->--}}
+{{--                                                                                        @endif--}}
+
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div class="select-div">
                                                                                                 <label for="category_id" class="form-label">التصنيف</label>
@@ -263,23 +279,6 @@ $lang = app()->getLocale();
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div><!--end col-->
-
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div class="select-div custom-check">
-                                                                                                <label for="subsubcategory_id"
-                                                                                                       class="form-label">طرق الشحن</label>
-                                                                                                <div class="inputs_cutom">
-                                                                                                    @foreach($shippings as $ship_key => $shipping)
-                                                                                                        <div class="me-1">
-                                                                                                            <input hidden="" {{ $product['shipping_method_id'] == $shipping['id'] ? 'checked' : '' }} name="shipping_method_id" value="{{ $shipping['id'] }}" type="radio" id="myCheckbo{{ $ship_key }}"/>
-                                                                                                            <label class="custom-label" for="myCheckbo{{ $ship_key }}">
-                                                                                                                {{ $shipping['name_'.$lang] }}
-                                                                                                            </label>
-                                                                                                        </div>
-                                                                                                    @endforeach
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div><!--end col-->
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div class="select-div custom-check">
                                                                                                 <label class="form-label">سياسات</label>
@@ -292,26 +291,6 @@ $lang = app()->getLocale();
                                                                                                             </label>
                                                                                                         </div>
                                                                                                     @endforeach
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div class="select-div custom-check">
-                                                                                                <label class="form-label">شحن مجاني</label>
-                                                                                                <div class="inputs_cutom">
-                                                                                                    <div class="me-1">
-                                                                                                        <input hidden="" {{ $product_store['free_shipping'] == true ? 'checked' : '' }} name="free_shipping" value="true" type="radio" id="myCheckbsh1"/>
-                                                                                                        <label class="custom-label" for="myCheckbsh1">
-                                                                                                            نعم
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <input hidden="" {{ $product_store['free_shipping'] == false ? 'checked' : '' }} name="free_shipping" value="false" type="radio" id="myCheckbsh2"/>
-                                                                                                        <label class="custom-label" for="myCheckbsh2">
-                                                                                                            لا
-                                                                                                        </label>
-                                                                                                    </div>
                                                                                                 </div>
                                                                                             </div>
                                                                                         </div><!--end col-->

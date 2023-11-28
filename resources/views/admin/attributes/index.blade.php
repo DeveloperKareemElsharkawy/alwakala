@@ -118,7 +118,7 @@ $lang = app()->getLocale();
                                                         <?php $attributs = \App\Models\ProductStoreStock::where('product_store_id' , $product_store['id'])->where('color_id' , $attribute['color']['id'])->orderBy('id' , 'desc')->get(); ?>
                                                         <tr class="image_class{{ $attribute->id }}">
                                                             <td>{{ $key + 1 }}</td>
-                                                            <td style="justify-content: start" class="user-row">
+                                                            <td style="justify-content: center" class="user-row">
                                                                 {{ $attribute['color']['name_'.$lang] }}
                                                                  <span style="width: 20px;height: 20px;background: {{ $attribute['color']['hex'] }};border-radius: 50px;margin:0 3px"></span>
                                                             </td>
@@ -140,7 +140,7 @@ $lang = app()->getLocale();
                                                                         </a>
                                                                     </li>
                                                                     <li>
-                                                                        <a title="archive" delete_url="attributes/"
+                                                                        <a title="delete" delete_url="attributes/"
                                                                            object_id="{{ $attribute['id'] }}"
                                                                            data-bs-toggle="tooltip"
                                                                            data-bs-placement="top"

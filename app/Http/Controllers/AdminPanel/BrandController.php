@@ -28,7 +28,7 @@ class BrandController extends Controller
             }else{
                 $brands = Brand::orderBy('id','desc')->where('archive' , false)->get();
             }
-            $categories = Category::whereNull('category_id')->orderBy('id' , 'desc')->get();
+            $categories = Category::whereNull('category_id')->orderBy('id' , 'desc')->where('activation', 'true')->where('archive', 'false')->get();
 
             return view('admin.settings.brands.index' , ['brands'=>$brands,'categories' => $categories]);
         }catch (\Exception $e){
@@ -94,7 +94,7 @@ class BrandController extends Controller
     public function show($id)
     {
         $brand = Brand::find($id);
-        $categories = Category::whereNull('category_id')->orderBy('id' , 'desc')->get();
+        $categories = Category::whereNull('category_id')->orderBy('id' , 'desc')->where('activation', 'true')->where('archive', 'false')->get();
         return view('admin.settings.brands.edit_popup', ['brand' => $brand,'categories' => $categories]);
     }
 

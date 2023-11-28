@@ -91,10 +91,10 @@ $lang = app()->getLocale();
                                                                                 </div><!--end col-->
                                                                                 <div class="col-md-12 col-12">
                                                                                     <div>
-                                                                                        <label for="date" class="form-label">تاريخ
+                                                                                        <label for="myDate" class="form-label">تاريخ
                                                                                             النشر</label>
-                                                                                        <input onchange="TDate()" type="date" name="publish_app_at" class="form-control"
-                                                                                               id="date" placeholder="">
+                                                                                        <input type="date" name="publish_app_at" class="form-control"
+                                                                                               id="myDate" placeholder="" min="<?php echo date('Y-m-d');?>">
                                                                                     </div>
                                                                                 </div><!--end col-->
                                                                                 <div class="col-md-12 col-12">
@@ -182,6 +182,22 @@ $lang = app()->getLocale();
                                                                                 </div><!--end col-->
                                                                                 <div class="col-md-12">
                                                                                     <div class="row">
+{{--                                                                                        @if($store['is_main_branch'] == true)--}}
+{{--                                                                                        <div class="col-md-12 col-12">--}}
+{{--                                                                                            <div class="select-div">--}}
+{{--                                                                                                <label for="branch_id" class="form-label">الفرع الخاص بالمنتج</label>--}}
+{{--                                                                                                <select name="branch_id" class="form-select select-modal"--}}
+{{--                                                                                                        id="branch_id" required="">--}}
+{{--                                                                                                    <option selected="" disabled="" value="{{ $store['user_id'] }}"--}}
+{{--                                                                                                            hidden>المتجر الرئيسي ({{ $store['name'] }})</option>--}}
+{{--                                                                                                    @foreach($store['branches'] as $branch)--}}
+{{--                                                                                                        <option--}}
+{{--                                                                                                            value="{{ $branch['user_id'] }}">{{ $branch['name'] }}</option>--}}
+{{--                                                                                                    @endforeach--}}
+{{--                                                                                                </select>--}}
+{{--                                                                                            </div>--}}
+{{--                                                                                        </div><!--end col-->--}}
+{{--                                                                                        @endif--}}
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div class="select-div">
                                                                                                 <label for="category_id" class="form-label">التصنيف</label>
@@ -264,25 +280,6 @@ $lang = app()->getLocale();
 
                                                                                         <div class="col-md-12 col-12">
                                                                                             <div class="select-div custom-check">
-                                                                                                <label for="subsubcategory_id"
-                                                                                                       class="form-label">طرق الشحن</label>
-                                                                                                <div class="inputs_cutom">
-                                                                                                    @foreach($shippings as $ship_key => $shipping)
-                                                                                                        <div class="me-1">
-                                                                                                            <input hidden="" name="shipping_method_id"
-                                                                                                                   value="{{ $shipping['id'] }}" type="radio"
-                                                                                                                   id="myCheckbo{{ $ship_key }}"/>
-                                                                                                            <label class="custom-label"
-                                                                                                                   for="myCheckbo{{ $ship_key }}">
-                                                                                                                {{ $shipping['name_'.$lang] }}
-                                                                                                            </label>
-                                                                                                        </div>
-                                                                                                    @endforeach
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div><!--end col-->
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div class="select-div custom-check">
                                                                                                 <label class="form-label">سياسات</label>
                                                                                                 <div class="inputs_cutom">
                                                                                                     @foreach($policies as $policy_key => $policy)
@@ -300,27 +297,6 @@ $lang = app()->getLocale();
                                                                                             </div>
                                                                                         </div><!--end col-->
 
-                                                                                        <div class="col-md-12 col-12">
-                                                                                            <div class="select-div custom-check">
-                                                                                                <label class="form-label">شحن مجاني</label>
-                                                                                                <div class="inputs_cutom">
-                                                                                                    <div class="me-1">
-                                                                                                        <input hidden="" name="free_shipping" value="true"
-                                                                                                               type="radio" id="myCheckbsh1"/>
-                                                                                                        <label class="custom-label" for="myCheckbsh1">
-                                                                                                            نعم
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                    <div class="me-1">
-                                                                                                        <input hidden="" name="free_shipping" value="false"
-                                                                                                               type="radio" id="myCheckbsh2"/>
-                                                                                                        <label class="custom-label" for="myCheckbsh2">
-                                                                                                            لا
-                                                                                                        </label>
-                                                                                                    </div>
-                                                                                                </div>
-                                                                                            </div>
-                                                                                        </div><!--end col-->
                                                                                     </div>
                                                                                 </div>
                                                                             </div>
@@ -397,6 +373,9 @@ $lang = app()->getLocale();
 
 @endsection
 @section('backend-footer')
+   <script>
+       document.getElementById("myDate").setAttribute("min", today);
+   </script>
     <!-- select2 js -->
     <script src="{{ asset('admin') }}/assets/libs/select2/select2.min.js"></script>
     <!-- Sweet Alerts js -->
@@ -514,16 +493,5 @@ $lang = app()->getLocale();
             });
         </script>
     @endif
-    <script>
-        function TDate() {
-            var UserDate = document.getElementById("userdate").value;
-            var ToDate = new Date();
 
-            if (new Date(UserDate).getTime() <= ToDate.getTime()) {
-                alert("The Date must be smaller or Equal to today date");
-                return false;
-            }
-            return true;
-        }
-    </script>
 @endsection
