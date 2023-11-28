@@ -54,28 +54,7 @@
                                 <div class="col-md-9">
                                     <div class="card store-places inventory_card">
                                         <div class="card-body p-0">
-                                            <div class="add-btns ms-2 mb-2 mt-md-1 mt-3 justify-content-between">
-                                                <form action="{{ url('admin_panel/orders',$store['id']) }}" method="get"
-                                                      class="products_type">
-                                                    <div class="form-check form-radio-dark">
-                                                        <input class="form-check-input" type="radio"
-                                                               name="store_type" onchange="this.form.submit()"
-                                                               id="formradioRight12"
-                                                               {{ $store_type == 2 ? 'checked' : '' }} value="2">
-                                                        <label class="form-check-label" for="formradioRight12">
-                                                            بائع تجزئة
-                                                        </label>
-                                                    </div>
-                                                    <div class="form-check form-radio-dark">
-                                                        <input class="form-check-input" type="radio"
-                                                               {{ $store_type == 1 ? 'checked' : '' }} onchange="this.form.submit()"
-                                                               name="store_type" id="formradioRight1" value="1">
-                                                        <label class="form-check-label" for="formradioRight1">
-                                                            بائع قطاعي
-                                                        </label>
-                                                    </div>
-                                                </form>
-                                            </div>
+
                                             <div class="">
                                                 <div class="tab-content  text-muted">
                                                     <div class="tab-pane active" id="base-justified-home"
@@ -101,6 +80,8 @@
                                                                             $color = 'text-danger';
                                                                         } elseif ($order_type['id'] == 6) {
                                                                             $color = 'text-success';
+                                                                        }elseif ($order_type['id'] == 7) {
+                                                                            $color = 'text-warning';
                                                                         }
                                                                         ?>
                                                                     <button class="btn fil-cat {{ $color }} me-1"
@@ -182,6 +163,8 @@
                                                                                                     $color = 'bg-danger';
                                                                                                 } elseif ($order['status_id'] == 6) {
                                                                                                     $color = 'bg-success';
+                                                                                                }elseif ($order['status_id'] == 7) {
+                                                                                                    $color = 'bg-warning';
                                                                                                 }
                                                                                                 $status = \App\Models\OrderStatus::find($order['status_id']);
                                                                                                 ?>

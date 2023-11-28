@@ -70,6 +70,8 @@
                                                         $color = 'bg-danger';
                                                     } elseif ($order['status_id'] == 6) {
                                                         $color = 'bg-success';
+                                                    }elseif ($order['status_id'] == 7) {
+                                                        $color = 'bg-warning';
                                                     }
                                                     $status = \App\Models\OrderStatus::find($order['status_id']);
                                                     ?>

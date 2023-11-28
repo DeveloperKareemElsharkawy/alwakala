@@ -2416,6 +2416,7 @@ table.dataTable thead > tr > th.sorting, table.dataTable thead > tr > th.sorting
 }
 
 .add_div.size_div > div input[type=text] {
+    outline: -webkit-focus-ring-color auto 0px!important;
     border: solid 5px transparent; /* !importanté */
     border-radius: 50px;
     width: auto;

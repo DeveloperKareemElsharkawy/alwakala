@@ -44,9 +44,9 @@ class ProductController extends Controller
         $colors = Color::where('activation', 'true')->where('archive', 'false')->get();
         $store = Store::find($store_id);
         $categories = Category::whereNull('category_id')->get();
-        $materials = Material::all();
+        $materials = Material::where('activation', 'true')->where('archive', 'false')->get();
         $policies = Policy::all();
-        $brands = Brand::all();
+        $brands = Brand::where('activation', 'true')->where('archive', 'false')->get();
         $shippings = ShippingMethod::all();
         $product_store = ProductStore::where('store_id', $store_id)->pluck('product_id');
         $products = Product::whereIn('id', $product_store)->orderBy('id', 'desc')->get();
@@ -64,9 +64,9 @@ class ProductController extends Controller
         $colors = Color::where('activation', 'true')->where('archive', 'false')->get();
         $store = Store::find($store_id);
         $categories = Category::whereNull('category_id')->get();
-        $materials = Material::all();
+        $materials = Material::where('activation', 'true')->where('archive', 'false')->get();
         $policies = Policy::all();
-        $brands = Brand::all();
+        $brands = Brand::where('activation', 'true')->where('archive', 'false')->get();
         $shippings = ShippingMethod::all();
         $product_store = ProductStore::where('store_id', $store_id)->pluck('product_id');
         $products = Product::whereIn('id', $product_store)->orderBy('id', 'desc')->get();
@@ -170,9 +170,9 @@ class ProductController extends Controller
     public function edit($product_id, $store_id)
     {
         $categories = Category::whereNull('category_id')->get();
-        $materials = Material::all();
+        $materials = Material::where('activation', 'true')->where('archive', 'false')->get();
         $policies = Policy::all();
-        $brands = Brand::all();
+        $brands = Brand::where('activation', 'true')->where('archive', 'false')->get();
         $shippings = ShippingMethod::all();
         $product = \App\Models\Product::find($product_id);
         $store = \App\Models\Store::find($store_id);
@@ -185,9 +185,9 @@ class ProductController extends Controller
     public function product_info($product_id, $store_id)
     {
         $categories = Category::whereNotNull('category_id')->get();
-        $materials = Material::all();
+        $materials = Material::where('activation', 'true')->where('archive', 'false')->get();
         $policies = Policy::all();
-        $brands = Brand::all();
+        $brands = Brand::where('activation', 'true')->where('archive', 'false')->get();
         $shippings = ShippingMethod::all();
         $product = \App\Models\Product::find($product_id);
         $store = \App\Models\Store::find($store_id);
@@ -200,9 +200,9 @@ class ProductController extends Controller
     public function product_attr($product_id, $store_id)
     {
         $categories = Category::whereNotNull('category_id')->get();
-        $materials = Material::all();
+        $materials = Material::where('activation', 'true')->where('archive', 'false')->get();
         $policies = Policy::all();
-        $brands = Brand::all();
+        $brands = Brand::where('activation', 'true')->where('archive', 'false')->get();
         $shippings = ShippingMethod::all();
         $product = \App\Models\Product::find($product_id);
         $category = Category::find($product['category_id']);
@@ -364,7 +364,7 @@ class ProductController extends Controller
     {
         try {
             DB::beginTransaction();
-            PackingUnitProduct::query()->where('product_id',$id)->delete();
+//            PackingUnitProduct::query()->where('product_id',$id)->delete();
             BadgeProduct::query()->where('product_id',$id)->delete();
             OrderProduct::query()->where('product_id',$id)->delete();
             $unit= PackingUnitProduct::query()->where('product_id',$id)->first();
@@ -393,8 +393,7 @@ class ProductController extends Controller
                 'title' => ' حذف المنتج ',
                 'msg' => 'تم حذف المنتج  بنجاح',
             ]);
-        }
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             DB::rollBack();
             Log::error('error in delete Product in dashboard' . __LINE__ . $e);
             return $this->connectionError($e);

@@ -93,7 +93,7 @@ $lang = app()->getLocale();
                                                                                     <div>
                                                                                         <label for="date" class="form-label">تاريخ
                                                                                             النشر</label>
-                                                                                        <input type="date" name="publish_app_at" class="form-control"
+                                                                                        <input onchange="TDate()" type="date" name="publish_app_at" class="form-control"
                                                                                                id="date" placeholder="">
                                                                                     </div>
                                                                                 </div><!--end col-->
@@ -514,4 +514,16 @@ $lang = app()->getLocale();
             });
         </script>
     @endif
+    <script>
+        function TDate() {
+            var UserDate = document.getElementById("userdate").value;
+            var ToDate = new Date();
+
+            if (new Date(UserDate).getTime() <= ToDate.getTime()) {
+                alert("The Date must be smaller or Equal to today date");
+                return false;
+            }
+            return true;
+        }
+    </script>
 @endsection

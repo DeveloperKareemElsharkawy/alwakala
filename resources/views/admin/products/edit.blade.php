@@ -198,7 +198,7 @@ $lang = app()->getLocale();
                                                                                                     <option selected="" disabled="" value=""
                                                                                                             hidden></option>
                                                                                                     @foreach($categories as $category)
-                                                                                                        <option {{ $categoryy->id == $category['id'] }}
+                                                                                                        <option {{ $categoryy['id'] == $category['id'] ? 'selected' : '' }}
                                                                                                                 value="{{ $category['id'] }}">{{ $category['name_'.$lang] }}</option>
                                                                                                     @endforeach
                                                                                                 </select>

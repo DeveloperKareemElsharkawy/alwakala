@@ -72,6 +72,8 @@
                                                         $color = 'bg-danger';
                                                     } elseif ($product_orders_status['status_id'] == 6) {
                                                         $color = 'bg-success';
+                                                    }elseif ($product_orders_status['status_id'] == 7) {
+                                                        $color = 'bg-warning';
                                                     }
 
                                                     $statue = \App\Models\OrderStatus::find($product_orders_status['status_id']);

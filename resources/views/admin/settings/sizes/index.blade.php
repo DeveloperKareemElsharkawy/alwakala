@@ -127,7 +127,10 @@
                                                                     <tr class="image_class{{ $brand['id'] }}">
                                                                         <td>{{ $key + 1 }}</td>
                                                                         <td>{{ $brand['size'] }}</td>
-                                                                        <td>@foreach($brand['categories'] as $brand_category) {{ $brand_category['name_'.$lang] }} <br> @endforeach</td>
+                                                                            <?php
+                                                                            $founds = \App\Models\CategorySize::where('size_id' , $brand['id'])->get();
+                                                                            ?>
+                                                                        <td>@foreach($founds as $brand_category) {{ $brand_category['category']['name_'.$lang] }} <br> @endforeach</td>
                                                                         <td>{{ count($brand->product_store_stocks) }}</td>
                                                                         <td class="colors">
                                                                             <div class="form-check form-switch form-switch-success d-inline-block">

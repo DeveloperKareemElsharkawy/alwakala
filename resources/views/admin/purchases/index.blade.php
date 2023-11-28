@@ -101,6 +101,8 @@
                                                                             $color = 'text-danger';
                                                                         } elseif ($order_type['id'] == 6) {
                                                                             $color = 'text-success';
+                                                                        }elseif ($order_type['id'] == 7) {
+                                                                            $color = 'bg-warning';
                                                                         }
                                                                         ?>
                                                                     <button class="btn fil-cat {{ $color }} me-1"
@@ -181,6 +183,8 @@
                                                                                                     $color = 'bg-danger';
                                                                                                 } elseif ($product_orders_status['status_id'] == 6) {
                                                                                                     $color = 'bg-success';
+                                                                                                }elseif ($product_orders_status['status_id'] == 7) {
+                                                                                                    $color = 'bg-warning';
                                                                                                 }
                                                                                                 $product_orders = \App\Models\OrderProduct::where('order_id', $order['id'])->get()->unique('store_id');
 

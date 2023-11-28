@@ -146,15 +146,17 @@ $lang = app()->getLocale();
                                                                            id="consumer_discount" value="{{ $product_store['consumer_price'] }} جنية" readonly>
                                                                 </div>
                                                             </div><!--end col-->
+                                                            @if(isset($product->category->parent))
                                                             <div class="col-md-12 col-12">
 
                                                                 <div class="select-div">
                                                                     <label for="category_id" class="form-label">التصنيف
                                                                         الرئيسي</label>
                                                                     <input type="text" class="form-control"
-                                                                           id="consumer_discount" @if(isset($product->category->parent)) value="{{ $product->category->parent['name_' . $lang] }}" @else value="{{ $product->category['name_' . $lang] }}" @endif readonly>
+                                                                           id="consumer_discount" value="{{ $product->category->parent->parent['name_' . $lang] }}" readonly>
                                                                 </div>
                                                             </div><!--end col-->
+                                                            @endif
                                                             @if(isset($product->category->parent))
                                                             <div class="col-md-12 col-12">
                                                                 <div class="select-div">
@@ -165,6 +167,15 @@ $lang = app()->getLocale();
                                                                 </div>
                                                             </div><!--end col-->
                                                             @endif
+
+                                                            <div class="col-md-12 col-12">
+                                                                <div class="select-div">
+                                                                    <label for="subcategory_id" class="form-label">التصنيف
+                                                                         الفرعي الثاني</label>
+                                                                    <input type="text" class="form-control"
+                                                                           id="consumer_discount" value="{{ $product->category['name_' . $lang] }}" readonly>
+                                                                </div>
+                                                            </div><!--end col-->
                                                             <div class="col-md-12 col-12">
                                                                 <div>
                                                                     <label for="brand"
