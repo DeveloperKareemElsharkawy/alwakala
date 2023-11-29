@@ -2,7 +2,7 @@
     <i class="ri-close-line"></i>
 </button>
 <div class="modal-header d-block text-center">
-    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل اللون {{ $size['size'] }} </h5>
+    <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل المقاس {{ $size['size'] }} </h5>
 </div>
 <div class="modal-body px-5">
     <form class="my_form px-5" method="post" action="{{route('sizes.update' , $size->id)}}" autocomplete="off">

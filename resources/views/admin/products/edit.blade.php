@@ -184,9 +184,9 @@ $lang = app()->getLocale();
                                                                                     </div>
                                                                                 </div>
                                                                                 <?php
-                                                                                $subsubcategory = \App\Models\Category::find($product['category_id']);
-                                                                                $subcategory = \App\Models\Category::find($subsubcategory['category_id']);
-                                                                                $categoryy = \App\Models\Category::find($subcategory['category_id']);
+                                                                                $subsubcategory = \App\Models\Category::where('activation', 'true')->where('archive', 'false')->find($product['category_id']);
+                                                                                $subcategory = \App\Models\Category::where('activation', 'true')->where('archive', 'false')->find($subsubcategory['category_id']);
+                                                                                $categoryy = \App\Models\Category::where('activation', 'true')->where('archive', 'false')->find($subcategory['category_id']);
                                                                                 ?>
                                                                                 <div class="col-md-6">
                                                                                     <div class="row">

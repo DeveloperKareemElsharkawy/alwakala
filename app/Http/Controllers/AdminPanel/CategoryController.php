@@ -266,7 +266,7 @@ class CategoryController extends Controller
     public function ajax_subcatgeories(Request $request)
     {
         $category_id = $request->input('category_id');
-        $subtypes = Category::where('category_id', $category_id)->select('id' , 'name_' . app()->getLocale() .' as name')->get();
+        $subtypes = Category::where('category_id', $category_id)->select('id' , 'name_' . app()->getLocale() .' as name')->where('activation', 'true')->where('archive', 'false')->get();
         return response()->json($subtypes);
     }
 
