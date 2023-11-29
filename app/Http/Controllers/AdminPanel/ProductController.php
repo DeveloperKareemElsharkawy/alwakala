@@ -63,7 +63,7 @@ class ProductController extends Controller
     {
         $colors = Color::where('activation', 'true')->where('archive', 'false')->get();
         $store = Store::find($store_id);
-        $categories = Category::whereNull('category_id')->get();
+        $categories = Category::whereNull('category_id')->where('activation', 'true')->where('archive', 'false')->get();
         $materials = Material::where('activation', 'true')->where('archive', 'false')->get();
         $policies = Policy::all();
         $brands = Brand::where('activation', 'true')->where('archive', 'false')->get();
