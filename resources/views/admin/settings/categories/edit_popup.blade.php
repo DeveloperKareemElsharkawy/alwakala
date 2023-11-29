@@ -5,7 +5,7 @@
     <h5 class="modal-title" id="exampleModalgridLabeldit">تعديل التصنيف {{ $category['name_'.$lang] }} </h5>
 </div>
 <div class="modal-body px-5">
-    <form class="my_form px-5" method="post" action="{{route('categories.update' , $category->id)}}" enctype="multipart/form-data" autocomplete="off">
+    <form class="my_form_edit px-5" method="post" action="{{route('categories.update' , $category->id)}}" enctype="multipart/form-data" autocomplete="off">
         {{ csrf_field() }}
         {{ method_field('PATCH') }}
         <div class="row g-3">
@@ -31,7 +31,7 @@
                         <label for="category_id" class="form-label">التصنيف الرئيسي </label>
                         <select class="form-select select-modal" name="category_id"
                                 id="category_id">
-                            @if(Request::is('admin_panel/settings/subcategories'))
+                            @if(url('admin_panel/settings/subcategories'))
                             @foreach($main_categories as $cat_key => $categoryy)
                                 <option {{ $categoryy['id'] == $category->category_id ? 'selected' : '' }}
                                     value="{{ $categoryy['id'] }}">{{ $categoryy['name_'.$lang] }}</option>
@@ -104,37 +104,75 @@
 <script src="{{ asset('admin') }}/assets/js/custom.js"></script>
 <script src="{{ asset('admin') }}/assets/js/additional-methods.min.js"></script>
 <script src="{{ asset('admin') }}/assets/js/jquery.validate.min.js"></script>
-@if(Request::is('admin_panel/settings/categories'))
+@if(url('admin_panel/settings/categories'))
     <script>
         $(document).ready(function () {
-            $(".my_form").validate({
+            jQuery.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-z\s]+$/i.test(value);
+            }, "احرف انجليزية فقط");
+            jQuery.validator.addMethod("lettersonlyy", function(value, element) {
+                return this.optional(element) || /^[أ-ي\s]+$/i.test(value);
+            }, "احرف عربية فقط");
+            $(".my_form_edit").validate({
                 rules: {
-                    name_ar: "required",
-                    name_en: "required",
+                    name_ar: {
+                        lettersonlyy: true,
+                        required : true
+                    },
+                    name_en: {
+                        lettersonly: true,
+                        required : true
+                    },
                     image: "required",
                 },
                 messages: {
-                    name_ar: "اسم البراند بالعربية مطلوب",
-                    name_en: "اسم البراند بالانجليزية مطلوب",
+                    name_ar: {
+                        lettersonly: "احرف عربية فقط",
+                        required : "الحقل مطلوب"
+                    },
+                    name_en: {
+                        lettersonly: "احرف انجليزية فقط",
+                        required : "الحقل مطلوب"
+                    },
                     image: "صورة البراند مطلوبة",
                 }
+
             });
         });
     </script>
 @endif
-@if(Request::is('admin_panel/settings/subcategories'))
+@if(url('admin_panel/settings/subcategories'))
     <script>
         $(document).ready(function () {
-            $(".my_form").validate({
+            $(".my_form_edit").validate({
+                jQuery.validator.addMethod("lettersonly", function(value, element) {
+                    return this.optional(element) || /^[a-z\s]+$/i.test(value);
+                }, "احرف انجليزية فقط");
+                jQuery.validator.addMethod("lettersonlyy", function(value, element) {
+                    return this.optional(element) || /^[أ-ي\s]+$/i.test(value);
+                }, "احرف عربية فقط");
+                $(".my_form_edit").validate({
                 rules: {
-                    name_ar: "required",
-                    name_en: "required",
+                    name_ar: {
+                        lettersonlyy: true,
+                        required : true
+                    },
+                    name_en: {
+                        lettersonly: true,
+                        required : true
+                    },
                     image: "required",
-                    category_id: "required"
+                    category_id: "required",
                 },
                 messages: {
-                    name_ar: "اسم البراند بالعربية مطلوب",
-                    name_en: "اسم البراند بالانجليزية مطلوب",
+                    name_ar: {
+                        lettersonly: "احرف عربية فقط",
+                        required : "الحقل مطلوب"
+                    },
+                    name_en: {
+                        lettersonly: "احرف انجليزية فقط",
+                        required : "الحقل مطلوب"
+                    },
                     image: "صورة البراند مطلوبة",
                     category_id: "من فضلك اختر تصنيف"
                 }
@@ -142,26 +180,49 @@
         });
     </script>
 @endif
-@if(Request::is('admin_panel/settings/subsubcategories'))
+@if(url('admin_panel/settings/subsubcategories'))
     <script>
+
         $(document).ready(function () {
-            $(".my_form").validate({
+            jQuery.validator.addMethod("lettersonly", function(value, element) {
+                return this.optional(element) || /^[a-z\s]+$/i.test(value);
+            }, "احرف انجليزية فقط");
+            jQuery.validator.addMethod("lettersonlyy", function(value, element) {
+                return this.optional(element) || /^[أ-ي\s]+$/i.test(value);
+            }, "احرف عربية فقط");
+            $(".my_form_edit").validate({
                 rules: {
-                    name_ar: "required",
-                    name_en: "required",
+                    name_ar: {
+                        lettersonlyy: true,
+                        required : true
+                    },
+                    name_en: {
+                        lettersonly: true,
+                        required : true
+                    },
                     image: "required",
                     category_id: "required",
-                    subcategory_id: "required"
+                    subcategory_id: "required",
                 },
                 messages: {
-                    name_ar: "اسم البراند بالعربية مطلوب",
-                    name_en: "اسم البراند بالانجليزية مطلوب",
+                    name_ar: {
+                        lettersonly: "احرف عربية فقط",
+                        required : "الحقل مطلوب"
+                    },
+                    name_en: {
+                        lettersonly: "احرف انجليزية فقط",
+                        required : "الحقل مطلوب"
+                    },
                     image: "صورة البراند مطلوبة",
                     category_id: "من فضلك اختر تصنيف",
                     subcategory_id: "من فضلك اختر تصنيف فرعي"
                 }
             });
         });
+
+        jQuery.validator.addMethod("lettersonly", function(value, element) {
+            return this.optional(element) || /^[a-z]+$/i.test(value);
+        }, "Letters only please");
     </script>
 @endif
 <script>

@@ -171,12 +171,12 @@ class CategoryController extends Controller
                 $category->category_id = $request->subcategory_id ? $request->subcategory_id : $request->category_id;
             }
             if (isset($request['image'])) {
-                $category->image = UploadImage::uploadImageToStorage($request['image'], 'brands');
+                $category->image = UploadImage::uploadImageToStorage($request['image'], 'categories');
             }
             $category->save();
             DB::commit();
             $request->session()->flash('status', 'تم التعديل بنجاح');
-            return redirect(route('brands.index'));
+            return redirect()->back();
         } catch (\Exception $e) {
             DB::rollBack();
             Log::error('error in edit brand from admin panel ' . __LINE__ . $e);
