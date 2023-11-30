@@ -112,7 +112,7 @@ $lang = app()->getLocale();
                                                                         الجملة</label>
                                                                     <input type="text" class="form-control"
                                                                            id="wholesale_price"
-                                                                           value="{{ isset($product['price']) ? $product['price'] . 'جنية' : 'غير محدد' }} "
+                                                                           value="{{ isset($product_store['price']) ? $product_store['price'] . 'جنية' : 'غير محدد' }} "
                                                                            readonly>
                                                                 </div>
                                                             </div><!--end col-->
@@ -122,7 +122,7 @@ $lang = app()->getLocale();
                                                                         القطاعي</label>
                                                                     <input type="text" class="form-control"
                                                                            id="consumer_price"
-                                                                           value="{{ isset($product['consumer_price']) ? $product['consumer_price'] . 'جنية' : 'غير محدد' }}"
+                                                                           value="{{ isset($product_store['consumer_price']) ? $product_store['consumer_price'] . 'جنية' : 'غير محدد' }}"
                                                                            readonly>
                                                                 </div>
                                                             </div><!--end col-->
@@ -132,8 +132,8 @@ $lang = app()->getLocale();
                                                                         الخصم للقطاعي</label>
                                                                     <input type="text" class="form-control"
                                                                            id="discount"
-                                                                           @if(isset($product['consumer_price_discount']))
-                                                                                value="{{ $product['consumer_price_discount'] }} {{ $product['consumer_price_discount_type'] == '2' ? ' % ' : ' جنية ' }}"
+                                                                           @if(isset($product_store['consumer_price_discount']))
+                                                                                value="{{ $product_store['consumer_price_discount'] }} {{ $product_store['consumer_price_discount_type'] == '2' ? ' % ' : ' جنية ' }}"
                                                                            @else
                                                                                value="غير محدد"
                                                                            @endif
@@ -146,8 +146,8 @@ $lang = app()->getLocale();
                                                                            class="form-label">قيمة الخصم للجملة</label>
                                                                     <input type="text" class="form-control"
                                                                            id="discount"
-                                                                           @if(isset($product['discount']))
-                                                                               value="{{ $product['discount'] }} {{ $product['discount_type'] == '2' ? ' % ' : ' جنية ' }}"
+                                                                           @if(isset($product_store['discount']))
+                                                                               value="{{ $product_store['discount'] }} {{ $product_store['discount_type'] == '2' ? ' % ' : ' جنية ' }}"
                                                                            @else
                                                                                value="غير محدد"
                                                                            @endif
@@ -161,7 +161,7 @@ $lang = app()->getLocale();
                                                                         الخصم</label>
                                                                     <input type="text" class="form-control"
                                                                            id="consumer_discount"
-                                                                           value=" {{ isset($product['net_price']) ? $product['net_price'] . 'جنية' : 'غير محدد' }}"
+                                                                           value=" {{ isset($product_store['net_price']) ? $product_store['net_price'] . 'جنية' : 'غير محدد' }}"
                                                                            readonly>
                                                                 </div>
                                                             </div><!--end col-->
@@ -172,7 +172,7 @@ $lang = app()->getLocale();
                                                                         الخصم</label>
                                                                     <input type="text" class="form-control"
                                                                            id="consumer_discount"
-                                                                           value="{{ isset($product['consumer_price']) ? $product['consumer_price'] . 'جنية' : 'غير محدد' }}"
+                                                                           value="{{ isset($product_store['consumer_price']) ? $product_store['consumer_price'] . 'جنية' : 'غير محدد' }}"
                                                                            readonly>
                                                                 </div>
                                                             </div><!--end col-->
@@ -227,7 +227,12 @@ $lang = app()->getLocale();
                                                     <div class="col-md-6 col-12">
                                                         <div class="row mt-3">
                                                             @foreach($product->images as $image)
-                                                                @if(isset($image['color']))
+                                                                <?php
+                                                                    $product_price = \App\Models\ProductStoreStock::where('color_id' , $image['color_id'])->whereHas('product_store' , function($r) use($image , $store){
+                                                                        $r->where('product_id' , $image['product_id'])->where('store_id' , $store['id']);
+                                                                    })->first();
+                                                                    ?>
+                                                                @if(isset($product_price))
                                                                     <div
                                                                         class="col-md-6 col-12 px-md-1 d-md-flex justify-content-end">
                                                                         <img

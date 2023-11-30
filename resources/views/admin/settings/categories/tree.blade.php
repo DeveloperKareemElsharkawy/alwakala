@@ -38,31 +38,43 @@
                                     <ul class="wtree">
                                         @foreach($categories as $category)
                                             <li class="{{ count($category->childrenCategories) > 0 ? 'has' : 'not-has' }}">
+                                                <?php
+                                                    $category_ids = \App\Models\Category::where('category_id' , $category['id'])->pluck('id');
+                                                    $subcategory_ids = \App\Models\Category::whereIn('category_id',$category_ids)->pluck('id');
+                                                    $products = \App\Models\Product::whereIn('category_id' , $subcategory_ids)->orderBy('id' , 'desc')->get();
+                                                    ?>
                                                 <span>
                                                     {{ $category['name_'.$lang] }}
                                                     <div>
-                                                        <a class="badge badge-gradient-danger" href="products.html">Products : {{ count($category['Products']) }}</a>
-                                                        <a class="badge badge-gradient-primary" href="all-vendors.html">Stores : {{ count($category['stores']) }}</a>
+                                                        <a class="badge badge-gradient-danger" href="{{ url('admin_panel/settings/category_products/' . $category['id']) }}">Products : {{ count($products) }}</a>
+                                                        <a class="badge badge-gradient-primary" href="{{ url('admin_panel/settings/category_stores/' . $category['id']) }}">Stores : {{ count($category['stores']) }}</a>
                                                     </div>
                                                 </span>
                                                 <ul>
                                                     @foreach($category['childrenCategories'] as $subcategory)
+                                                        <?php
+                                                            $category_ids = \App\Models\Category::where('category_id' , $subcategory['id'])->pluck('id');
+                                                            $products = \App\Models\Product::whereIn('category_id' , $category_ids)->orderBy('id' , 'desc')->get();
+                                                            ?>
                                                         <li class="{{ count($subcategory->childrenCategories) > 0 ? 'has' : 'not-has' }}">
                                                 <span>
                                                     {{ $subcategory['name_'.$lang] }}
                                                     <div>
-                                                        <a class="badge badge-gradient-danger" href="products.html">Products : {{ count($subcategory['Products']) }}</a>
-                                                        <a class="badge badge-gradient-primary" href="all-vendors.html">Stores : {{ count($subcategory['stores']) }}</a>
+                                                        <a class="badge badge-gradient-danger" href="{{ url('admin_panel/settings/category_products/' . $subcategory['id']) }}">Products : {{ count($products) }}</a>
+                                                        <a class="badge badge-gradient-primary" href="{{ url('admin_panel/settings/category_stores/' . $subcategory['id']) }}">Stores : {{ count($subcategory['stores']) }}</a>
                                                     </div>
                                                 </span>
                                                             <ul>
                                                                 @foreach($subcategory['childrenCategories'] as $subsubcategory)
+                                                                        <?php
+                                                                        $products = \App\Models\Product::where('category_id' , $subsubcategory['id'])->orderBy('id' , 'desc')->get();
+                                                                        ?>
                                                                     <li class="{{ count($subsubcategory->childrenCategories) > 0 ? 'has' : 'not-has' }}">
                                                 <span>
                                                     {{ $subsubcategory['name_'.$lang] }}
                                                     <div>
-                                                        <a class="badge badge-gradient-danger" href="products.html">Products : {{ count($subsubcategory['Products']) }}</a>
-                                                        <a class="badge badge-gradient-primary" href="all-vendors.html">Stores : {{ count($subsubcategory['stores']) }}</a>
+                                                        <a class="badge badge-gradient-danger" href="{{ url('admin_panel/settings/category_products/' . $subsubcategory['id']) }}">Products : {{ count($products) }}</a>
+                                                        <a class="badge badge-gradient-primary" href="{{ url('admin_panel/settings/category_stores/' . $subsubcategory['id']) }}">Stores : {{ count($subsubcategory['stores']) }}</a>
                                                     </div>
                                                 </span>
                                                                     </li>

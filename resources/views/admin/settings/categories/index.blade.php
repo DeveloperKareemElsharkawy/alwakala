@@ -196,6 +196,20 @@
                                                                 </thead>
                                                                 <tbody>
                                                                 @foreach($categories as $key => $category)
+                                                                        <?php
+                                                                        if(empty($category->category_id)){
+                                                                            $category_ids = \App\Models\Category::where('category_id' , $category['id'])->pluck('id');
+                                                                            $subcategory_ids = \App\Models\Category::whereIn('category_id',$category_ids)->pluck('id');
+                                                                            $products = \App\Models\Product::whereIn('category_id' , $subcategory_ids)->orderBy('id' , 'desc')->get();
+                                                                        }
+                                                                        if(isset($category->parent) && !isset($category->parent->parent)){
+                                                                            $category_ids = \App\Models\Category::where('category_id' , $category['id'])->pluck('id');
+                                                                            $products = \App\Models\Product::whereIn('category_id' , $category_ids)->orderBy('id' , 'desc')->get();
+                                                                        }
+                                                                        if(isset($category->parent) && isset($category->parent->parent)){
+                                                                            $products = \App\Models\Product::where('category_id' , $category['id'])->orderBy('id' , 'desc')->get();
+                                                                        }
+                                                                        ?>
                                                                     <tr class="image_class{{ $category['id'] }}">
                                                                         <td>{{ $key + 1 }}</td>
                                                                         <td>
@@ -213,8 +227,10 @@
                                                                             <td>{{ $category['parent']['name_'.$lang] }}</td>
                                                                         @endif
                                                                         <td>{{ count($category->stores) }}</td>
-                                                                        <td>{{ count($category->Products) }}</td>
+                                                                        <td>{{ count($products) }}</td>
                                                                         <td class="colors">
+
+                                                                            @if(count($products) == 0 && count($category['stores']) == 0)
                                                                             <div
                                                                                 class="form-check form-switch form-switch-success d-inline-block">
                                                                                 <input class="form-check-input active"
@@ -223,6 +239,7 @@
                                                                                        type="checkbox" role="switch"
                                                                                        id="SwitchCheck3" {{ $category['activation'] == true ? 'checked' : '' }}>
                                                                             </div>
+                                                                                @endif
                                                                         </td>
                                                                         <td>
                                                                             <ul class="actions-list">
@@ -236,6 +253,7 @@
                                                                                     </a>
                                                                                 </li>
                                                                                 <li>
+                                                                                    @if(count($products) == 0 && count($category['stores']) == 0)
                                                                                     @if(request()->type == 'archived')
                                                                                         <a title="delete"
                                                                                            delete_url="settings/categories/"
@@ -268,6 +286,7 @@
                                                                                            href="#">
                                                                                             <i class="ph-archive-box"></i>
                                                                                         </a>
+                                                                                    @endif
                                                                                     @endif
                                                                                 </li>
                                                                             </ul>

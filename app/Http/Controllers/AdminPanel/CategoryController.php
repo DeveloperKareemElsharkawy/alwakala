@@ -5,6 +5,9 @@ namespace App\Http\Controllers\AdminPanel;
 use App\Http\Controllers\Controller;
 use App\Lib\Services\ImageUploader\UploadImage;
 use App\Models\Category;
+use App\Models\CategoryStore;
+use App\Models\Product;
+use App\Models\Store;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -268,6 +271,32 @@ class CategoryController extends Controller
         $category_id = $request->input('category_id');
         $subtypes = Category::where('category_id', $category_id)->select('id' , 'name_' . app()->getLocale() .' as name')->where('activation', 'true')->where('archive', 'false')->get();
         return response()->json($subtypes);
+    }
+
+    public function products($category_id)
+    {
+        $category = Category::find($category_id);
+        if(empty($category->category_id)){
+            $category_ids = Category::where('category_id' , $category_id)->pluck('id');
+            $subcategory_ids = Category::whereIn('category_id',$category_ids)->pluck('id');
+            $products = Product::whereIn('category_id' , $subcategory_ids)->orderBy('id' , 'desc')->get();
+        }
+        if(isset($category->parent) && !isset($category->parent->parent)){
+            $category_ids = Category::where('category_id' , $category_id)->pluck('id');
+            $products = Product::whereIn('category_id' , $category_ids)->orderBy('id' , 'desc')->get();
+        }
+        if(isset($category->parent) && isset($category->parent->parent)){
+            $products = Product::where('category_id' , $category_id)->orderBy('id' , 'desc')->get();
+        }
+        return view('admin.settings.categories.products' , ['products'=> $products]);
+    }
+
+    public function stores($category_id)
+    {
+        $category = Category::find($category_id);
+        $store_ids = CategoryStore::where('category_id' , $category_id)->pluck('store_id');
+        $stores = Store::whereIn('id' , $store_ids)->orderBy('id','desc')->get();
+        return view('admin.settings.categories.stores' , ['stores'=> $stores]);
     }
 
 }

@@ -136,6 +136,8 @@ Route::group(array('prefix' => 'admin_panel/settings'), function () {
     Route::get('subsubcategories/archive/{id}', [CategoryController::class , 'archive']);
 
     Route::get('categories_trees', [CategoryController::class , 'tree']);
+    Route::get('category_stores/{category_id}', [CategoryController::class , 'stores']);
+    Route::get('category_products/{category_id}', [CategoryController::class , 'products']);
 
 });
 Route::get('ajax_subcatgeories', [CategoryController::class , 'ajax_subcatgeories']);
